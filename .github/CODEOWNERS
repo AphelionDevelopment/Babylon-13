@@ -1,26 +1,31 @@
 # This list auto requests reviews from the specified org members
+
 # when a PR that modifies the file in question is opened
+
 # This list is alphabetized by User -> Filename and separated into sections for Maintainers/Contributors KEEP IT THAT WAY
+
 # In the event that people are to be informed of changes
+
 # to the same file or dir, add them to the end of under Multiple Owners
 
 # MAINTAINERS
 
-# vinylspiders
-/.github/workflows/ @vinylspiders
-/SQL/ @vinylspiders
-/tools/ @vinylspiders
-/code/modules/tgui/ @vinylspiders
+# Gandalf2k15
 
-# Zergspower
+/.github/workflows/ @Gandalf2k15
+/SQL/ @Gandalf2k15
+/tools/ @Gandalf2k15
+/code/modules/tgui/ @Gandalf2k15
 
-/modular_babylon/modules/borgs @Zergspower
-/modular_babylon/modules/borg_buffs @Zergspower
-/modular_babylon/modules/ghostcafe @Zergspower
-/modular_babylon/modules/hotel_rooms @Zergspower
-/modular_babylon/master_files/code/modules/mapfluff @Zergspower
-/modular_babylon/modules/ashwalkers @Zergspower
-/modular_babylon/modules/aesthetics/keyed_doors @Zergspower
+# Gandalf2k15
+
+/modular_babylon/modules/borgs @Gandalf2k15
+/modular_babylon/modules/borg_buffs @Gandalf2k15
+/modular_babylon/modules/ghostcafe @Gandalf2k15
+/modular_babylon/modules/hotel_rooms @Gandalf2k15
+/modular_babylon/master_files/code/modules/mapfluff @Gandalf2k15
+/modular_babylon/modules/ashwalkers @Gandalf2k15
+/modular_babylon/modules/aesthetics/keyed_doors @Gandalf2k15
 
 # CONTRIBUTORS
 
@@ -28,11 +33,13 @@
 
 # Maptainers
 
-/tools/maplint/lints @sqnztb
-/tools/UpdatePaths @sqnztb
-/_maps/ @Zergspower @sqnztb
-/modular_babylon/modules/mapping @Zergspower @sqnztb
+/tools/maplint/lints @Gandalf2k15
+/tools/UpdatePaths @Gandalf2k15
+/\_maps/ @Gandalf2k15
+/modular_babylon/modules/mapping @Gandalf2k15
 
 # Expensive files that touching basically always cause performance problems
+
 ## Init times
-**/*_EXPENSIVE.dm @vinylspiders
+
+\*_/_\_EXPENSIVE.dm @Gandalf2k15
