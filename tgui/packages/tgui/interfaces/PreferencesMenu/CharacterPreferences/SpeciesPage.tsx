@@ -296,9 +296,9 @@ function SpeciesPageInner(props: SpeciesPageInnerProps) {
                     key={speciesKey}
                     onClick={() => {
                       if (
-                        data.nova_star_restrictions &&
-                        species.nova_stars_only &&
-                        !data.is_nova_star
+                        data.babylon_star_restrictions &&
+                        species.babylon_stars_only &&
+                        !data.is_babylon_star
                       ) {
                         return;
                       }
@@ -321,9 +321,9 @@ function SpeciesPageInner(props: SpeciesPageInnerProps) {
                   </Button>
                 );
                 if (
-                  data.nova_star_restrictions &&
-                  species.nova_stars_only &&
-                  !data.is_nova_star
+                  data.babylon_star_restrictions &&
+                  species.babylon_stars_only &&
+                  !data.is_babylon_star
                 ) {
                   const tooltipContent =
                     species.name +

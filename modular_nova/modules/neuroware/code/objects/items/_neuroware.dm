@@ -28,7 +28,7 @@
 	///Associative list of reagent types to units. Added to the mob when the chip is used.
 	var/list/list_reagents
 	///Manufacturer label appended to examine.
-	/// For the list of available tags, see [code/__DEFINES/~nova_defines/neuroware_defines.dm]
+	/// For the list of available tags, see [code/__DEFINES/~babylon_defines/neuroware_defines.dm]
 	var/manufacturer_tag
 	///How many deciseconds to delay when used on someone else.
 	var/external_delay = 5 SECONDS

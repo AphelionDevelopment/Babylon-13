@@ -18,9 +18,9 @@ Adds opt-in knotting preferences and a temporary knot tie after internal climax.
 
 ### Defines:
 
-- `code/__DEFINES/~nova_defines/lewd_defines.dm`: `CLIMAX_TARGET_ASSHOLE`, `CLIMAX_TARGET_MOUTH`
+- `code/__DEFINES/~babylon_defines/lewd_defines.dm`: `CLIMAX_TARGET_ASSHOLE`, `CLIMAX_TARGET_MOUTH`
 - `modular_nova/modules/knotting/code/knotted_component.dm`: `KNOT_DEFAULT_DURATION`, `KNOT_MIN_DURATION`, `KNOT_MAX_DURATION`
-- `code/__DEFINES/~nova_defines/traits/declarations.dm`: `TRAIT_CAN_KNOT`, `TRAIT_KNOTTED`
+- `code/__DEFINES/~babylon_defines/traits/declarations.dm`: `TRAIT_CAN_KNOT`, `TRAIT_KNOTTED`
 
 ### Included files that are not contained in this module:
 

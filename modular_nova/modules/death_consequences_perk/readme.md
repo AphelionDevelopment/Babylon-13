@@ -32,7 +32,7 @@ E.g:
 
 ### Defines:
 
-- ~nova_defines/quirks.dm: A lot of prefixed defines
+- ~babylon_defines/quirks.dm: A lot of prefixed defines
 <!-- If you needed to add any defines, mention the files you added those defines in, along with the name of the defines. -->
 
 ### Included files that are not contained in this module:

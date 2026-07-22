@@ -44,7 +44,7 @@
 	/// Whether the item is restricted to supporters
 	var/donator_only
 	/// Whether the item is restricted to Nova stars.
-	var/nova_stars_only
+	var/babylon_stars_only
 	/// Whether the item requires a specific season in order to be available
 	var/required_season = null
 	/// Is the loadout item a mechanical item? If so, it will be blocked by 'allow_mechanical_loadout_items' under some circumstances
@@ -141,7 +141,7 @@
 			message_client(client, target, "donator")
 		return FALSE
 
-	if(GLOB.nova_star_restrictions && nova_stars_only && !SSplayer_ranks.is_nova_star(client))
+	if(GLOB.babylon_star_restrictions && babylon_stars_only && !SSplayer_ranks.is_babylon_star(client))
 		if(!visuals_only)
 			message_client(client, target, "Nova star")
 		return FALSE
@@ -180,7 +180,7 @@
 	formatted_item["blacklisted_roles"] = blacklisted_roles
 	formatted_item["species_whitelist"] = species_whitelist
 	formatted_item["donator_only"] = donator_only
-	formatted_item["nova_stars_only"] = nova_stars_only
+	formatted_item["babylon_stars_only"] = babylon_stars_only
 
 	return formatted_item
 

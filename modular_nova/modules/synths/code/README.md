@@ -19,8 +19,8 @@ Adds in a roundstart robotic race. Currently in a very sad state, and is being w
 
 ### Defines:
 
-- ~nova_defines/medical_defines.dm: SYNTH_DEFIBBED_TRAUMA_DURATION
-- ~nova_defines/medical_defines.dm: SYNTH_DEFIBBED_TRAUMA_SEVERITY
+- ~babylon_defines/medical_defines.dm: SYNTH_DEFIBBED_TRAUMA_DURATION
+- ~babylon_defines/medical_defines.dm: SYNTH_DEFIBBED_TRAUMA_SEVERITY
 
 ### Included files that are not contained in this module:
 

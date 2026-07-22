@@ -260,9 +260,9 @@ function JobRow(props: JobRowProps) {
     );
     // NOVA EDIT START
   } else if (
-    data.nova_star_restrictions &&
-    job.nova_star &&
-    !data.is_nova_star
+    data.babylon_star_restrictions &&
+    job.babylon_star &&
+    !data.is_babylon_star
   ) {
     rightSide = (
       <Stack align="center" height="100%" pr={1}>

@@ -43,7 +43,7 @@ To rerun the cutting tool move the relevant .dmi .png and .png.toml files to the
 ### Defines:
 
 - `code/__DEFINES/icon_smoothing.dm` -> SMOOTH_GROUP_MUSHROOM
-- `code/__DEFINES/~nova_defines/atmospherics.dm` -> FOREST_DEFAULT_ATMOS
+- `code/__DEFINES/~babylon_defines/atmospherics.dm` -> FOREST_DEFAULT_ATMOS
 
 ### Included files that are not contained in this module:
 
@@ -51,7 +51,7 @@ To rerun the cutting tool move the relevant .dmi .png and .png.toml files to the
 - `_maps/map_files/SerenityStation/SerenityStation.dmm`
 - `_maps/serenitystation.json`
 - `_maps/shuttles/nova/planetary_planetary_ferry.dmm`
-- `code/__DEFINES/~nova_defines/atmospherics.dm`
+- `code/__DEFINES/~babylon_defines/atmospherics.dm`
 
 ### Credits:
 

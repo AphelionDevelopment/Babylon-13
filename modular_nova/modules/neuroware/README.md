@@ -36,7 +36,7 @@ Adds neuroware chips, which add reagents to synthetic humanoids which are contex
 
 ### Defines:
 
-- Defined in `code/__DEFINES/~nova_defines/neuroware_defines.dm`:
+- Defined in `code/__DEFINES/~babylon_defines/neuroware_defines.dm`:
 - `NEUROWARE_METABOLIZE_HELPER` macro, overrides a reagent's `on_mob_end_metabolize()`.
 - `REAGENT_NEUROWARE` bitflag for `chemical_flags`, which combines `REAGENT_INVISIBLE` with a new flag.
 - Bitflags for chip labels:
@@ -65,7 +65,7 @@ Adds neuroware chips, which add reagents to synthetic humanoids which are contex
 
  ### Included files that are not contained in this module:
 
-- `code/__DEFINES/~nova_defines/neuroware_defines.dm`
+- `code/__DEFINES/~babylon_defines/neuroware_defines.dm`
 - `modular_nova/modules/GAGS/json_configs/items/neuroware.json`
 - `modular_nova/master_files/code/_globalvars/lists/reagents.dm`
 

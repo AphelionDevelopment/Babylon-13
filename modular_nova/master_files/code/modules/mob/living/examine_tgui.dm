@@ -153,7 +153,7 @@
 
 /datum/examine_panel/ui_static_data(mob/user)
 	var/list/data = list(
-		"nova_star_status" = !!(holder.client && SSplayer_ranks.is_nova_star(holder.client, admin_bypass = FALSE)),
+		"babylon_star_status" = !!(holder.client && SSplayer_ranks.is_babylon_star(holder.client, admin_bypass = FALSE)),
 		"antag_opt_in_colors" = GLOB.antag_opt_in_colors,
 		"conflict_opt_in_colors" = GLOB.conflict_opt_in_colors,
 	)

@@ -105,8 +105,8 @@
 	data["ckey"] = user.ckey
 	if(SSplayer_ranks.is_donator(user.client))
 		data["is_donator"] = TRUE
-	if(SSplayer_ranks.is_nova_star(user.client))
-		data["is_nova_star"] = TRUE
+	if(SSplayer_ranks.is_babylon_star(user.client))
+		data["is_babylon_star"] = TRUE
 	// NOVA EDIT END
 	return data
 

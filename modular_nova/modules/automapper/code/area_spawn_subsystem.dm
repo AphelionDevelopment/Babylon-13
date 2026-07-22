@@ -263,7 +263,7 @@ SUBSYSTEM_DEF(area_spawn)
 	var/desired_atom
 	/// The amount we want to spawn
 	var/amount_to_spawn = 1
-	/// See code/__DEFINES/~nova_defines/automapper.dm
+	/// See code/__DEFINES/~babylon_defines/automapper.dm
 	var/mode = AREA_SPAWN_MODE_OPEN
 	/// Map blacklist, this is used to determine what maps we should not spawn on.
 	var/list/blacklisted_stations = list("Void Raptor", "Ouroboros", "Snowglobe Station", "Runtime Station", "MultiZ Debug", "Gateway Test", "Blueshift", "Pubby Station", "SerenityStation", "Minimal Runtime Station")

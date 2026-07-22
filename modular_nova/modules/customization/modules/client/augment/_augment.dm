@@ -2,9 +2,9 @@
 	abstract_type = /datum/augment_item
 	// The augment's name
 	var/name
-	/// Category in which the augment belongs to. check "code\__DEFINES\~nova_defines\augment.dm"
+	/// Category in which the augment belongs to. check "code\__DEFINES\~babylon_defines\augment.dm"
 	var/category
-	/// Slot in which the augment belongs to - this is also the display name of its category. See "code\__DEFINES\~nova_defines\augment.dm"
+	/// Slot in which the augment belongs to - this is also the display name of its category. See "code\__DEFINES\~babylon_defines\augment.dm"
 	var/slot
 	/// Description of the loadout augment, automatically set by New() if null
 	var/description

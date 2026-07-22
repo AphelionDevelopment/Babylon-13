@@ -32,7 +32,7 @@ Overrides the sleep verb and some associated code chunks to implement enhancesme
 
 ### Defines:
 
-- Edited `code/__DEFINES/~nova_defines/signals.dm`:
+- Edited `code/__DEFINES/~babylon_defines/signals.dm`:
   - Added `COMSIG_MOB_GIVE_DIRECT_CONTROL`, emitted by `/datum/admin_verb/cmd_give_direct_control()`.
 
 ### Master file additions

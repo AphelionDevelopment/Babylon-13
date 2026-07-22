@@ -22,7 +22,7 @@ SUBSYSTEM_DEF(player_ranks)
 	/// The mentor player rank controller.
 	var/datum/player_rank_controller/mentor/mentor_controller
 	/// The Nova star player rank controller.
-	var/datum/player_rank_controller/nova_star/nova_star_controller
+	var/datum/player_rank_controller/babylon_star/babylon_star_controller
 
 
 /datum/controller/subsystem/player_ranks/Initialize()
@@ -31,7 +31,7 @@ SUBSYSTEM_DEF(player_ranks)
 
 	load_donators()
 	load_mentors()
-	load_nova_stars()
+	load_babylon_stars()
 
 	return SS_INIT_SUCCESS
 
@@ -39,7 +39,7 @@ SUBSYSTEM_DEF(player_ranks)
 /datum/controller/subsystem/player_ranks/Destroy()
 	QDEL_NULL(donator_controller)
 	QDEL_NULL(mentor_controller)
-	QDEL_NULL(nova_star_controller)
+	QDEL_NULL(babylon_star_controller)
 	return ..()
 
 
@@ -88,11 +88,11 @@ SUBSYSTEM_DEF(player_ranks)
  * * admin_bypass - Whether or not admins can succeed this check, even if they
  * do not actually possess the role. Defaults to `TRUE`.
  */
-/datum/controller/subsystem/player_ranks/proc/is_nova_star(client/user, admin_bypass = TRUE)
+/datum/controller/subsystem/player_ranks/proc/is_babylon_star(client/user, admin_bypass = TRUE)
 	if(!istype(user))
-		CRASH("Invalid user type provided to is_nova_star(), expected 'client' and obtained '[user ? user.type : "null"]'.")
+		CRASH("Invalid user type provided to is_babylon_star(), expected 'client' and obtained '[user ? user.type : "null"]'.")
 
-	if(GLOB.nova_star_list[user.ckey])
+	if(GLOB.babylon_star_list[user.ckey])
 		return TRUE
 
 	if(admin_bypass && is_admin(user))
@@ -182,28 +182,28 @@ SUBSYSTEM_DEF(player_ranks)
 
 /// Handles loading star players either via SQL or using the legacy system,
 /// based on configs.
-/datum/controller/subsystem/player_ranks/proc/load_nova_stars()
+/datum/controller/subsystem/player_ranks/proc/load_babylon_stars()
 	PROTECTED_PROC(TRUE)
 
 	if(IsAdminAdvancedProcCall())
 		return
 
-	nova_star_controller = new
+	babylon_star_controller = new
 
-	if(CONFIG_GET(flag/nova_star_legacy_system))
-		nova_star_controller.load_legacy()
+	if(CONFIG_GET(flag/babylon_star_legacy_system))
+		babylon_star_controller.load_legacy()
 		return
 
 	if(!SSdbcore.Connect())
-		var/message = "Failed to connect to database in load_nova_stars(). Reverting to legacy system."
+		var/message = "Failed to connect to database in load_babylon_stars(). Reverting to legacy system."
 		log_config(message)
 		log_game(message)
 		message_admins(message)
-		CONFIG_SET(flag/nova_star_legacy_system, TRUE)
-		nova_star_controller.load_legacy()
+		CONFIG_SET(flag/babylon_star_legacy_system, TRUE)
+		babylon_star_controller.load_legacy()
 		return
 
-	load_player_rank_sql(nova_star_controller)
+	load_player_rank_sql(babylon_star_controller)
 
 
 /**
@@ -248,8 +248,8 @@ SUBSYSTEM_DEF(player_ranks)
 	if(rank_title == mentor_controller.rank_title)
 		return mentor_controller
 
-	if(rank_title == nova_star_controller.rank_title)
-		return nova_star_controller
+	if(rank_title == babylon_star_controller.rank_title)
+		return babylon_star_controller
 
 	CRASH("Invalid player_rank_controller \"[rank_title || "*null*"]\" used in get_controller_for_group()!")
 

@@ -28,7 +28,7 @@ Adds an emergency stop for the supermatter engine. Operable in the first 30 minu
 
 | File Location                             | Defines                                            |
 | ----------------------------------------- | -------------------------------------------------- |
-| `code/__DEFINES/~nova_defines/signals.dm` | `#define COMSIG_MAIN_SM_DELAMINATING "delam_time"` |
+| `code/__DEFINES/~babylon_defines/signals.dm` | `#define COMSIG_MAIN_SM_DELAMINATING "delam_time"` |
 
 ### Master file additions
 

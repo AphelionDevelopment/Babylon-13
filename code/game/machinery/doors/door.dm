@@ -1,5 +1,5 @@
 ///Default wait until doors autoclose
-// #define DOOR_CLOSE_WAIT 60 // NOVA EDIT REMOVAL - Default wait until doors autoclose - moved to code/__DEFINES/~nova_defines/airlock.dm
+// #define DOOR_CLOSE_WAIT 60 // NOVA EDIT REMOVAL - Default wait until doors autoclose - moved to code/__DEFINES/~babylon_defines/airlock.dm
 /// Trait for checking if a mob is currently activating an unrestricted airlock open and thus has pressure pushes blocked
 #define TRAIT_UNRESTRICTED_AIRLOCK_OPENING "trait_unrestricted_airlock_opening"
 
@@ -792,5 +792,5 @@
 		return ..()
 	return ..(0)
 
-//#undef DOOR_CLOSE_WAIT // NOVA EDIT REMOVAL - moved to code/__DEFINES/~nova_defines/airlock.dm
+//#undef DOOR_CLOSE_WAIT // NOVA EDIT REMOVAL - moved to code/__DEFINES/~babylon_defines/airlock.dm
 #undef TRAIT_UNRESTRICTED_AIRLOCK_OPENING

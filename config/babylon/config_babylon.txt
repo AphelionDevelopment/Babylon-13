@@ -163,7 +163,7 @@ SIZE_COLLAR_MINIMUM 15
 ## These flags are automatically enabled if SQL_ENABLED isn't.
 DONATOR_LEGACY_SYSTEM
 MENTOR_LEGACY_SYSTEM
-NOVA_STAR_LEGACY_SYSTEM
+BABYLON_STAR_LEGACY_SYSTEM
 
 ## How much time arrivals shuttle should stay at station after its engines recharged before returning to interlink. In deciseconds. 150 - 15 seconds. 0 - disables autoreturn.
 ARRIVALS_WAIT 150
@@ -228,7 +228,7 @@ SAVEFILE_UPLOAD_LIMIT 2000
 #RELAY_OPTION Connect Directly (No Relay),byond://placeholder.com:1337
 
 ## Uncomment to disable the Star rank restrictions
-#ENABLE_NOVA_STAR_RESTRICTIONS 0
+#ENABLE_BABYLON_STAR_RESTRICTIONS 0
 
 ## Uncomment to make the supermatter superheat and blast mobs away instead of dusting them when touched
 #DISABLE_SM_DUSTING

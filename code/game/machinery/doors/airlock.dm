@@ -54,7 +54,7 @@
 // "Would this be better with a global var"
 
 // Wires for the airlock are located in the datum folder, inside the wires datum folder.
-// NOVA EDIT REMOVAL START - moved to code/__DEFINES/~nova_defines/airlock.dm
+// NOVA EDIT REMOVAL START - moved to code/__DEFINES/~babylon_defines/airlock.dm
 /*
 #define AIRLOCK_FRAME_CLOSED "closed"
 #define AIRLOCK_FRAME_CLOSING "closing"
@@ -82,7 +82,7 @@
 
 #define DOOR_VISION_DISTANCE 11 ///The maximum distance a door will see out to
 */
-// NOVA EDIT REMOVAL END - moved to code/__DEFINES/~nova_defines/airlock.dm
+// NOVA EDIT REMOVAL END - moved to code/__DEFINES/~babylon_defines/airlock.dm
 
 /obj/machinery/door/airlock
 	name = "Airlock"
@@ -2652,7 +2652,7 @@
 	opacity = FALSE
 	glass = TRUE
 
-// NOVA EDIT REMOVAL START - moved to code/__DEFINES/~nova_defines/airlock.dm
+// NOVA EDIT REMOVAL START - moved to code/__DEFINES/~babylon_defines/airlock.dm
 /*
 #undef AIRLOCK_SECURITY_NONE
 #undef AIRLOCK_SECURITY_IRON
@@ -2679,4 +2679,4 @@
 #undef AIRLOCK_FRAME_OPEN
 #undef AIRLOCK_FRAME_OPENING
 */
-// NOVA EDIT REMOVAL END - moved to code/__DEFINES/~nova_defines/airlock.dm
+// NOVA EDIT REMOVAL END - moved to code/__DEFINES/~babylon_defines/airlock.dm

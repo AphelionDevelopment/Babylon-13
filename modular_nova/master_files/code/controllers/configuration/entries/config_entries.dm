@@ -99,8 +99,8 @@
 /datum/config_entry/flag/mentor_legacy_system
 	protection = CONFIG_ENTRY_LOCKED
 
-/// Defines whether the server uses the legacy star system with nova_star_players.txt or the SQL system.
-/datum/config_entry/flag/nova_star_legacy_system
+/// Defines whether the server uses the legacy star system with babylon_star_players.txt or the SQL system.
+/datum/config_entry/flag/babylon_star_legacy_system
 	protection = CONFIG_ENTRY_LOCKED
 
 /// RUIN BUDGETS ///
@@ -148,7 +148,7 @@
 /datum/config_entry/number/savefile_upload_limit
 	default = 2000
 
-/datum/config_entry/flag/enable_nova_star_restrictions
+/datum/config_entry/flag/enable_babylon_star_restrictions
 	default = FALSE
 
 /// Whether the supermatter dusts consumed mobs outright (FALSE) or superheats and blasts them away instead (TRUE).

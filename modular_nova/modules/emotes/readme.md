@@ -33,7 +33,7 @@ Pretty much anything that changes emotes is in here
 
 | File Location                                | Defines                           |
 | -------------------------------------------- | --------------------------------- |
-| `code/__DEFINES/~nova_defines/traits.dm`     | `#define TRAIT_EXCITABLE	"wagwag"` |
+| `code/__DEFINES/~babylon_defines/traits.dm`     | `#define TRAIT_EXCITABLE	"wagwag"` |
 | `modular_nova/modules/emotes/code/emotes.dm` | `#define EMOTE_DELAY`             |
 
 ### Master file additions

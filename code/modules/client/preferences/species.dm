@@ -58,6 +58,6 @@
 		data[species_id]["enabled_features"] = species.get_features()
 		data[species_id]["perks"] = species.get_species_perks()
 		data[species_id]["diet"] =  species.get_species_diet()
-		data[species_id]["nova_stars_only"] = species.nova_stars_only // NOVA EDIT ADDITION - Veteran races
+		data[species_id]["babylon_stars_only"] = species.babylon_stars_only // NOVA EDIT ADDITION - Veteran races
 
 	return data

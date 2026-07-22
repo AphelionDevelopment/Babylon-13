@@ -8,9 +8,9 @@ Holosynths are a synthetic subtype made of soft-light, semi-solid and dependent 
 
 ### TG Proc/File Changes
 
-- `code/__DEFINES/~nova_defines/DNA.dm` - Added `SPECIES_HOLOSYNTH`
-- `code/__DEFINES/~nova_defines/traits/declarations.dm` - Added `TRAIT_HOLOSYNTH`
-- `code/__DEFINES/~nova_defines/colors.dm` - Added `BLOOD_COLOR_HOLOGEL`
+- `code/__DEFINES/~babylon_defines/DNA.dm` - Added `SPECIES_HOLOSYNTH`
+- `code/__DEFINES/~babylon_defines/traits/declarations.dm` - Added `TRAIT_HOLOSYNTH`
+- `code/__DEFINES/~babylon_defines/colors.dm` - Added `BLOOD_COLOR_HOLOGEL`
 - `code/_globalvars/traits/_traits.dm` - Registered `TRAIT_HOLOSYNTH`
 - `code/_globalvars/traits/admin_tooling.dm` - Registered `TRAIT_HOLOSYNTH`
 

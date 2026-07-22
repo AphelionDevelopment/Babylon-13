@@ -53,7 +53,7 @@ SUBSYSTEM_DEF(events)
 		return
 	var/list/configuration = json_decode(file2text(json_file))
 	// NOVA EDIT ADDITION START
-	var/nova_json_file = file("[global.config.directory]/nova/events.json")
+	var/nova_json_file = file("[global.config.directory]/babylon/events.json")
 	if(fexists(nova_json_file))
 		configuration += json_decode(file2text(nova_json_file))
 	// NOVA EDIT ADDITION END
