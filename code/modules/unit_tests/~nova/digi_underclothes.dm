@@ -3,7 +3,7 @@
 /datum/unit_test/digi_underclothes_sanity/Run()
 	// The icon files where digi underwear resides
 	var/list/digi_underclothes_icon_files = list(
-		'modular_nova/master_files/icons/mob/clothing/underwear.dmi' = TRUE,
+		'modular_babylon/master_files/icons/mob/clothing/underwear.dmi' = TRUE,
 	)
 
 	// Checks whether we have a digi icon_state (denoted by "_d")

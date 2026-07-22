@@ -14,13 +14,13 @@
 
 # Zergspower
 
-/modular_nova/modules/borgs @Zergspower
-/modular_nova/modules/borg_buffs @Zergspower
-/modular_nova/modules/ghostcafe @Zergspower
-/modular_nova/modules/hotel_rooms @Zergspower
-/modular_nova/master_files/code/modules/mapfluff @Zergspower
-/modular_nova/modules/ashwalkers @Zergspower
-/modular_nova/modules/aesthetics/keyed_doors @Zergspower
+/modular_babylon/modules/borgs @Zergspower
+/modular_babylon/modules/borg_buffs @Zergspower
+/modular_babylon/modules/ghostcafe @Zergspower
+/modular_babylon/modules/hotel_rooms @Zergspower
+/modular_babylon/master_files/code/modules/mapfluff @Zergspower
+/modular_babylon/modules/ashwalkers @Zergspower
+/modular_babylon/modules/aesthetics/keyed_doors @Zergspower
 
 # CONTRIBUTORS
 
@@ -31,7 +31,7 @@
 /tools/maplint/lints @sqnztb
 /tools/UpdatePaths @sqnztb
 /_maps/ @Zergspower @sqnztb
-/modular_nova/modules/mapping @Zergspower @sqnztb
+/modular_babylon/modules/mapping @Zergspower @sqnztb
 
 # Expensive files that touching basically always cause performance problems
 ## Init times

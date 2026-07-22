@@ -11,8 +11,8 @@
 | -----------------------   | -------------------------------------------------------------------------------------------------------------------------------------- |
 | How to Write a Design Doc |  [https://hackmd.io/@tgstation/BkzmU9EyK](https://hackmd.io/@tgstation/BkzmU9EyK)                                                      |
 | Git / GitHub cheatsheet   | [https://www.notion.so/Git-GitHub-61bc81766b2e4c7d9a346db3078ce833](https://www.notion.so/Git-GitHub-61bc81766b2e4c7d9a346db3078ce833) |
-| Guide to Modularization   | [./modular_nova/readme.md](./modular_nova/readme.md)                                                                                   |
-| Guide to Mirroring        | [./modular_nova/mirroring_guide.md](./modular_nova/mirroring_guide.md)                                                                 |
+| Guide to Modularization   | [./modular_babylon/readme.md](./modular_babylon/readme.md)                                                                                   |
+| Guide to Mirroring        | [./modular_babylon/mirroring_guide.md](./modular_babylon/mirroring_guide.md)                                                                 |
 | Code                      | [https://github.com/Babylon-13/Babylon-13](https://github.com/Babylon-13/Babylon-13)                                                   |
 | Wiki                      | [https://wiki.babylon13.com](https://wiki.babylon13.com)                                                                               |
 | Codedocs                  | [https://Babylon-13.github.io/Babylon-13/](https://Babylon-13.github.io/Babylon-13/)                                                   |
@@ -31,7 +31,7 @@ You are responsible for the testing of your content and providing proof of such 
 
 ## DEVELOPMENT
 
-[Modularisation Guide](./modular_nova/readme.md)
+[Modularisation Guide](./modular_babylon/readme.md)
 
 ## DOWNLOADING
 

@@ -10,7 +10,7 @@
 # lot of pain.
 #
 # Wanna modify these?
-# \modular_nova\master_files\code\modules\mob_spawn\ghost_roles\mining_roles.dm
+# \modular_babylon\master_files\code\modules\mob_spawn\ghost_roles\mining_roles.dm
 
 
 # Spawners

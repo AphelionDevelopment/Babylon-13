@@ -307,7 +307,7 @@
 		// NOVA EDIT ADDITION START
 				maploaded = FALSE
 				if(play_sound)
-					playsound(src.loc, 'modular_nova/modules/aesthetics/lights/sound/light_on.ogg', 65, 1)
+					playsound(src.loc, 'modular_babylon/modules/aesthetics/lights/sound/light_on.ogg', 65, 1)
 		else if(!matching && !turning_on)
 			switchcount++
 			turning_on = TRUE

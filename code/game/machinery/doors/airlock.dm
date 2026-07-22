@@ -574,7 +574,7 @@
 	else
 		icon_state = "[base_icon_state]closed"
 
-/* NOVA EDIT REMOVAL - AESTHETICS - OVERWRITTEN IN modular_nova/modules/aesthetics/airlock/code/airlock.dm
+/* NOVA EDIT REMOVAL - AESTHETICS - OVERWRITTEN IN modular_babylon/modules/aesthetics/airlock/code/airlock.dm
 /obj/machinery/door/airlock/update_overlays()
 	. = ..()
 

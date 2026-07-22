@@ -22,7 +22,7 @@
 	byond_member.scale(16, 16)
 	insert_icon("byond_member", byond_member)
 	// NOVA EDIT ADDITION START
-	var/datum/universal_icon/nova_donator = uni_icon('modular_nova/master_files/icons/donator/donator_chat_icon.dmi', "nova_logo")
+	var/datum/universal_icon/nova_donator = uni_icon('modular_babylon/master_files/icons/donator/donator_chat_icon.dmi', "nova_logo")
 	nova_donator.scale(16, 16)
 	insert_icon("nova_donator", nova_donator)
 	// NOVA EDIT ADDITION END

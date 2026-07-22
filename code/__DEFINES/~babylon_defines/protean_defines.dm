@@ -14,7 +14,7 @@
 #define BLOOD_COLOR_IRON "#CCCCCC"
 
 /// Sprite file location
-#define PROTEAN_ORGAN_SPRITE 'modular_nova/modules/protean/icons/mob/species/protean/protean.dmi'
+#define PROTEAN_ORGAN_SPRITE 'modular_babylon/modules/protean/icons/mob/species/protean/protean.dmi'
 
 /// Stomach constants
 #define PROTEAN_STOMACH_FULL 10

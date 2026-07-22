@@ -504,10 +504,10 @@
 			else if(damage_amount)
 				//playsound(loc, 'sound/items/weapons/smash.ogg', 50, TRUE) // NOVA EDIT REMOVAL
 				//NOVA EDIT ADDITION - CREDITS TO WHITEDREAM(valtos)
-				playsound(src, pick('modular_nova/master_files/sound/effects/metalblock1.wav', 'modular_nova/master_files/sound/effects/metalblock2.wav', \
-									'modular_nova/master_files/sound/effects/metalblock3.wav', 'modular_nova/master_files/sound/effects/metalblock4.wav', \
-									'modular_nova/master_files/sound/effects/metalblock5.wav', 'modular_nova/master_files/sound/effects/metalblock6.wav', \
-									'modular_nova/master_files/sound/effects/metalblock7.wav', 'modular_nova/master_files/sound/effects/metalblock8.wav'), 50, TRUE)
+				playsound(src, pick('modular_babylon/master_files/sound/effects/metalblock1.wav', 'modular_babylon/master_files/sound/effects/metalblock2.wav', \
+									'modular_babylon/master_files/sound/effects/metalblock3.wav', 'modular_babylon/master_files/sound/effects/metalblock4.wav', \
+									'modular_babylon/master_files/sound/effects/metalblock5.wav', 'modular_babylon/master_files/sound/effects/metalblock6.wav', \
+									'modular_babylon/master_files/sound/effects/metalblock7.wav', 'modular_babylon/master_files/sound/effects/metalblock8.wav'), 50, TRUE)
 				//NOVA EDIT END
 			else
 				playsound(src, 'sound/items/weapons/tap.ogg', 50, TRUE)
