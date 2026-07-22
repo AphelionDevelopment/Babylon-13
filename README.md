@@ -16,7 +16,7 @@
 | Code                      | [https://github.com/NovaSector/NovaSector](https://github.com/NovaSector/NovaSector)                                                   |
 | Wiki                      | [https://wiki.novasector13.com](https://wiki.novasector13.com)                                                                         |
 | Codedocs                  | [https://NovaSector.github.io/NovaSector/](https://NovaSector.github.io/NovaSector/)                                                   |
-| Babylon 13's Discord      | [https://discord.gg/babylon13](https://discord.gg/qbMNSzeSj)                                                                           |
+| Babylon 13's Discord      | [https://discord.gg/babylon13]( https://discord.gg/HsX9hYwJtm)                                                                         |
 | Coderbus Discord          | [https://discord.gg/Vh8TJp9](https://discord.gg/Vh8TJp9)                                                                               |
 
 This is Babylon 13.
