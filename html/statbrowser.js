@@ -25,6 +25,7 @@ var mc_tab_parts = [['Loading...']];
 var href_token = null;
 var verb_tabs = [];
 var verbs = [['', '']]; // list with a list inside
+var favourite_verbs = [];
 var tickets = [];
 var interviewManager = { status: '', interviews: [] };
 var sdql2 = [];
@@ -69,7 +70,7 @@ function createStatusTab(name) {
   button.textContent = name;
   button.className = 'button';
   //ORDERING ALPHABETICALLY
-  button.style.order = { Status: 1, MC: 2 }[name] || name.charCodeAt(0);
+  button.style.order = { Status: 1, MC: 2, Favourites: 3 }[name] || name.charCodeAt(0);
   //END ORDERING
   menu.appendChild(button);
   SendTabToByond(name);
@@ -224,6 +225,8 @@ function tab_change(tab) {
     draw_status();
   } else if (tab == 'MC') {
     draw_mc();
+  } else if (tab == 'Favourites') {
+    draw_favourites();
   } else if (verb_tabs_thingy) {
     draw_verbs(tab);
   } else if (tab == 'Debug Stat Panel') {
@@ -643,6 +646,48 @@ function make_verb_onclick(command) {
   };
 }
 
+function toggle_favourite(verb_name) {
+  var idx = favourite_verbs.indexOf(verb_name);
+  if (idx === -1) {
+    favourite_verbs.push(verb_name);
+  } else {
+    favourite_verbs.splice(idx, 1);
+  }
+  Byond.sendMessage('Toggle-Favourite-Verb', { verb: verb_name });
+  if (current_tab == 'Favourites') {
+    draw_favourites();
+  } else if (verb_tabs.includes(current_tab)) {
+    draw_verbs(current_tab);
+  }
+}
+
+function make_star(verb_name) {
+  var is_fav = favourite_verbs.includes(verb_name);
+  var star = document.createElement('span');
+  star.className = is_fav ? 'grid-item-star favourited' : 'grid-item-star';
+  star.textContent = is_fav ? '★' : '☆';
+  star.title = is_fav ? 'Remove from Favourites' : 'Add to Favourites';
+  star.onclick = ((name) => (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggle_favourite(name);
+  })(verb_name);
+  return star;
+}
+
+function make_verb_item(command) {
+  var a = document.createElement('a');
+  a.href = '#';
+  a.onclick = make_verb_onclick(command.replace(/\s/g, '-'));
+  a.className = 'grid-item';
+  a.appendChild(make_star(command));
+  var t = document.createElement('span');
+  t.textContent = command;
+  t.className = 'grid-item-text';
+  a.appendChild(t);
+  return a;
+}
+
 function draw_verbs(cat) {
   statcontentdiv.textContent = '';
   var table = document.createElement('div');
@@ -675,15 +720,7 @@ function draw_verbs(cat) {
         additions[subCat] = newTable;
       }
 
-      var a = document.createElement('a');
-      a.href = '#';
-      a.onclick = make_verb_onclick(command.replace(/\s/g, '-'));
-      a.className = 'grid-item';
-      var t = document.createElement('span');
-      t.textContent = command;
-      t.className = 'grid-item-text';
-      a.appendChild(t);
-      (subCat ? additions[subCat] : table).appendChild(a);
+      (subCat ? additions[subCat] : table).appendChild(make_verb_item(command));
     }
   }
 
@@ -700,6 +737,39 @@ function draw_verbs(cat) {
       content.appendChild(header);
       content.appendChild(additions[cat]);
     }
+  }
+}
+
+function draw_favourites() {
+  statcontentdiv.textContent = '';
+  var content = document.getElementById('statcontent');
+  var table = document.createElement('div');
+  table.className = 'grid-container';
+  var names = [];
+  var seen = {};
+  for (var i = 0; i < verbs.length; ++i) {
+    var command = verbs[i][1];
+    if (!command || !favourite_verbs.includes(command) || seen[command]) {
+      continue;
+    }
+    seen[command] = true;
+    names.push(command);
+  }
+  names.sort((a, b) => {
+    var au = a.toUpperCase();
+    var bu = b.toUpperCase();
+    return au < bu ? -1 : au > bu ? 1 : 0;
+  });
+  for (var j = 0; j < names.length; ++j) {
+    table.appendChild(make_verb_item(names[j]));
+  }
+  content.appendChild(table);
+  if (!names.length) {
+    var empty = document.createElement('div');
+    empty.className = 'status-info';
+    empty.textContent =
+      'No favourite verbs yet. Click the ☆ next to any verb to add it here.';
+    content.appendChild(empty);
   }
 }
 
@@ -785,6 +855,8 @@ if (!current_tab) {
   tab_change(defaultTab);
 }
 
+addPermanentTab('Favourites');
+
 window.onload = () => {
   Byond.sendMessage('Update-Verbs');
 };
@@ -806,6 +878,9 @@ Byond.subscribeTo('init_verbs', (payload) => {
   checkStatusTab(); // remove all status tabs
   verb_tabs = payload.panel_tabs;
   verb_tabs.sort(); // sort it
+  if (payload.favorite_verbs) {
+    favourite_verbs = payload.favorite_verbs;
+  }
   var do_update = false;
   var cat = '';
   for (var i = 0; i < verb_tabs.length; i++) {
@@ -822,7 +897,19 @@ Byond.subscribeTo('init_verbs', (payload) => {
       draw_verbs(current_tab);
     }
   }
+  if (current_tab == 'Favourites') {
+    draw_favourites();
+  }
   SendTabsToByond();
+});
+
+Byond.subscribeTo('update_favourite_verbs', (payload) => {
+  favourite_verbs = Array.isArray(payload) ? payload : [];
+  if (current_tab == 'Favourites') {
+    draw_favourites();
+  } else if (verb_tabs.includes(current_tab)) {
+    draw_verbs(current_tab);
+  }
 });
 
 Byond.subscribeTo('update_stat', (payload) => {
