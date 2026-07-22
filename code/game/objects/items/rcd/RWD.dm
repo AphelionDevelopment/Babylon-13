@@ -1,6 +1,4 @@
 //This represents the amount of materials (both iron and glass that the max_amount of cable would amount to
-//210 is /obj/item/rwd/loaded::max_amount; inlined as a literal because BYOND 516.1685 miscompiles
-//the compile-time :: scope operator in const var initializers ("possible infinite cross-reference loop").
 #define MAX_CABLE_AMOUNT (SMALL_MATERIAL_AMOUNT * 0.1 * 210)
 
 /obj/item/rwd

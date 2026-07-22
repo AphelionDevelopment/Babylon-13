@@ -3,8 +3,6 @@
 	/// Should we open a greyscale menu when the user reskins this?
 	var/update_greyscale
 	/// The icon state to switch to when applying a custom greyscale
-	/// Literal "hypovial" (= /datum/atom_skin/hypovial/sterile::new_icon_state); the :: scope operator
-	/// miscompiles in const var initializers on BYOND 516.1685 ("possible infinite cross-reference loop").
 	var/base_icon_state = "hypovial"
 
 /datum/atom_skin/hypovial/apply(atom/apply_to, mob/user)
@@ -214,7 +212,7 @@
 
 /datum/atom_skin/hypovial/interdyne_medium
 	abstract_type = /datum/atom_skin/hypovial/interdyne_medium
-	base_icon_state = "hypovial-interdyne" // = /datum/atom_skin/hypovial/interdyne_medium/sterile::new_icon_state; see base type note re: BYOND 516.1685 :: bug
+	base_icon_state = "hypovial-interdyne"
 
 /datum/atom_skin/hypovial/interdyne_medium/sterile
 	preview_name = "Sterile"
