@@ -1,47 +1,47 @@
 /// The list of all star players.
-GLOBAL_LIST_EMPTY(nova_star_list)
-GLOBAL_PROTECT(nova_star_list)
+GLOBAL_LIST_EMPTY(star_list)
+GLOBAL_PROTECT(star_list)
 
 
-/datum/player_rank_controller/nova_star
-	rank_title = "nova_star"
+/datum/player_rank_controller/star
+	rank_title = "star"
 
 
-/datum/player_rank_controller/nova_star/New()
+/datum/player_rank_controller/star/New()
 	. = ..()
-	legacy_file_path = "[global.config.directory]/nova/nova_star_players.txt"
+	legacy_file_path = "[global.config.directory]/nova/star_players.txt"
 
 
-/datum/player_rank_controller/nova_star/add_player(ckey)
+/datum/player_rank_controller/star/add_player(ckey)
 	if(IsAdminAdvancedProcCall())
 		return
 
 	ckey = ckey(ckey)
 
 	// Associative list for extra SPEED!
-	GLOB.nova_star_list[ckey] = TRUE
+	GLOB.star_list[ckey] = TRUE
 
 
-/datum/player_rank_controller/nova_star/remove_player(ckey)
+/datum/player_rank_controller/star/remove_player(ckey)
 	if(IsAdminAdvancedProcCall())
 		return
 
-	GLOB.nova_star_list -= ckey
+	GLOB.star_list -= ckey
 
 
-/datum/player_rank_controller/nova_star/get_ckeys_for_legacy_save()
+/datum/player_rank_controller/star/get_ckeys_for_legacy_save()
 	if(IsAdminAdvancedProcCall())
 		return
 
-	return GLOB.nova_star_list
+	return GLOB.star_list
 
 
-/datum/player_rank_controller/nova_star/should_use_legacy_system()
-	return CONFIG_GET(flag/nova_star_legacy_system)
+/datum/player_rank_controller/star/should_use_legacy_system()
+	return CONFIG_GET(flag/star_legacy_system)
 
 
-/datum/player_rank_controller/nova_star/clear_existing_rank_data()
+/datum/player_rank_controller/star/clear_existing_rank_data()
 	if(IsAdminAdvancedProcCall())
 		return
 
-	GLOB.nova_star_list = list()
+	GLOB.star_list = list()

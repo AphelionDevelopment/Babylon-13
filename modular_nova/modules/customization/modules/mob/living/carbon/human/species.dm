@@ -18,8 +18,8 @@ GLOBAL_LIST_EMPTY(customizable_races)
 	var/markings_alpha = 255
 	///If a species can always be picked in prefs for the purposes of customizing it for ghost roles or events
 	var/always_customizable = FALSE
-	/// If a species requires the player to be a Nova star to be able to pick it.
-	var/nova_stars_only = FALSE
+	/// If a species requires the player to be a Star to be able to pick it.
+	var/stars_only = FALSE
 	///Flavor text of the species displayed on character creation screeen
 	var/flavor_text = "No description."
 	///Path to BODYSHAPE_CUSTOM species worn icons. An assoc list of ITEM_SLOT_X => /icon
@@ -58,7 +58,7 @@ GLOBAL_LIST_EMPTY(customizable_races)
 		STOP_PROCESSING(SSobj, old_stomach)
 
 /datum/species/dullahan
-	nova_stars_only = TRUE
+	stars_only = TRUE
 	outfit_important_for_life = /datum/outfit/dullahan
 
 /datum/species/dullahan/pre_equip_species_outfit(datum/job/job, mob/living/carbon/human/equipping, visuals_only)

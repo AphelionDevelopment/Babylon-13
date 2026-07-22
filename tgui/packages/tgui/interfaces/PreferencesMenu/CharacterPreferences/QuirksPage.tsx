@@ -115,8 +115,7 @@ function QuirkDisplay(props: QuirkDisplayProps) {
         pointerEvents: props.quirkActionLocked ? 'none' : 'auto',
       }}
       onClick={() => {
-        if (quirkActionLocked)
-          return;
+        if (quirkActionLocked) return;
         if (selected) {
           setCustomizationExpanded(false);
         }
@@ -377,13 +376,9 @@ function QuirkPage() {
         return 'You need a negative quirk to balance this out!';
       }
     }
-    // NOVA EDIT START - Nova star quirks
-    if (
-      data.nova_star_restrictions &&
-      quirk.nova_stars_only &&
-      !data.is_nova_star
-    ) {
-      return 'You need to be a Nova star to select this quirk, apply today!';
+    // NOVA EDIT START - Star quirks
+    if (data.star_restrictions && quirk.stars_only && !data.is_star) {
+      return 'You need to be a Star to select this quirk, apply today!';
     }
     // NOVA EDIT END
     const selectedQuirkNames = selectedQuirks.map((quirkKey) => {
@@ -551,7 +546,9 @@ function QuirkPage() {
 
                 withQuirkDebounce(() => {
                   setSelectedQuirks(
-                    selectedQuirks.filter((otherQuirk) => quirkName !== otherQuirk),
+                    selectedQuirks.filter(
+                      (otherQuirk) => quirkName !== otherQuirk,
+                    ),
                   );
 
                   act('remove_quirk', { quirk: quirk.name });

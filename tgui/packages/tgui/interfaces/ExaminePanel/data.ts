@@ -29,5 +29,5 @@ export type ExaminePanelData = {
     color: string;
   };
   // Misc
-  nova_star_status: boolean;
+  star_status: boolean;
 };

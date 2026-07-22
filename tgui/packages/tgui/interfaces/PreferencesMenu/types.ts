@@ -64,7 +64,7 @@ export type Species = {
 
   enabled_features: string[];
 
-  nova_stars_only: boolean; // NOVA EDIT - Nova star quirks
+  stars_only: boolean; // NOVA EDIT - Star quirks
 
   perks: {
     positive: Perk[];
@@ -94,7 +94,7 @@ export type Job = {
   description: string;
   department: string;
   // NOVA EDIT
-  nova_star?: boolean;
+  star?: boolean;
   alt_titles?: string[];
   // NOVA EDIT END
 };
@@ -106,7 +106,7 @@ export type Quirk = {
   value: number;
   customizable: boolean;
   customization_options?: string[];
-  nova_stars_only: boolean; // NOVA EDIT ADDITION - Nova star quirks
+  stars_only: boolean; // NOVA EDIT ADDITION - Star quirks
   erp_quirk: boolean; // NOVA EDIT ADDITION - Purple ERP quirks
 };
 
@@ -221,7 +221,6 @@ export enum PrefsWindow {
 }
 
 export type CharacterPreferencesData = {
-
   clothing: Record<string, string>;
   features: Record<string, string>;
   game_preferences: Record<string, unknown>;
@@ -294,7 +293,7 @@ export type PreferencesMenuData = {
   species_restricted_jobs?: string[];
   ckey: string;
   is_donator: BooleanLike;
-  is_nova_star: BooleanLike;
+  is_star: BooleanLike;
 
   // NOVA EDIT ADDITION END
   keybindings: Record<string, string[]>;

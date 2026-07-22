@@ -259,15 +259,11 @@ function JobRow(props: JobRowProps) {
       </Stack>
     );
     // NOVA EDIT START
-  } else if (
-    data.nova_star_restrictions &&
-    job.nova_star &&
-    !data.is_nova_star
-  ) {
+  } else if (data.star_restrictions && job.star && !data.is_star) {
     rightSide = (
       <Stack align="center" height="100%" pr={1}>
         <Stack.Item grow textAlign="right">
-          <b>Nova Stars Only</b>
+          <b>Stars Only</b>
         </Stack.Item>
       </Stack>
     );
@@ -329,7 +325,7 @@ function JobRow(props: JobRowProps) {
               }}
             >
               <Tooltip content={job.description} position="bottom-start">
-                <JobTitle job={job} name={name}/>
+                <JobTitle job={job} name={name} />
               </Tooltip>
             </Stack.Item>
             {assignedProfileSlot !== null && (

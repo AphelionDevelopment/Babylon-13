@@ -85,7 +85,7 @@
 			"value" = initial(quirk.value),
 			"customizable" = constant_data?.is_customizable(),
 			"customization_options" = customization_options,
-			"nova_stars_only" = initial(quirk.nova_stars_only), // NOVA EDIT ADDITION - Veteran quirks
+			"stars_only" = initial(quirk.stars_only), // NOVA EDIT ADDITION - Veteran quirks
 			"erp_quirk" = initial(quirk.erp_quirk), // NOVA EDIT ADDITION - Purple ERP quirks
 		)
 
@@ -106,7 +106,7 @@
 	//NOVA EDIT ADDITION
 	var/list/quirks = SSquirks.get_quirks()
 	var/datum/quirk/quirk = quirks[quirk_name]
-	if(GLOB.nova_star_restrictions && initial(quirk.nova_stars_only) && !SSplayer_ranks.is_nova_star(preferences?.parent))
+	if(GLOB.star_restrictions && initial(quirk.stars_only) && !SSplayer_ranks.is_star(preferences?.parent))
 		return FALSE
 	//NOVA EDIT END
 
@@ -149,7 +149,7 @@
 		//NOVA EDIT ADDITION
 		var/list/quirks = SSquirks.get_quirks()
 		var/datum/quirk/quirk_datum = quirks[quirk]
-		if(GLOB.nova_star_restrictions && initial(quirk_datum.nova_stars_only) && !SSplayer_ranks.is_nova_star(preferences?.parent))
+		if(GLOB.star_restrictions && initial(quirk_datum.stars_only) && !SSplayer_ranks.is_star(preferences?.parent))
 			preferences.all_quirks -= quirk
 			continue
 		//NOVA EDIT END
