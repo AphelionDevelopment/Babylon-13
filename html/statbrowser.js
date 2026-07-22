@@ -26,6 +26,8 @@ var href_token = null;
 var verb_tabs = [];
 var verbs = [['', '']]; // list with a list inside
 var favourite_verbs = [];
+var verb_filter = '';
+var current_verb_cat = null;
 var tickets = [];
 var interviewManager = { status: '', interviews: [] };
 var sdql2 = [];
@@ -688,19 +690,84 @@ function make_verb_item(command) {
   return a;
 }
 
-function draw_verbs(cat) {
-  statcontentdiv.textContent = '';
-  var table = document.createElement('div');
-  var additions = {}; // additional sub-categories to be rendered
-  table.className = 'grid-container';
-  sortVerbs();
-  if (split_admin_tabs && cat.lastIndexOf('.') != -1) {
-    var splitName = cat.split('.');
-    if (splitName[0] === 'Admin') cat = splitName[1];
+function verb_compare(a, b) {
+  var ac = (a[0] || '').toUpperCase();
+  var bc = (b[0] || '').toUpperCase();
+  if (ac != bc) return ac < bc ? -1 : 1;
+  var an = (a[1] || '').toUpperCase();
+  var bn = (b[1] || '').toUpperCase();
+  return an < bn ? -1 : an > bn ? 1 : 0;
+}
+
+function make_verb_search() {
+  var wrap = document.createElement('div');
+  wrap.className = 'verb-search';
+  var input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'verb-search-input';
+  input.placeholder = 'Search all verbs...';
+  input.value = verb_filter;
+  input.spellcheck = false;
+  var stop = (e) => e.stopPropagation();
+  input.addEventListener('mousedown', stop);
+  input.addEventListener('mouseup', stop);
+  input.addEventListener('keydown', stop);
+  input.addEventListener('keyup', stop);
+  input.oninput = () => {
+    verb_filter = input.value;
+    render_verb_results();
+  };
+  wrap.appendChild(input);
+  return wrap;
+}
+
+function render_verb_results() {
+  var results = document.getElementById('verb-results');
+  if (!results) return;
+  results.textContent = '';
+  var filter = verb_filter.trim().toUpperCase();
+
+  if (filter) {
+    var names = [];
+    var seen = {};
+    for (var i = 0; i < verbs.length; ++i) {
+      var command = verbs[i][1];
+      if (!command || seen[command]) continue;
+      if (command.toUpperCase().indexOf(filter) == -1) continue;
+      seen[command] = true;
+      names.push(command);
+    }
+    names.sort((a, b) => {
+      var au = a.toUpperCase();
+      var bu = b.toUpperCase();
+      return au < bu ? -1 : au > bu ? 1 : 0;
+    });
+    var grid = document.createElement('div');
+    grid.className = 'grid-container';
+    for (var j = 0; j < names.length; ++j) {
+      grid.appendChild(make_verb_item(names[j]));
+    }
+    results.appendChild(grid);
+    if (!names.length) {
+      var empty = document.createElement('div');
+      empty.className = 'status-info';
+      empty.textContent = 'No verbs match "' + verb_filter.trim() + '".';
+      results.appendChild(empty);
+    }
+    return;
   }
-  verbs.reverse(); // sort verbs backwards before we draw
-  for (var i = 0; i < verbs.length; ++i) {
-    var part = verbs[i];
+
+  render_verb_category(results, current_verb_cat);
+}
+
+function render_verb_category(container, cat) {
+  if (!cat) return;
+  var table = document.createElement('div');
+  table.className = 'grid-container';
+  var additions = {}; // additional sub-categories to be rendered
+  var sorted = verbs.slice().sort(verb_compare);
+  for (var i = 0; i < sorted.length; ++i) {
+    var part = sorted[i];
     var name = part[0];
     if (split_admin_tabs && name.lastIndexOf('.') != -1) {
       var splitName = name.split('.');
@@ -724,20 +791,30 @@ function draw_verbs(cat) {
     }
   }
 
-  // Append base table to view
-  var content = document.getElementById('statcontent');
-  content.appendChild(table);
+  container.appendChild(table);
 
-  // Append additional sub-categories if relevant
-  for (var cat in additions) {
-    if (Object.hasOwn(additions, cat)) {
-      // do addition here
+  for (var subCatName in additions) {
+    if (Object.hasOwn(additions, subCatName)) {
       var header = document.createElement('h3');
-      header.textContent = cat;
-      content.appendChild(header);
-      content.appendChild(additions[cat]);
+      header.textContent = subCatName;
+      container.appendChild(header);
+      container.appendChild(additions[subCatName]);
     }
   }
+}
+
+function draw_verbs(cat) {
+  if (split_admin_tabs && cat.lastIndexOf('.') != -1) {
+    var splitName = cat.split('.');
+    if (splitName[0] === 'Admin') cat = splitName[1];
+  }
+  current_verb_cat = cat;
+  statcontentdiv.textContent = '';
+  statcontentdiv.appendChild(make_verb_search());
+  var results = document.createElement('div');
+  results.id = 'verb-results';
+  statcontentdiv.appendChild(results);
+  render_verb_results();
 }
 
 function draw_favourites() {

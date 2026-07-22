@@ -183,6 +183,31 @@ img {
   color: #f0b400;
 }
 
+.verb-search {
+  margin: 0 0.25em 0.5em;
+}
+
+.verb-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.35em 0.5em;
+  font-size: 1em;
+  font-family: inherit;
+  color: black;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 0.25em;
+}
+
+.verb-search-input:focus {
+  outline: none;
+  border-color: #0668b8;
+}
+
+.verb-search-input::placeholder {
+  color: #999999;
+}
+
 .grid-item:hover .grid-item-text {
   height: 100%;
   overflow: visible;
@@ -297,4 +322,18 @@ body.dark {
 .dark .grid-item-star.favourited,
 .dark .grid-item-star:hover {
   color: #f0b400;
+}
+
+.dark .verb-search-input {
+  color: #d4dfec;
+  background-color: #202020;
+  border-color: #3a3a3a;
+}
+
+.dark .verb-search-input:focus {
+  border-color: #20b142;
+}
+
+.dark .verb-search-input::placeholder {
+  color: #6a6a6a;
 }
