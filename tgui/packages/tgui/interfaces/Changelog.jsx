@@ -184,19 +184,19 @@ export class Changelog extends Component {
 
     const header = (
       <Section>
-        <h1>Nova Sector</h1>
+        <h1>Babylon</h1>
         <p>
           <b>Thanks to: </b>
-          Traditional Games 13, Skyrat Station 13, Baystation 12, /vg/station,
-          NTstation, CDK Station devs, FacepunchStation, GoonStation devs, the
-          original Space Station 13 developers, Invisty for the title image and
-          the countless others who have contributed to the game.
+          Nova Sector, Traditional Games 13, Skyrat Station 13, Baystation 12,
+          /vg/station, NTstation, CDK Station devs, FacepunchStation, GoonStation
+          devs, the original Space Station 13 developers, Invisty for the title
+          image and the countless others who have contributed to the game.
         </p>
         <p>
           {'Current project maintainers can be found '}
-          <a href="https://github.com/NovaSector?tab=members">here</a>
+          <a href="https://github.com/orgs/Babylon-13/people">here</a>
           {', recent GitHub contributors can be found '}
-          <a href="https://github.com/NovaSector/NovaSector/pulse/monthly">
+          <a href="https://github.com/Babylon-13/Babylon-13/pulse/monthly">
             here
           </a>
           .

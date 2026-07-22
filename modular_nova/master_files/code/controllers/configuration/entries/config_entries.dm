@@ -122,7 +122,7 @@
 /// while it has an active whitelist. The \n allows the message to be displayed on a separate line,
 /// to make it more readable in the BYOND window.
 /datum/config_entry/string/missing_whitelist_message
-	default = "\nThis server requires you to be whitelisted in order to be allowed to play. Apply on our Discord by simply filling the Access Request form from the #application-instructions channel under the 'Landing Zone' category. Here's the invite link: https://discord.gg/novasector"
+	default = "\nThis server requires you to be whitelisted in order to be allowed to play. Apply on our Discord by simply filling the Access Request form from the #application-instructions channel under the 'Landing Zone' category. Here's the invite link: https://discord.gg/qbMNSzeSj"
 
 /datum/config_entry/flag/disable_blinking
 	default = FALSE

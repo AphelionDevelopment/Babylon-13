@@ -14,7 +14,7 @@
 	allow_duplicates = FALSE
 
 /datum/map_template/ruin/lavaland/nova/interdyne_base
-	name = "Lava-Ruin Interdyne Pharmaceutics Nova Sector Base 3c76928"
+	name = "Lava-Ruin Interdyne Pharmaceutics Babylon Base 3c76928"
 	id = "lava-base"
 	description = "A planetside Interdyne research facility developing biological weapons; it is closely guarded by an elite team of agents."
 	prefix = "_maps/RandomRuins/LavaRuins/nova/"
