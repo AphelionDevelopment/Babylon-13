@@ -21,7 +21,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Abductors!_Station_Threat*2">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Abductors!_Station_Threat*2">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -34,7 +34,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Contractor!">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Contractor!">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -47,7 +47,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Cortical_Borer!_PERMANENT_MECHANICAL_STATE">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Cortical_Borer!_PERMANENT_MECHANICAL_STATE">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -60,7 +60,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Man_Eaters!_PERMANENT_MECHANICAL_STATE">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Man_Eaters!_PERMANENT_MECHANICAL_STATE">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -73,7 +73,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Obsessed!">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Obsessed!">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -86,7 +86,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Revenant!_PERMANENT_MECHANICAL_STATE">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Revenant!_PERMANENT_MECHANICAL_STATE">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -99,7 +99,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Space_Dragon!_PERMANENT_MECHANICAL_STATE">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Space_Dragon!_PERMANENT_MECHANICAL_STATE">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -112,7 +112,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Space_Pirates!_Station_Threat*2">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Space_Pirates!_Station_Threat*2">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -125,7 +125,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Blob!_PERMANENT_MECHANICAL_STATE">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Blob!_PERMANENT_MECHANICAL_STATE">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -138,7 +138,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Changeling!_Station_Threat">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Changeling!_Station_Threat">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -151,7 +151,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Clockcult_(OPFOR)">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Clockcult_(OPFOR)">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -164,7 +164,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Assault_Ops!">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Assault_Ops!">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -177,7 +177,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Heretic!">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Heretic!">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -190,7 +190,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Malf_AI!">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Malf_AI!">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -203,7 +203,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Morphling!_Station_Threat*2">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Morphling!_Station_Threat*2">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -216,7 +216,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Nightmare!_Station_Threat">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Nightmare!_Station_Threat">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -229,7 +229,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Space_Ninja">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Space_Ninja">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -242,7 +242,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Wizard!">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Wizard!">
                 Special Rules and Metaprotections!
               </a>
             }
@@ -255,7 +255,7 @@ export const Rules = (props) => {
           <Stack.Item bold>Special Rules:</Stack.Item>
           <Stack.Item>
             {
-              <a href="https://wiki.novasector13.com/index.php/Antagonist_Policy#Traitor!">
+              <a href="https://wiki.babylon13.com/index.php/Antagonist_Policy#Traitor!">
                 Special Rules and Metaprotections!
               </a>
             }

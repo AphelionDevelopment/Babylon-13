@@ -7169,7 +7169,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -8396,7 +8396,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -11495,7 +11495,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -17700,7 +17700,7 @@
 /obj/structure/flora/bush/sparsegrass,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -18797,7 +18797,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -23702,7 +23702,7 @@
 /mob/living/basic/frog,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -24412,7 +24412,7 @@
 /obj/structure/flora/bush/stalky,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -28102,7 +28102,7 @@
 /obj/structure/decorative{
 	icon_state = "projector";
 	pixel_y = -6;
-	icon = 'modular_nova/modules/wargame_projectors/icons/projectors_and_holograms.dmi';
+	icon = 'modular_babylon/modules/wargame_projectors/icons/projectors_and_holograms.dmi';
 	base_icon_state = "projector";
 	dir = 8;
 	pixel_x = 1;
@@ -28124,7 +28124,7 @@
 	pixel_y = 24;
 	base_icon_state = "planet";
 	icon_state = "planet";
-	icon = 'modular_nova/modules/wargame_projectors/icons/projectors_and_holograms.dmi';
+	icon = 'modular_babylon/modules/wargame_projectors/icons/projectors_and_holograms.dmi';
 	color = "#a6ffed";
 	desc = null;
 	name = "hologram"
@@ -30899,7 +30899,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -37244,7 +37244,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -41230,7 +41230,7 @@
 /obj/structure/flora/bush/reed/style_2,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -42174,7 +42174,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -49039,7 +49039,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -52536,7 +52536,7 @@
 /obj/structure/flora/ocean/longseaweed,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -53587,7 +53587,7 @@
 /obj/structure/flora/ocean/coral,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -53597,7 +53597,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -60296,7 +60296,7 @@
 /obj/structure/flora/bush/sparsegrass/style_3,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -62727,7 +62727,7 @@
 /obj/structure/flora/bush/stalky/style_2,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -63020,7 +63020,7 @@
 /obj/structure/flora/bush/sparsegrass,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -65861,7 +65861,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -74786,7 +74786,7 @@
 /obj/structure/flora/bush/stalky/style_random,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -74857,7 +74857,7 @@
 	},
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -79429,7 +79429,7 @@
 /obj/structure/flora/bush/stalky/style_3,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -83687,7 +83687,7 @@
 /obj/structure/flora/bush/stalky/style_random,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)
@@ -88061,7 +88061,7 @@
 /obj/structure/railing,
 /obj/effect/spawner/liquids_spawner,
 /turf/open/floor/iron/pool{
-	icon = 'modular_nova/modules/mapping/icons/unique/dungeon.dmi';
+	icon = 'modular_babylon/modules/mapping/icons/unique/dungeon.dmi';
 	icon_state = "cobble"
 	},
 /area/station/hallway/floor2)

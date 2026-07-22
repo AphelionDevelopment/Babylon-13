@@ -50,11 +50,11 @@ ALTER TABLE connection_log
 ---
 
 Version 5.36, 23 June 2025, by vinylspiders
-In the `player_rank` table, renames the `rank` value `veteran` to `nova_star`.
+In the `player_rank` table, renames the `rank` value `veteran` to `babylon_star`.
 
 ```sql
 UPDATE player_rank
-SET rank = 'nova_star'
+SET rank = 'babylon_star'
 WHERE rank = 'veteran';
 ```
 

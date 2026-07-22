@@ -412,8 +412,8 @@ GLOBAL_LIST_INIT(clown_mask_options, list(
 		var/mob/living/carbon/human/human_user = user
 		var/datum/mutant_bodypart/snout = human_user.dna.mutant_bodyparts[FEATURE_SNOUT]
 		if(snout)
-			icon = 'modular_nova/master_files/icons/obj/clothing/masks.dmi'
-			worn_icon = 'modular_nova/master_files/icons/mob/clothing/mask_muzzled.dmi'
+			icon = 'modular_babylon/master_files/icons/obj/clothing/masks.dmi'
+			worn_icon = 'modular_babylon/master_files/icons/mob/clothing/mask_muzzled.dmi'
 			var/list/avian_snouts = list("Beak", "Big Beak", "Corvid Beak")
 			if(snout.name in avian_snouts)
 				icon_state = "[options[choice]]_b"

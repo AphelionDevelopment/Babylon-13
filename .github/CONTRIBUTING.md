@@ -188,7 +188,7 @@ If you are porting features/tools from other codebases, you must give them credi
 
 Regarding sprites & sounds, you must credit the artist and possibly the codebase. All /tg/station assets including icons and sound are under a [Creative Commons 3.0 BY-SA license](https://creativecommons.org/licenses/by-sa/3.0/) unless otherwise indicated.
 
-Regarding sprites in particular, you still need to take your own screenshots of the sprites in-game on your Nova Sector code in your PR body, not just re-use the screenshots provided in the original PR.
+Regarding sprites in particular, you still need to take your own screenshots of the sprites in-game on your Babylon code in your PR body, not just re-use the screenshots provided in the original PR.
 
 ## Banned content
 

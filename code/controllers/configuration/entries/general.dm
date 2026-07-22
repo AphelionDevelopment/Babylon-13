@@ -326,7 +326,7 @@
 /datum/config_entry/string/banappeals
 
 /datum/config_entry/string/wikiurl
-	default = "https://wiki.novasector13.com/index.php" //NOVA EDIT CHANGE - Original: default = "https://wiki.tgstation13.org"
+	default = "https://wiki.babylon13.com/index.php" //NOVA EDIT CHANGE - Original: default = "https://wiki.tgstation13.org"
 
 /datum/config_entry/string/forumurl
 	default = "http://tgstation13.org/phpBB/index.php"
@@ -335,7 +335,7 @@
 	default = "http://tgstation13.org/wiki/Rules"
 
 /datum/config_entry/string/githuburl
-	default = "https://www.github.com/tgstation/tgstation"
+	default = "https://github.com/Babylon-13/Babylon"
 
 /datum/config_entry/string/configurl
 	default = "https://github.com/tgstation-operations/server-config"

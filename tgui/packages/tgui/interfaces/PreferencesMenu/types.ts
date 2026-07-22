@@ -64,7 +64,7 @@ export type Species = {
 
   enabled_features: string[];
 
-  nova_stars_only: boolean; // NOVA EDIT - Nova star quirks
+  babylon_stars_only: boolean; // NOVA EDIT - Nova star quirks
 
   perks: {
     positive: Perk[];
@@ -94,7 +94,7 @@ export type Job = {
   description: string;
   department: string;
   // NOVA EDIT
-  nova_star?: boolean;
+  babylon_star?: boolean;
   alt_titles?: string[];
   // NOVA EDIT END
 };
@@ -106,7 +106,7 @@ export type Quirk = {
   value: number;
   customizable: boolean;
   customization_options?: string[];
-  nova_stars_only: boolean; // NOVA EDIT ADDITION - Nova star quirks
+  babylon_stars_only: boolean; // NOVA EDIT ADDITION - Nova star quirks
   erp_quirk: boolean; // NOVA EDIT ADDITION - Purple ERP quirks
 };
 
@@ -294,7 +294,7 @@ export type PreferencesMenuData = {
   species_restricted_jobs?: string[];
   ckey: string;
   is_donator: BooleanLike;
-  is_nova_star: BooleanLike;
+  is_babylon_star: BooleanLike;
 
   // NOVA EDIT ADDITION END
   keybindings: Record<string, string[]>;

@@ -1,9 +1,9 @@
-## Babylon Station
+## Babylon (/tg/station Downstream)
 
-[![CI Suite](https://github.com/Babylon-13/Babylon-13/workflows/CI%20Suite/badge.svg)](https://github.com/Babylon-13/Babylon-13/actions?query=workflow%3A%22CI+Suite%22)
-[![Percentage of issues still open](https://isitmaintained.com/badge/open/Babylon-13/Babylon-13.svg)](https://isitmaintained.com/project/Babylon-13/Babylon-13 "Percentage of issues still open")
-[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/Babylon-13/Babylon-13.svg)](https://isitmaintained.com/project/Babylon-13/Babylon-13 "Average time to resolve an issue")
-![Coverage](https://img.shields.io/codecov/c/github/Babylon-13/Babylon-13)
+[![CI Suite](https://github.com/Babylon-13/Babylon/workflows/CI%20Suite/badge.svg)](https://github.com/Babylon-13/Babylon/actions?query=workflow%3A%22CI+Suite%22)
+[![Percentage of issues still open](https://isitmaintained.com/badge/open/Babylon-13/Babylon.svg)](https://isitmaintained.com/project/Babylon-13/Babylon "Percentage of issues still open")
+[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/Babylon-13/Babylon.svg)](https://isitmaintained.com/project/Babylon-13/Babylon "Average time to resolve an issue")
+![Coverage](https://img.shields.io/codecov/c/github/Babylon-13/Babylon)
 
 [![resentment](.github/images/badges/built-with-resentment.svg)](.github/images/comics/131-bug-free.png) [![technical debt](.github/images/badges/contains-technical-debt.svg)](.github/images/comics/106-tech-debt-modified.png) [![forinfinityandbyond](.github/images/badges/made-in-byond.gif)](https://www.reddit.com/r/SS13/comments/5oplxp/what_is_the_main_problem_with_byond_as_an_engine/dclbu1a)
 
@@ -11,15 +11,15 @@
 | -----------------------   | -------------------------------------------------------------------------------------------------------------------------------------- |
 | How to Write a Design Doc |  [https://hackmd.io/@tgstation/BkzmU9EyK](https://hackmd.io/@tgstation/BkzmU9EyK)                                                      |
 | Git / GitHub cheatsheet   | [https://www.notion.so/Git-GitHub-61bc81766b2e4c7d9a346db3078ce833](https://www.notion.so/Git-GitHub-61bc81766b2e4c7d9a346db3078ce833) |
-| Guide to Modularization   | [./modular_nova/readme.md](./modular_nova/readme.md)                                                                                   |
-| Guide to Mirroring        | [./modular_nova/mirroring_guide.md](./modular_nova/mirroring_guide.md)                                                                 |
-| Code                      | [https://github.com/NovaSector/NovaSector](https://github.com/NovaSector/NovaSector)                                                   |
-| Wiki                      | [https://wiki.novasector13.com](https://wiki.novasector13.com)                                                                         |
-| Codedocs                  | [https://NovaSector.github.io/NovaSector/](https://NovaSector.github.io/NovaSector/)                                                   |
-| Babylon 13's Discord      | [https://discord.gg/babylon13]( https://discord.gg/HsX9hYwJtm)                                                                         |
+| Guide to Modularization   | [./modular_babylon/readme.md](./modular_babylon/readme.md)                                                                                   |
+| Guide to Mirroring        | [./modular_babylon/mirroring_guide.md](./modular_babylon/mirroring_guide.md)                                                                 |
+| Code                      | [https://github.com/Babylon-13/Babylon](https://github.com/Babylon-13/Babylon)                                                   |
+| Wiki                      | [https://wiki.babylon13.com](https://wiki.babylon13.com)                                                                               |
+| Codedocs                  | [https://Babylon-13.github.io/Babylon/](https://Babylon-13.github.io/Babylon/)                                                   |
+| Babylon's Discord         | [https://discord.gg/qbMNSzeSj](https://discord.gg/qbMNSzeSj)                                                                           |
 | Coderbus Discord          | [https://discord.gg/Vh8TJp9](https://discord.gg/Vh8TJp9)                                                                               |
 
-This is Babylon 13.
+This is Babylon, a downstream fork of /tg/station (via Nova Sector), created in byond.
 
 **Please note that this repository contains sexually explicit content and is not suitable for those under the age of 18.**
 
@@ -31,7 +31,7 @@ You are responsible for the testing of your content and providing proof of such 
 
 ## DEVELOPMENT
 
-[Modularisation Guide](./modular_nova/readme.md)
+[Modularisation Guide](./modular_babylon/readme.md)
 
 ## DOWNLOADING
 

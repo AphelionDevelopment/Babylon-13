@@ -72,7 +72,7 @@
 		jobs[job.title] = list(
 			"description" = job.description,
 			"department" = department_name,
-			"nova_star" = job.nova_stars_only, // NOVA EDIT ADDITION
+			"babylon_star" = job.babylon_stars_only, // NOVA EDIT ADDITION
 			"alt_titles" = job.alt_titles, // NOVA EDIT ADDITION
 		)
 
@@ -108,9 +108,9 @@
 /datum/preference_middleware/jobs/get_ui_static_data(mob/user)
 	var/list/data = list()
 	// NOVA EDIT
-	if(SSplayer_ranks.is_nova_star(user.client))
-		data["is_nova_star"] = TRUE
-	data["nova_star_restrictions"] = GLOB.nova_star_restrictions
+	if(SSplayer_ranks.is_babylon_star(user.client))
+		data["is_babylon_star"] = TRUE
+	data["babylon_star_restrictions"] = GLOB.babylon_star_restrictions
 	// NOVA EDIT END
 	var/list/required_job_playtime = get_required_job_playtime(user)
 	if (!isnull(required_job_playtime))

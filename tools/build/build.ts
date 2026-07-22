@@ -110,8 +110,8 @@ export const IconCutterTarget = new Juke.Target({
       `icons/**/*.dmi.toml`,
       `cutter_templates/**/*.toml`,
       // NOVA EDIT ADDITION START - Making it work in our nova master files
-      `modular_nova/**/*.png.toml`,
-      `modular_nova/**/*.dmi.toml`,
+      `modular_babylon/**/*.png.toml`,
+      `modular_babylon/**/*.dmi.toml`,
       // NOVA EDIT ADDITION END
       cutter_path,
     ];
@@ -121,8 +121,8 @@ export const IconCutterTarget = new Juke.Target({
       ...Juke.glob(`icons/**/*.png.toml`),
       ...Juke.glob(`icons/**/*.dmi.toml`),
       // NOVA EDIT ADDITION START - Making it work in our nova master files
-      ...Juke.glob(`modular_nova/**/*.png.toml`),
-      ...Juke.glob(`modular_nova/**/*.dmi.toml`),
+      ...Juke.glob(`modular_babylon/**/*.png.toml`),
+      ...Juke.glob(`modular_babylon/**/*.dmi.toml`),
       // NOVA EDIT ADDITION END
     ];
     return [
@@ -136,8 +136,8 @@ export const IconCutterTarget = new Juke.Target({
       ...Juke.glob(`icons/**/*.png.toml`),
       ...Juke.glob(`icons/**/*.dmi.toml`),
       // NOVA EDIT ADDITION START - Making it work in our nova master files
-      ...Juke.glob(`modular_nova/**/*.png.toml`),
-      ...Juke.glob(`modular_nova/**/*.dmi.toml`),
+      ...Juke.glob(`modular_babylon/**/*.png.toml`),
+      ...Juke.glob(`modular_babylon/**/*.dmi.toml`),
       // NOVA EDIT ADDITION END
     ];
     return folders
@@ -150,7 +150,7 @@ export const IconCutterTarget = new Juke.Target({
       '--templates',
       'cutter_templates',
       'icons',
-      'modular_nova', // NOVA EDIT ADDITION - Making the cutter actually work
+      'modular_babylon', // NOVA EDIT ADDITION - Making the cutter actually work
     ]);
   },
 });
@@ -220,7 +220,7 @@ export const DmTarget = new Juke.Target({
     'interface/**',
     'sound/**',
     'tgui/public/tgui.html',
-    "modular_nova/**", ///NOVA EDIT ADDITION - Making the CBT work
+    "modular_babylon/**", ///NOVA EDIT ADDITION - Making the CBT work
     `${DME_NAME}.dme`,
     NamedVersionFile,
   ],

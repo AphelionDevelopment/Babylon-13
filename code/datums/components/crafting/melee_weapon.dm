@@ -50,7 +50,7 @@
 		/obj/item/claymore/weak/ceremonial,
 		/obj/item/claymore/highlander/robot,
 		// NOVA ADDITION BEGIN - blacklisting our common weapons
-		// katana and sabres can be found in modular_nova/modules/modular_weapons/code/melee.dm
+		// katana and sabres can be found in modular_babylon/modules/modular_weapons/code/melee.dm
 		/obj/item/claymore/dragonslayer,
 		/obj/item/claymore/weak/weaker,
 		/obj/item/claymore/cutlass/luna,
