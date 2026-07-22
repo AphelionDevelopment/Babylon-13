@@ -196,7 +196,7 @@ export class Changelog extends Component {
           {'Current project maintainers can be found '}
           <a href="https://github.com/orgs/Babylon-13/people">here</a>
           {', recent GitHub contributors can be found '}
-          <a href="https://github.com/Babylon-13/Babylon-13/pulse/monthly">
+          <a href="https://github.com/Babylon-13/Babylon/pulse/monthly">
             here
           </a>
           .

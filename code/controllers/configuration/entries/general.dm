@@ -335,7 +335,7 @@
 	default = "http://tgstation13.org/wiki/Rules"
 
 /datum/config_entry/string/githuburl
-	default = "https://github.com/Babylon-13/Babylon-13"
+	default = "https://github.com/Babylon-13/Babylon"
 
 /datum/config_entry/string/configurl
 	default = "https://github.com/tgstation-operations/server-config"
