@@ -261,6 +261,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 			parsed_favs += path
 	favorite_outfits = unique_list(parsed_favs)
 
+	favorite_verbs = savefile.get_entry("favorite_verbs")
+
 	// Custom hotkeys
 	key_bindings = savefile.get_entry("key_bindings")
 
@@ -281,6 +283,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	be_special = sanitize_be_special(SANITIZE_LIST(be_special))
 	key_bindings = sanitize_keybindings(key_bindings)
 	favorite_outfits = SANITIZE_LIST(favorite_outfits)
+	favorite_verbs = SANITIZE_LIST(favorite_verbs)
 
 	key_bindings_by_key = get_key_bindings_by_key(key_bindings)
 
@@ -335,6 +338,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	savefile.set_entry("key_bindings", key_bindings)
 	savefile.set_entry("hearted_until", (hearted_until > world.realtime ? hearted_until : null))
 	savefile.set_entry("favorite_outfits", favorite_outfits)
+	savefile.set_entry("favorite_verbs", favorite_verbs)
 	savefile.save()
 	return TRUE
 

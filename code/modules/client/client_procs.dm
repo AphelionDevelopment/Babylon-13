@@ -1142,7 +1142,20 @@ GLOBAL_LIST_INIT(unrecommended_builds, list(
 			continue
 		panel_tabs |= verb_to_init.category
 		verblist[++verblist.len] = list(verb_to_init.category, verb_to_init.name)
-	src.stat_panel.send_message("init_verbs", list(panel_tabs = panel_tabs, verblist = verblist))
+	src.stat_panel.send_message("init_verbs", list(panel_tabs = panel_tabs, verblist = verblist, favorite_verbs = prefs?.favorite_verbs))
+
+/client/proc/toggle_favourite_verb(verb_name)
+	if(IsAdminAdvancedProcCall())
+		return
+	if(!istext(verb_name) || !prefs)
+		return
+	LAZYINITLIST(prefs.favorite_verbs)
+	if(verb_name in prefs.favorite_verbs)
+		prefs.favorite_verbs -= verb_name
+	else
+		prefs.favorite_verbs |= verb_name
+	prefs.save_preferences()
+	src.stat_panel.send_message("update_favourite_verbs", prefs.favorite_verbs)
 
 /client/proc/check_panel_loaded()
 	if(stat_panel.is_ready())
@@ -1194,6 +1207,8 @@ GLOBAL_LIST_INIT(unrecommended_builds, list(
 		if("Set-Tab")
 			stat_tab = payload["tab"]
 			SSstatpanels.immediate_send_stat_data(src)
+		if("Toggle-Favourite-Verb")
+			toggle_favourite_verb(payload["verb"])
 
 /// Checks if this client has met the days requirement passed in, or if
 /// they are exempt from it.

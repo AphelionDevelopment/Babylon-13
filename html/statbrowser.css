@@ -161,8 +161,26 @@ img {
   white-space: nowrap;
   pointer-events: none;
   width: 100%;
+  min-width: 0;
   padding: 0.33em 0.5em;
   border-radius: 0.25em;
+}
+
+.grid-item-star {
+  flex: 0 0 auto;
+  align-self: center;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  -ms-user-select: none; /* Remove after Byond 516 */
+  padding: 0 0.1em 0 0.4em;
+  color: #b0b0b0;
+  line-height: 1;
+}
+
+.grid-item-star.favourited,
+.grid-item-star:hover {
+  color: #f0b400;
 }
 
 .grid-item:hover .grid-item-text {
@@ -270,4 +288,13 @@ body.dark {
 
 .dark .grid-item:active .grid-item-text {
   background-color: #313131;
+}
+
+.dark .grid-item-star {
+  color: #5a5a5a;
+}
+
+.dark .grid-item-star.favourited,
+.dark .grid-item-star:hover {
+  color: #f0b400;
 }

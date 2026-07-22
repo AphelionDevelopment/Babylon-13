@@ -73,6 +73,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/hearted_until
 	///What outfit typepaths we've favorited in the SelectEquipment menu
 	var/list/favorite_outfits = list()
+	var/list/favorite_verbs = list()
 
 	/// A preview of the current character
 	var/atom/movable/screen/map_view/char_preview/character_preview_view
