@@ -15,31 +15,27 @@
 		if(entry.protection & CONFIG_ENTRY_HIDDEN) // never expose comms_key / DB creds
 			continue
 		var/etype = "string"
-		var/is_list = FALSE
 		if(istype(entry, /datum/config_entry/flag))
 			etype = "flag"
 		else if(istype(entry, /datum/config_entry/number))
 			etype = "number"
 		else if(istype(entry, /datum/config_entry/number_list))
 			etype = "number_list"
-			is_list = TRUE
 		else if(istype(entry, /datum/config_entry/str_list))
 			etype = "str_list"
-			is_list = TRUE
 		else if(istype(entry, /datum/config_entry/keyed_list))
 			etype = "keyed_list"
-			is_list = TRUE
 		entries += list(list(
 			"name" = entry.name,
 			"type" = etype,
-			"value" = is_list ? null : entry.config_entry_value, // list values aren't shown/edited here
-			"settable" = !is_list && !(entry.protection & CONFIG_ENTRY_LOCKED),
+			"value" = entry.config_entry_value, // actual value; lists come back as arrays / assoc objects
+			"locked" = !!(entry.protection & CONFIG_ENTRY_LOCKED), // locked = editable via file (persists), no live hot-reload
 			"file" = entry.resident_file, // config-dir-relative source file (null = code default); SSymphony writes here
 		))
 	.["count"] = length(entries)
 	.["entries"] = entries
 
-/// Set a scalar config entry (flag/number/string) at runtime — hot, no restart. List entries are refused.
+/// Set a config entry at runtime (hot, no restart). Lists are replaced (set_default + re-add each line). Hidden/locked refused (locked persists via file).
 /datum/world_topic/symphony_config_set
 	keyword = "symphony_config_set"
 	require_comms_key = TRUE
@@ -58,17 +54,31 @@
 		.["success"] = FALSE
 		.["message"] = "unknown entry"
 		return
-	// A world_topic is NOT an admin proccall, so LOCKED/HIDDEN are NOT auto-guarded — enforce here.
-	if(entry.protection & (CONFIG_ENTRY_LOCKED | CONFIG_ENTRY_HIDDEN))
+	// A world_topic is NOT an admin proccall, so protection is NOT auto-guarded — enforce here.
+	// HIDDEN must never be touched. LOCKED can't be changed live (the SSymphony file write persists it for next boot).
+	if(entry.protection & CONFIG_ENTRY_HIDDEN)
 		.["success"] = FALSE
-		.["message"] = "protected entry"
+		.["message"] = "hidden entry"
 		return
-	if(istype(entry, /datum/config_entry/str_list) || istype(entry, /datum/config_entry/keyed_list) || istype(entry, /datum/config_entry/number_list))
+	if(entry.protection & CONFIG_ENTRY_LOCKED)
 		.["success"] = FALSE
-		.["message"] = "list configs are not editable here"
+		.["message"] = "locked — change persisted to file, applies on restart"
 		return
 	var/old_value = entry.config_entry_value
-	if(!entry.ValidateAndSet("[new_value]")) // writes config_entry_value in place -> CONFIG_GET is live immediately
+	var/ok = FALSE
+	if(istype(entry, /datum/config_entry/str_list) || istype(entry, /datum/config_entry/number_list) || istype(entry, /datum/config_entry/keyed_list))
+		// list ValidateAndSet APPENDS — reset to default first, then add each line, so the whole list is REPLACED.
+		entry.set_default()
+		ok = TRUE
+		for(var/element in splittext(new_value, "\n"))
+			element = trim(element)
+			if(!element)
+				continue
+			if(!entry.ValidateAndSet(element))
+				ok = FALSE
+	else
+		ok = entry.ValidateAndSet("[new_value]") // writes config_entry_value in place -> CONFIG_GET is live immediately
+	if(!ok)
 		.["success"] = FALSE
 		.["message"] = "validation failed"
 		return
