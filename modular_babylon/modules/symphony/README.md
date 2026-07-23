@@ -7,7 +7,7 @@ Discord-role whitelist gate for the server, paired with the **SSymphony** bridge
 ## How it works
 
 - Un-whitelisted players can't ready up or late-join (`is_ready_to_play` / `AttemptLateSpawn` are gated, fail-closed). They use the **Get Whitelisted** verb (OOC tab), which opens SSymphony's OAuth flow using a one-time `discord_links` token.
-- The whitelist check reads the shared MySQL: a ckey is whitelisted iff its linked `discord_id` holds the configured role in `discord_member_roles` (kept current by SSymphony).
+- The whitelist check reads the shared MySQL: a ckey is whitelisted iff its linked `discord_id` holds a role mapped to the in-game `whitelist` role in `symphony_role_grants` (kept current by SSymphony). The generic helper `symphony_has_ingame_role(ckey, key)` supports other in-game roles too (e.g. `staff`, `donator`) — the Discord-role → in-game-role mapping is managed in SSymphony's panel, not in game config.
 - SSymphony pushes `whitelist_revoke` / `whitelist_grant` world topics; on revoke, the player gets a grace period then is returned to the lobby. `SSsymphony` re-checks connected players periodically as a safety net.
 
 ## Config (add to your config to enable)
@@ -16,7 +16,6 @@ Discord-role whitelist gate for the server, paired with the **SSymphony** bridge
 |-----|---------|
 | `SYMPHONY_ENABLED` | Master switch (flag). |
 | `SYMPHONY_URL` | SSymphony base URL, e.g. `https://symphony.example.com`. |
-| `SYMPHONY_WHITELIST_ROLE_ID` | Discord role id required to play. |
 | `SYMPHONY_GRACE_SECONDS` | Seconds between losing the role and lobby return (default 30). |
 
-Requires the SQL backend enabled and SSymphony running against the **same** database, with matching table prefix. See the SSymphony repo for the bridge setup.
+Which Discord roles grant the whitelist (or any in-game role) is configured in **SSymphony's panel** → In-game roles, not in game config. Requires the SQL backend enabled and SSymphony running against the **same** database, with matching table prefix. See the SSymphony repo for the bridge setup.
