@@ -22,8 +22,23 @@
 	qdel(found) // routes through /client/Destroy — clean disconnect
 	.["success"] = TRUE
 
-/// Permanent full server ban by ckey, attributed to an external admin. Works even if the target is offline.
-/// A world_topic has no usr, so the built-in create_ban is unusable — insert the ban row directly.
+/// The roles the panel/command can ban: 'Server' (full login-enforced ban) + abstract roles + every job title.
+/datum/world_topic/symphony_bannable_roles
+	keyword = "symphony_bannable_roles"
+	require_comms_key = TRUE
+	log = FALSE
+
+/datum/world_topic/symphony_bannable_roles/Run(list/input)
+	. = list()
+	var/list/roles = list("Server", "OOC", "Deadchat", "Emote", "Appearance", "Urgent Adminhelp")
+	for(var/datum/job/job_datum as anything in SSjob?.all_occupations)
+		if(job_datum.title)
+			roles += job_datum.title
+	.["roles"] = roles
+
+/// Ban a ckey. role='Server' = permanent/temp full server ban (login-enforced + kick); any other role =
+/// in-round role/job ban. duration_mins null/0 = permanent, else a temporary ban of that many minutes.
+/// A world_topic has no usr, so create_ban is unusable — insert the ban row directly.
 /datum/world_topic/symphony_ban
 	keyword = "symphony_ban"
 	require_comms_key = TRUE
@@ -33,6 +48,13 @@
 	var/target_ckey = ckey(input["target_ckey"])
 	var/reason = input["reason"]
 	var/admin_name = input["admin_name"] || "Discord Admin"
+	var/role = trim(input["role"])
+	if(!role)
+		role = "Server"
+	role = copytext(role, 1, 33) // ban.role is VARCHAR(32)
+	var/duration = text2num(input["duration_mins"]) // minutes; null/0 => permanent
+	if(!duration || duration <= 0)
+		duration = null
 	if(!target_ckey || !reason)
 		.["success"] = FALSE
 		.["message"] = "missing target_ckey or reason"
@@ -57,13 +79,14 @@
 	var/list/special_columns = list(
 		"bantime" = "NOW()",
 		"ip" = "INET_ATON(?)", // INET_ATON(null) -> null, fine (ip is nullable)
+		"expiration_time" = "IF(? IS NULL, NULL, NOW() + INTERVAL ? MINUTE)", // one row value fills both '?'
 	)
 	var/list/row = list(
 		"server_ip" = 0,
 		"server_port" = world.port,
 		"round_id" = GLOB.round_id,
-		"role" = "Server", // full server ban — enforced at login
-		"expiration_time" = null, // null == permanent
+		"role" = role, // 'Server' = full login-enforced ban; anything else = in-round role ban
+		"expiration_time" = duration, // null = permanent, else minutes
 		"applies_to_admins" = 0,
 		"reason" = reason,
 		"ckey" = target_ckey,
@@ -80,13 +103,19 @@
 		.["message"] = "insert failed"
 		return
 
-	log_admin("[admin_name] (via Symphony) permanently server-banned [target_ckey]. Reason: [reason]")
-	message_admins("[admin_name] (via Symphony) permanently server-banned [target_ckey]. Reason: [reason]")
+	var/dur_txt = duration ? "for [duration] minutes" : "permanently"
+	var/what = (role == "Server") ? "server-banned" : "role-banned ([role])"
+	log_admin("[admin_name] (via Symphony) [what] [target_ckey] [dur_txt]. Reason: [reason]")
+	message_admins("[admin_name] (via Symphony) [what] [target_ckey] [dur_txt]. Reason: [reason]")
 
-	// The insert alone does not disconnect — kick them if they're online.
 	var/client/found = GLOB.directory[target_ckey]
 	if(found)
-		build_ban_cache(found)
-		to_chat(found, span_userdanger("You have been permanently banned by [admin_name].\nReason: [reason]"))
-		qdel(found)
+		build_ban_cache(found) // in-round role bans take effect without a relog
+		if(role == "Server")
+			to_chat(found, span_userdanger("You have been [duration ? "" : "permanently "]banned by [admin_name].\nReason: [reason]"))
+			qdel(found)
+		else
+			to_chat(found, span_userdanger("You have been [what] by [admin_name]. Reason: [reason]"))
 	.["success"] = TRUE
+	.["role"] = role
+	.["permanent"] = isnull(duration)

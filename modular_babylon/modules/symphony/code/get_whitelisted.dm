@@ -3,6 +3,9 @@
 	set category = "OOC"
 	set desc = "Link your Discord account to gain whitelist access."
 
+	if(is_guest_key(ckey))
+		to_chat(src, span_warning("BYOND guest accounts cannot be whitelisted. Sign in with a real BYOND account and reconnect."))
+		return
 	if(!CONFIG_GET(flag/symphony_enabled))
 		to_chat(src, span_warning("Discord whitelisting is not enabled on this server."))
 		return
