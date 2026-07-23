@@ -34,6 +34,7 @@
 			"type" = etype,
 			"value" = is_list ? null : entry.config_entry_value, // list values aren't shown/edited here
 			"settable" = !is_list && !(entry.protection & CONFIG_ENTRY_LOCKED),
+			"file" = entry.resident_file, // config-dir-relative source file (null = code default); SSymphony writes here
 		))
 	.["count"] = length(entries)
 	.["entries"] = entries
