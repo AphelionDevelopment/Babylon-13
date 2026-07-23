@@ -66,13 +66,20 @@
 		return
 	var/old_value = entry.config_entry_value
 	var/ok = FALSE
-	if(istype(entry, /datum/config_entry/str_list) || istype(entry, /datum/config_entry/number_list) || istype(entry, /datum/config_entry/keyed_list))
-		// list ValidateAndSet APPENDS — reset to default first, then add each line, so the whole list is REPLACED.
-		entry.set_default()
+	if(istype(entry, /datum/config_entry/number_list))
+		// number_list REPLACES the whole value on each call — pass everything as one space-separated line.
+		ok = entry.ValidateAndSet(replacetext(trim(new_value), "\n", " "))
+	else if(istype(entry, /datum/config_entry/str_list) || istype(entry, /datum/config_entry/keyed_list))
+		// str_list appends / keyed_list assigns per key. Empty the list first (NOT set_default, which re-seeds
+		// the CODE default), then add each line, so the whole list is truly REPLACED.
+		var/keyed = istype(entry, /datum/config_entry/keyed_list)
+		entry.config_entry_value = list()
 		ok = TRUE
 		for(var/element in splittext(new_value, "\n"))
 			element = trim(element)
 			if(!element)
+				continue
+			if(keyed && !findtext(element, " ")) // keyed_list needs "key value"; skip malformed to avoid a null-parse runtime
 				continue
 			if(!entry.ValidateAndSet(element))
 				ok = FALSE
