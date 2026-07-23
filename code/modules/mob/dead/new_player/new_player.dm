@@ -75,6 +75,9 @@
 
 //When you cop out of the round (NB: this HAS A SLEEP FOR PLAYER INPUT IN IT)
 /mob/dead/new_player/proc/make_me_an_observer()
+	if(discord_auth_blocks_play()) // BABYLON EDIT - discord whitelist gate
+		discord_auth_gate_notice()
+		return FALSE
 	if(QDELETED(src) || !src.client)
 		ready = PLAYER_NOT_READY
 		return FALSE
