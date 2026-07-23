@@ -2,7 +2,13 @@
 /proc/discord_auth_revoke(target_ckey)
 	target_ckey = ckey(target_ckey)
 	var/client/found = GLOB.directory[target_ckey]
-	if(!found || isnewplayer(found.mob))
+	if(!found)
+		return
+	// Already in the lobby — just refresh the title screen to the gate, no grace needed.
+	if(isnewplayer(found.mob))
+		var/mob/dead/new_player/lobby = found.mob
+		to_chat(found, span_userdanger("Your Discord whitelist role was removed."))
+		lobby.show_title_screen()
 		return
 	var/grace = CONFIG_GET(number/discord_auth_grace_seconds)
 	to_chat(found, span_userdanger("Your Discord whitelist role was removed. You will be returned to the lobby in [grace] seconds unless it is restored."))
