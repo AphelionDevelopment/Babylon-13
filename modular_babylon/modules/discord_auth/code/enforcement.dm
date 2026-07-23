@@ -26,6 +26,7 @@
 	lobby.key = target.key
 	if(old_mob && !isnewplayer(old_mob))
 		old_mob.log_message("returned to lobby by discord whitelist enforcement", LOG_GAME)
+	lobby.show_title_screen()
 
 /// whitelist_grant handler effect: tell a waiting player they can now join and refresh their lobby.
 /proc/discord_auth_notify_grant(target_ckey)

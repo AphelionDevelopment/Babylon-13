@@ -10,4 +10,4 @@
 /// Message shown at the gate, pointing players at the Get Whitelisted verb.
 /mob/dead/new_player/proc/discord_auth_gate_notice()
 	to_chat(src, span_userdanger("You are not whitelisted."))
-	to_chat(src, span_warning("Use the <b>Get Whitelisted</b> verb in the OOC tab to link your Discord account and gain access. You must stay in the Discord with the whitelist role to play."))
+	to_chat(src, span_warning("<a href='byond://?src=[REF(src)];get_whitelisted=1'><b>Click here to Get Whitelisted</b></a> — link your Discord account to gain access. You must stay in the Discord with the whitelist role to play."))
