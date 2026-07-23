@@ -17,8 +17,8 @@
 		client?.get_whitelisted()
 		return
 
-	if(discord_auth_blocks_play() && (href_list["toggle_ready"] || href_list["late_join"] || href_list["character_setup"] || href_list["game_options"] || href_list["toggle_antag"])) // BABYLON EDIT - discord whitelist gate
-		discord_auth_gate_notice()
+	if(symphony_blocks_play() && (href_list["toggle_ready"] || href_list["late_join"] || href_list["character_setup"] || href_list["game_options"] || href_list["toggle_antag"])) // BABYLON EDIT - discord whitelist gate
+		symphony_gate_notice()
 		return
 
 	if(href_list["observe"])

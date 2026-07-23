@@ -9,7 +9,7 @@
 		.["success"] = FALSE
 		.["message"] = "missing target_ckey"
 		return
-	discord_auth_revoke(target_ckey)
+	symphony_revoke(target_ckey)
 	.["success"] = TRUE
 
 /datum/world_topic/whitelist_grant
@@ -23,5 +23,5 @@
 		.["success"] = FALSE
 		.["message"] = "missing target_ckey"
 		return
-	discord_auth_notify_grant(target_ckey)
+	symphony_notify_grant(target_ckey)
 	.["success"] = TRUE

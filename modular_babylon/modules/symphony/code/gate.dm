@@ -1,13 +1,13 @@
 /// The single gate. TRUE means this new_player is blocked from readying up or joining the round.
 /// Inert (returns FALSE) when the module is disabled.
-/mob/dead/new_player/proc/discord_auth_blocks_play()
-	if(!CONFIG_GET(flag/discord_auth_enabled))
+/mob/dead/new_player/proc/symphony_blocks_play()
+	if(!CONFIG_GET(flag/symphony_enabled))
 		return FALSE
 	if(!client)
 		return TRUE
-	return !is_discord_whitelisted(ckey)
+	return !is_symphony_whitelisted(ckey)
 
 /// Message shown at the gate, pointing players at the Get Whitelisted verb.
-/mob/dead/new_player/proc/discord_auth_gate_notice()
+/mob/dead/new_player/proc/symphony_gate_notice()
 	to_chat(src, span_userdanger("You are not whitelisted."))
 	to_chat(src, span_warning("<a href='byond://?src=[REF(src)];get_whitelisted=1'><b>Click here to Get Whitelisted</b></a> — link your Discord account to gain access. You must stay in the Discord with the whitelist role to play."))

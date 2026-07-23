@@ -69,14 +69,14 @@
 /// The assertion is that readiness must be an opted in TRUE, while all other states (e.g. not ready, broken, etc) are FALSE.
 /// We organize it this way to ensure the system is extensible for other possible ready states.
 /mob/dead/new_player/proc/is_ready_to_play()
-	if(discord_auth_blocks_play()) // BABYLON EDIT - discord whitelist gate
+	if(symphony_blocks_play()) // BABYLON EDIT - discord whitelist gate
 		return FALSE
 	return ready == PLAYER_READY_TO_PLAY
 
 //When you cop out of the round (NB: this HAS A SLEEP FOR PLAYER INPUT IN IT)
 /mob/dead/new_player/proc/make_me_an_observer()
-	if(discord_auth_blocks_play()) // BABYLON EDIT - discord whitelist gate
-		discord_auth_gate_notice()
+	if(symphony_blocks_play()) // BABYLON EDIT - discord whitelist gate
+		symphony_gate_notice()
 		return FALSE
 	if(QDELETED(src) || !src.client)
 		ready = PLAYER_NOT_READY
@@ -194,8 +194,8 @@
 
 
 /mob/dead/new_player/proc/AttemptLateSpawn(rank)
-	if(discord_auth_blocks_play()) // BABYLON EDIT - discord whitelist gate
-		discord_auth_gate_notice()
+	if(symphony_blocks_play()) // BABYLON EDIT - discord whitelist gate
+		symphony_gate_notice()
 		return FALSE
 	// Check that they're picking someone new for new character respawning
 	if(CONFIG_GET(flag/allow_respawn) == RESPAWN_FLAG_NEW_CHARACTER)

@@ -87,7 +87,7 @@ GLOBAL_LIST_EMPTY(startup_messages)
 		</script>
 		"}
 
-	else if(discord_auth_blocks_play())
+	else if(symphony_blocks_play())
 		dat += {"<img src="loading_screen.gif" class="bg" alt="">"}
 		dat += {"<div class="container_nav" style="text-align: center;">"}
 		dat += {"<p class="menu_notice" style="text-align: center;">You must be whitelisted to play.<br>Link your Discord to continue.</p>"}

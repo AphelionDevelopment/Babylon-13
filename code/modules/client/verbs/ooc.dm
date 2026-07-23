@@ -17,7 +17,7 @@ GLOBAL_VAR_INIT(normal_ooc_colour, "#002eb8")
 		to_chat(usr, span_warning("Failed to send your OOC message. You attempted to send the following message:\n[span_big(msg)]"))
 		return
 
-	if(!holder && isnewplayer(mob) && CONFIG_GET(flag/discord_auth_enabled) && !is_discord_whitelisted(ckey)) // BABYLON EDIT - discord whitelist gate
+	if(!holder && isnewplayer(mob) && CONFIG_GET(flag/symphony_enabled) && !is_symphony_whitelisted(ckey)) // BABYLON EDIT - discord whitelist gate
 		to_chat(src, span_danger("You must be whitelisted to use OOC. Ahelp if you need help getting whitelisted."))
 		return
 

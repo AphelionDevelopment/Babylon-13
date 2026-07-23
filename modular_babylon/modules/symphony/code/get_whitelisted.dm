@@ -3,10 +3,10 @@
 	set category = "OOC"
 	set desc = "Link your Discord account to gain whitelist access."
 
-	if(!CONFIG_GET(flag/discord_auth_enabled))
+	if(!CONFIG_GET(flag/symphony_enabled))
 		to_chat(src, span_warning("Discord whitelisting is not enabled on this server."))
 		return
-	var/base_url = CONFIG_GET(string/discord_auth_symphony_url)
+	var/base_url = CONFIG_GET(string/symphony_url)
 	if(!base_url)
 		to_chat(src, span_warning("The whitelist service is not configured. Contact an admin."))
 		return
