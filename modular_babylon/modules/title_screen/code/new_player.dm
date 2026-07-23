@@ -12,6 +12,15 @@
 	if(client.interviewee)
 		return FALSE
 
+	if(href_list["get_whitelisted"]) // BABYLON EDIT - discord whitelist
+		play_lobby_button_sound()
+		client?.get_whitelisted()
+		return
+
+	if(discord_auth_blocks_play() && (href_list["toggle_ready"] || href_list["late_join"] || href_list["character_setup"] || href_list["game_options"] || href_list["toggle_antag"])) // BABYLON EDIT - discord whitelist gate
+		discord_auth_gate_notice()
+		return
+
 	if(href_list["observe"])
 		play_lobby_button_sound()
 		make_me_an_observer()

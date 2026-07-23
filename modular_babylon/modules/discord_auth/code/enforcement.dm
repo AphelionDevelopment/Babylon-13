@@ -27,8 +27,12 @@
 	if(old_mob && !isnewplayer(old_mob))
 		old_mob.log_message("returned to lobby by discord whitelist enforcement", LOG_GAME)
 
-/// whitelist_grant handler effect: tell a waiting player they can now join.
+/// whitelist_grant handler effect: tell a waiting player they can now join and refresh their lobby.
 /proc/discord_auth_notify_grant(target_ckey)
 	var/client/found = GLOB.directory[ckey(target_ckey)]
-	if(found)
-		to_chat(found, span_greentext("You are now whitelisted — you can join the round."))
+	if(!found)
+		return
+	to_chat(found, span_greentext("You are now whitelisted — you can join the round."))
+	var/mob/dead/new_player/lobby_mob = found.mob
+	if(istype(lobby_mob))
+		lobby_mob.show_title_screen()

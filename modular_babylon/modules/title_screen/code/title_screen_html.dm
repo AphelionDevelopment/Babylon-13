@@ -87,6 +87,13 @@ GLOBAL_LIST_EMPTY(startup_messages)
 		</script>
 		"}
 
+	else if(discord_auth_blocks_play())
+		dat += {"<img src="loading_screen.gif" class="bg" alt="">"}
+		dat += {"<div class="container_nav">"}
+		dat += {"<p class="menu_notice">You must be whitelisted to play. Link your Discord to continue.</p>"}
+		dat += {"<a class="menu_button" href='byond://?src=[text_ref(src)];get_whitelisted=1'>GET WHITELISTED</a>"}
+		dat += "</div>"
+
 	else
 		dat += {"<img src="loading_screen.gif" class="bg" alt="">"}
 
