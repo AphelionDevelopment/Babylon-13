@@ -65,6 +65,11 @@
 /datum/world_topic/symphony_player_list/Run(list/input)
 	. = list()
 	var/list/players = list()
+	// Fetch the whitelist-role holders once, instead of a per-player query inside the loop (60 players
+	// was 60 serial DB round-trips with the game stalled on each panel refresh). This reports actual
+	// role-holding, independent of whether the gate is enforced — same as the old per-player call. null
+	// means the lookup failed; everyone then reads FALSE, matching the single-ckey path's fail-closed.
+	var/list/whitelisted_ckeys = symphony_ingame_role_ckeys("whitelist")
 	// GLOB.clients covers lobby + in-round + observers, one client per connected player.
 	for(var/client/connected as anything in GLOB.clients)
 		var/mob/player_mob = connected.mob
@@ -100,7 +105,7 @@
 			"antags" = antag_names,
 			"is_admin" = !!holder,
 			"admin_rank" = holder ? holder.rank_names() : null,
-			"whitelisted" = symphony_has_ingame_role(connected.ckey, "whitelist"),
+			"whitelisted" = whitelisted_ckeys?[connected.ckey] ? TRUE : FALSE,
 			"state" = state,
 			"ping" = round(connected.avgping, 1),
 			"connected_secs" = connected.connection_time ? round((world.time - connected.connection_time) / 10) : 0,
