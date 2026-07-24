@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 ADMIN_VERB_ONLY_CONTEXT_MENU(select_equipment, R_FUN, "Select Equipment", mob/target in world)
 	// NOVA EDIT ADDITION START
 	if(tgui_alert(user, "This interface is resource-intensive. Are you sure you want to open it? Tip: You can also Ctrl-click a ghost to access a lighter version.", "Server Resources Warning", list("No", "Yes", "Sorry")) != "Yes")
 		return
 	// NOVA EDIT ADDITION END
+=======
+ADMIN_VERB_ONLY_CONTEXT_MENU(select_equipment, R_FUN, "Select Equipment", mob/target)
+>>>>>>> 4853c46ded8 (Removes `in world` / `in GLOB.list` from all verbs (and some `in view`s) (#97056))
 	var/datum/select_equipment/ui = new(user, target)
 	ui.ui_interact(user.mob)
 

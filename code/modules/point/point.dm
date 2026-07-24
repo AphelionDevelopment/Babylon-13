@@ -106,8 +106,12 @@
  *
  * overridden here and in /mob/dead/observer for different point span classes and sanity checks
  */
+<<<<<<< HEAD
 /mob/verb/pointed(atom/A as mob|obj|turf in view(client.view, src))
 	set name = "Point To"
+=======
+GAME_VERB(/mob, pointed, "Point To", null, atom/A as mob|obj|turf)
+>>>>>>> 4853c46ded8 (Removes `in world` / `in GLOB.list` from all verbs (and some `in view`s) (#97056))
 
 	if(isnull(A) || istype(A, /obj/effect/temp_visual/point) || isarea(A))
 		return FALSE

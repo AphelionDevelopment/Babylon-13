@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 /client/proc/makepAI(turf/target in GLOB.mob_list)
 	set category = "Admin.Fun"
 	set name = "Make pAI"
 	set desc = "Specify a location to spawn a pAI device, then specify a key to play that pAI"
 
+=======
+ADMIN_VERB(makepAI, R_FUN, "Make pAI", "Specify a location to spawn a pAI device, then specify a key to play that pAI", ADMIN_CATEGORY_FUN, turf/target)
+>>>>>>> 4853c46ded8 (Removes `in world` / `in GLOB.list` from all verbs (and some `in view`s) (#97056))
 	var/list/available = list()
 	for(var/mob/player as anything in GLOB.player_list)
 		if(player.client && player.key)
