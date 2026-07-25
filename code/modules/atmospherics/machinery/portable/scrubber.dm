@@ -69,17 +69,13 @@
 		if(scrub(epicentre.return_air()))
 			epicentre.air_update_turf(FALSE, FALSE)
 	for(var/turf/open/openturf as anything in epicentre.get_atmos_adjacent_turfs(alldir = TRUE))
-<<<<<<< HEAD
-		scrub(openturf.return_air())
+		if(scrub(openturf.return_air()))
+			openturf.air_update_turf(FALSE, FALSE)
 	//NOVA EDIT ADDITION
 	for(var/turf/open/open_turf in view(3, src))
 		if(open_turf.pollution)
 			open_turf.pollution.scrub_amount(POLLUTION_HEIGHT_DIVISOR)
 	//NOVA EDIT END
-=======
-		if(scrub(openturf.return_air()))
-			openturf.air_update_turf(FALSE, FALSE)
->>>>>>> d3b46b5b014 (Fix scrubbers not updating turfs (#97140))
 	return ..()
 
 /**
