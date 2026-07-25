@@ -136,7 +136,7 @@
 
 /datum/atom_skin/hypovial/large
 	abstract_type = /datum/atom_skin/hypovial/large
-	base_icon_state = "hypoviallarge" // = /datum/atom_skin/hypovial/large/sterile::new_icon_state; see base type note re: BYOND 516.1685 :: bug
+	base_icon_state = "hypoviallarge"
 
 /datum/atom_skin/hypovial/large/sterile
 	preview_name = "Sterile"
