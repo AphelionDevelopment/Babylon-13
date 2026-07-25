@@ -43,7 +43,7 @@
 		return ITEM_INTERACT_BLOCKING
 	return ..()
 
-/* NOVA EDIT CHANGE BEGIN - MOVED TO modular_babylon/master_files/code/modules/power/tesla/coil.dm
+/* NOVA EDIT CHANGE BEGIN - MOVED TO modular_nova/master_files/code/modules/power/tesla/coil.dm
 /obj/machinery/power/energy_accumulator/tesla_coil/RefreshParts()
 	. = ..()
 	var/power_multiplier = 0

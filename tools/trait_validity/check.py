@@ -14,7 +14,7 @@ def red(text):
 on_github = os.getenv("GITHUB_ACTIONS") == "true"
 
 defines_file = "code/__DEFINES/traits/declarations.dm"
-babylon_defines_file = "code/__DEFINES/~babylon_defines/traits/declarations.dm" # NOVA EDIT ADDITION
+babylon_defines_file = "code/__DEFINES/~nova_defines/traits/declarations.dm" # NOVA EDIT ADDITION
 globalvars_file = "code/_globalvars/traits/_traits.dm"
 
 how_to_fix_message = f"Please ensure that all traits in the {defines_file} file are added in the {globalvars_file} file."
