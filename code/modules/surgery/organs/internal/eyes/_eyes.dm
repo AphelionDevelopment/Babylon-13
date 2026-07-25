@@ -128,7 +128,6 @@
 		affected_human.add_eye_color_right(eye_color_right, EYE_COLOR_ORGAN_PRIORITY, update_body = FALSE)
 	refresh_atom_color_overrides()
 
-<<<<<<< HEAD
 	if(HAS_TRAIT(affected_human, TRAIT_NIGHT_VISION)) // NOVA EDIT CHANGE - ORIGINAL: if(HAS_TRAIT(affected_human, TRAIT_NIGHT_VISION) && !lighting_cutoff)
 		//lighting_cutoff = LIGHTING_CUTOFF_REAL_LOW // NOVA EDIT REMOVAL
 		// NOVA EDIT ADDITION START - NIGHT VISION ADJUSTMENT - adjusts color cutoffs based on chosen quirk color, or left eye colour if not available
@@ -137,8 +136,6 @@
 			nv_quirk.nv_color_cutoffs = nv_quirk.calculate_color_cutoffs(nv_quirk.nv_color)
 			color_cutoffs = nv_quirk.nv_color_cutoffs
 		// NOVA EDIT ADDITION END
-=======
->>>>>>> 58a55ae36ea (Adds some mutations (plus rewrites mutation descriptions)  (#96676))
 	if(CONFIG_GET(flag/native_fov) && native_fov)
 		affected_human.add_fov_trait(type, native_fov)
 
