@@ -5,6 +5,11 @@
 		return FALSE
 	if(!client)
 		return TRUE
+	// Staff are exempt, matching the OOC hook. The gate is fail-closed, so without this a DB blip — or
+	// simply switching enforcement on before any role is mapped — locks the admin team out of joining
+	// and observing, leaving nobody able to fix it in-round.
+	if(client.holder)
+		return FALSE
 	return !is_symphony_whitelisted(ckey)
 
 /// Message shown at the gate, pointing players at the Get Whitelisted verb.

@@ -28,13 +28,29 @@
 	require_comms_key = TRUE
 	log = FALSE
 
-/datum/world_topic/symphony_bannable_roles/Run(list/input)
-	. = list()
+/// The canonical list of bannable roles. Shared by the topic and by symphony_ban's validation so the
+/// two can't drift.
+/proc/symphony_bannable_roles()
 	var/list/roles = list("Server", "OOC", "Deadchat", "Emote", "Appearance", "Urgent Adminhelp")
 	for(var/datum/job/job_datum as anything in SSjob?.all_occupations)
 		if(job_datum.title)
 			roles += job_datum.title
-	.["roles"] = roles
+	return roles
+
+/// Resolve caller-supplied text to the exact stored role title, case-insensitively. The DM ban cache is
+/// case-sensitive, so a mis-cased role produced a ban row that never matched and silently did nothing.
+/proc/symphony_resolve_role(supplied)
+	supplied = trim(supplied)
+	if(!supplied)
+		return "Server"
+	for(var/role in symphony_bannable_roles())
+		if(LOWER_TEXT(role) == LOWER_TEXT(supplied))
+			return role
+	return null
+
+/datum/world_topic/symphony_bannable_roles/Run(list/input)
+	. = list()
+	.["roles"] = symphony_bannable_roles()
 
 /// Ban a ckey. role='Server' = permanent/temp full server ban (login-enforced + kick); any other role =
 /// in-round role/job ban. duration_mins null/0 = permanent, else a temporary ban of that many minutes.
@@ -48,10 +64,7 @@
 	var/target_ckey = ckey(input["target_ckey"])
 	var/reason = input["reason"]
 	var/admin_name = input["admin_name"] || "Discord Admin"
-	var/role = trim(input["role"])
-	if(!role)
-		role = "Server"
-	role = copytext(role, 1, 33) // ban.role is VARCHAR(32)
+	var/role = symphony_resolve_role(input["role"])
 	var/duration = text2num(input["duration_mins"]) // minutes; null/0 => permanent
 	if(!duration || duration <= 0)
 		duration = null
@@ -59,22 +72,38 @@
 		.["success"] = FALSE
 		.["message"] = "missing target_ckey or reason"
 		return
+	if(!role)
+		.["success"] = FALSE
+		.["message"] = "unknown role — use one of the roles from symphony_bannable_roles"
+		return
+	// applies_to_admins is 0 below, so a ban on staff would insert a row the login check ignores and
+	// report success while doing nothing. Refuse instead of lying to the operator.
+	if(GLOB.admin_datums[target_ckey] || GLOB.deadmins[target_ckey])
+		.["success"] = FALSE
+		.["message"] = "target is staff — use the in-game ban panel"
+		return
 	if(!SSdbcore.Connect())
 		.["success"] = FALSE
 		.["message"] = "no database"
 		return
 
-	// Widen the ban to the target's last-known IP/CID so it isn't trivially evaded.
+	// Optionally widen the ban to the target's last-known IP/CID so it isn't trivially evaded. This also
+	// catches unrelated accounts behind the same connection or PC (shared houses, student halls, VPNs),
+	// so the caller decides; omitted means widen, preserving the previous behaviour.
+	var/widen = TRUE
+	if("match_ip_cid" in input)
+		widen = text2num(input["match_ip_cid"]) ? TRUE : FALSE
 	var/player_ip = null
 	var/player_cid = null
-	var/datum/db_query/lookup = SSdbcore.NewQuery(
-		"SELECT INET_NTOA(ip), computerid FROM [format_table_name("player")] WHERE ckey = :ckey",
-		list("ckey" = target_ckey),
-	)
-	if(lookup.warn_execute() && lookup.NextRow())
-		player_ip = lookup.item[1]
-		player_cid = lookup.item[2]
-	qdel(lookup)
+	if(widen)
+		var/datum/db_query/lookup = SSdbcore.NewQuery(
+			"SELECT INET_NTOA(ip), computerid FROM [format_table_name("player")] WHERE ckey = :ckey",
+			list("ckey" = target_ckey),
+		)
+		if(lookup.warn_execute() && lookup.NextRow())
+			player_ip = lookup.item[1]
+			player_cid = lookup.item[2]
+		qdel(lookup)
 
 	var/list/special_columns = list(
 		"bantime" = "NOW()",
@@ -105,6 +134,10 @@
 		.["success"] = FALSE
 		.["message"] = "insert failed"
 		return
+
+	// Mirror the in-game ban panel and leave a note, so a Discord-issued ban is visible in the notes
+	// workflow instead of only existing in the ban table.
+	create_message("note", target_ckey, "symphony", "Banned via Symphony by [admin_name] ([role]): [reason]", null, null, 0, 0, null, 0, null)
 
 	var/dur_txt = duration ? "for [duration] minutes" : "permanently"
 	var/what = (role == "Server") ? "server-banned" : "role-banned ([role])"

@@ -17,9 +17,14 @@
 		client?.get_whitelisted()
 		return
 
-	if(symphony_blocks_play() && (href_list["toggle_ready"] || href_list["late_join"] || href_list["character_setup"] || href_list["game_options"] || href_list["toggle_antag"])) // BABYLON EDIT - discord whitelist gate
+	// BABYLON EDIT ADDITION START - discord whitelist gate.
+	// Allow-list, not deny-list: the old enumeration of blocked hrefs silently let anything new through
+	// (crew manifest, character directory, polls). The href is checked BEFORE the gate so an unwhitelisted
+	// client can't make every lobby click cost a whitelist query.
+	if(!(href_list["title_is_ready"] || href_list["server_swap"]) && symphony_blocks_play())
 		symphony_gate_notice()
 		return
+	// BABYLON EDIT ADDITION END
 
 	if(href_list["observe"])
 		play_lobby_button_sound()
