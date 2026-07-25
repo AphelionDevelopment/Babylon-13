@@ -369,7 +369,7 @@
 		return
 
 	if(isliving(talking_movable))
-		/* NOVA EDIT REMOVAL START - ORIGINAL - We use our own radio sounds - see modular_babylon/modules/radiosound/code/radio.dm - ORIGINAL:
+		/* NOVA EDIT REMOVAL START - ORIGINAL - We use our own radio sounds - see modular_nova/modules/radiosound/code/radio.dm - ORIGINAL:
 		var/mob/living/talking_living = talking_movable
 		var/volume_modifier = (talking_living.client?.prefs.read_preference(/datum/preference/numeric/volume/sound_radio_noise))
 		if(radio_noise && !HAS_TRAIT(talking_living, TRAIT_DEAF) && volume_modifier && signal.frequency != FREQ_COMMON && !LAZYACCESS(message_mods, MODE_SEQUENTIAL) && COOLDOWN_FINISHED(src, audio_cooldown))

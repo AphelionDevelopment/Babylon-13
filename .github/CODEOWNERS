@@ -19,13 +19,13 @@
 
 # Gandalf2k15
 
-/modular_babylon/modules/borgs @Gandalf2k15
-/modular_babylon/modules/borg_buffs @Gandalf2k15
-/modular_babylon/modules/ghostcafe @Gandalf2k15
-/modular_babylon/modules/hotel_rooms @Gandalf2k15
-/modular_babylon/master_files/code/modules/mapfluff @Gandalf2k15
-/modular_babylon/modules/ashwalkers @Gandalf2k15
-/modular_babylon/modules/aesthetics/keyed_doors @Gandalf2k15
+/modular_nova/modules/borgs @Gandalf2k15
+/modular_nova/modules/borg_buffs @Gandalf2k15
+/modular_nova/modules/ghostcafe @Gandalf2k15
+/modular_nova/modules/hotel_rooms @Gandalf2k15
+/modular_nova/master_files/code/modules/mapfluff @Gandalf2k15
+/modular_nova/modules/ashwalkers @Gandalf2k15
+/modular_nova/modules/aesthetics/keyed_doors @Gandalf2k15
 
 # CONTRIBUTORS
 
@@ -36,7 +36,7 @@
 /tools/maplint/lints @Gandalf2k15
 /tools/UpdatePaths @Gandalf2k15
 /\_maps/ @Gandalf2k15
-/modular_babylon/modules/mapping @Gandalf2k15
+/modular_nova/modules/mapping @Gandalf2k15
 
 # Expensive files that touching basically always cause performance problems
 
