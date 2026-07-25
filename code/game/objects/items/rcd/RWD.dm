@@ -1,5 +1,5 @@
 //This represents the amount of materials (both iron and glass that the max_amount of cable would amount to
-#define MAX_CABLE_AMOUNT (SMALL_MATERIAL_AMOUNT * 0.1 * 210)
+#define MAX_CABLE_AMOUNT (SMALL_MATERIAL_AMOUNT * 0.1 * /obj/item/rwd/loaded::max_amount)
 
 /obj/item/rwd
 	name = "rapid wiring device"
