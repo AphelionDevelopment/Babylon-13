@@ -406,11 +406,7 @@
 	remove_as_source()
 	soundloop.stop()
 	is_playing_alarm = FALSE
-<<<<<<< HEAD
-	correct_state() // NOVA EDIT CHANGE - AESTHETICS - moved above update_appearance(), see comment on reset_reopen_pending
-=======
 	correct_state()
->>>>>>> b59256ac76a (Reorders a firedoor update_appearance (#97133))
 	update_appearance(UPDATE_ICON) //Sets the door lights even if the door doesn't move.
 
 /**
@@ -428,11 +424,7 @@
 	soundloop.stop()
 	is_playing_alarm = FALSE
 	remove_as_source()
-<<<<<<< HEAD
-	correct_state() // NOVA EDIT CHANGE - AESTHETICS - moved above update_appearance(), see comment on reset_reopen_pending
-=======
 	correct_state()
->>>>>>> b59256ac76a (Reorders a firedoor update_appearance (#97133))
 	update_appearance(UPDATE_ICON) //Sets the door lights even if the door doesn't move.
 
 	/// Please be called 3 seconds after the LAST open, rather then 3 seconds after the first
