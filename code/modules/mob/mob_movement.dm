@@ -3,9 +3,14 @@
  *
  * This is a hidden verb, likely for binding with winset for hotkeys
  */
+<<<<<<< HEAD
 /client/verb/drop_item()
 	set hidden = TRUE
 	if(!iscyborg(mob) && mob.stat == CONSCIOUS)
+=======
+GAME_VERB_HIDDEN(/client, drop_item, "drop item")
+	if(!iscyborg(mob) && !IS_UNCONSCIOUS_OR_CRIT(mob))
+>>>>>>> 7357a3441ff (Being unconscious conceals the identity of nearby humans/silicons. (Also removes the unconscious stat.) (#97041))
 		mob.dropItemToGround(mob.get_active_held_item())
 	return
 /**
@@ -161,7 +166,7 @@
 		COOLDOWN_START(src, move_delay, 1 SECONDS)
 		to_chat(src, span_warning("You're restrained! You can't move!"))
 		return TRUE
-	return mob.resist_grab(TRUE)
+	return !mob.resist_grab(TRUE)
 
 
 /**

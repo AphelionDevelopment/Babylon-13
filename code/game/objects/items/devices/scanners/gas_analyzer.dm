@@ -138,13 +138,21 @@
 	return list("gasmixes" = last_gasmix_data)
 
 /obj/item/analyzer/attack_self(mob/user, modifiers)
+<<<<<<< HEAD
 	if(user.stat != CONSCIOUS || !user.can_read(src)) //NOVA EDIT: Blind People Can Analyze Again
+=======
+	if(IS_UNCONSCIOUS_OR_CRIT(user) || !user.can_read(src) || user.is_blind())
+>>>>>>> 7357a3441ff (Being unconscious conceals the identity of nearby humans/silicons. (Also removes the unconscious stat.) (#97041))
 		return
 	atmos_scan(user=user, target=get_turf(src), silent=FALSE)
 	on_analyze(source=src, target=get_turf(src))
 
 /obj/item/analyzer/attack_self_secondary(mob/user, modifiers)
+<<<<<<< HEAD
 	if(user.stat != CONSCIOUS || !user.can_read(src)) //NOVA EDIT: Blind People Can Analyze Again
+=======
+	if(IS_UNCONSCIOUS_OR_CRIT(user) || !user.can_read(src) || user.is_blind())
+>>>>>>> 7357a3441ff (Being unconscious conceals the identity of nearby humans/silicons. (Also removes the unconscious stat.) (#97041))
 		return
 
 	ui_interact(user)
