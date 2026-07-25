@@ -20,13 +20,13 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 //NOVA EDIT - ADDITION - ERP ICONS FIX
 
 GLOBAL_LIST_INIT(available_erp_ui_styles, list(
-	"Midnight" = 'modular_babylon/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/midnight.dmi',
-	"Retro" = 'modular_babylon/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/retro.dmi',
-	"Plasmafire" = 'modular_babylon/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/plasmafire.dmi',
-	"Slimecore" = 'modular_babylon/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/slimecore.dmi',
-	"Operative" = 'modular_babylon/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/operative.dmi',
-	"Clockwork" = 'modular_babylon/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/clockwork.dmi',
-	"Glass" = 'modular_babylon/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/glass.dmi'
+	"Midnight" = 'modular_nova/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/midnight.dmi',
+	"Retro" = 'modular_nova/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/retro.dmi',
+	"Plasmafire" = 'modular_nova/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/plasmafire.dmi',
+	"Slimecore" = 'modular_nova/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/slimecore.dmi',
+	"Operative" = 'modular_nova/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/operative.dmi',
+	"Clockwork" = 'modular_nova/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/clockwork.dmi',
+	"Glass" = 'modular_nova/modules/modular_items/lewd_items/icons/obj/lewd_items/inventory_icons/glass.dmi'
 ))
 
 //NOVA EDIT - ADDITION - ERP ICONS FIX - END
@@ -508,6 +508,9 @@ GLOBAL_LIST_INIT(available_erp_ui_styles, list(
 
 /// Rebuilds our mob's hand slot screen elements
 /datum/hud/proc/build_hand_slots(update_hud = FALSE)
+	// Clean up existing hand slot objects
+	for (var/atom/movable/screen/inventory/hand/hand in screen_groups[HUD_GROUP_STATIC])
+		remove_screen_object(hand, FALSE)
 
 	for(var/i in 1 to length(mymob.held_items))
 		var/atom/movable/screen/inventory/hand/hand_box = add_screen_object(/atom/movable/screen/inventory/hand, HUD_KEY_HAND_SLOT(i), HUD_GROUP_STATIC, ui_style, ui_hand_position(i))

@@ -1,5 +1,5 @@
 ///Default wait until doors autoclose
-// #define DOOR_CLOSE_WAIT 60 // NOVA EDIT REMOVAL - Default wait until doors autoclose - moved to code/__DEFINES/~babylon_defines/airlock.dm
+// #define DOOR_CLOSE_WAIT 60 // NOVA EDIT REMOVAL - Default wait until doors autoclose - moved to code/__DEFINES/~nova_defines/airlock.dm
 /// Trait for checking if a mob is currently activating an unrestricted airlock open and thus has pressure pushes blocked
 #define TRAIT_UNRESTRICTED_AIRLOCK_OPENING "trait_unrestricted_airlock_opening"
 
@@ -376,7 +376,7 @@
 	stoplag(1) // allow the door to process any allow/deny responses first
 	var/do_after_time = rand(delayed_unres_time_lower, delayed_unres_time_upper)
 	ADD_TRAIT(opener, TRAIT_UNRESTRICTED_AIRLOCK_OPENING, REF(src))
-	RegisterSignal(opener, COMSIG_ATOM_PRE_PRESSURE_PUSH, PROC_REF(stop_pressure_during_unres_open))
+	RegisterSignal(opener, COMSIG_ATOM_PRE_PRESSURE_PUSH, PROC_REF(stop_pressure_during_unres_open), override = TRUE)
 	addtimer(CALLBACK(src, PROC_REF(deregister_pressure_push_signal), opener), do_after_time + 0.5 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE) // extra half-second to be safe, else this is just a guarantee we remove the signal.
 
 	SSblackbox.record_feedback("tally", "unrestricted_airlock_usage", 1, "open attempt ([type])") // statcollecting on how often people try to use this.
@@ -504,10 +504,10 @@
 			else if(damage_amount)
 				//playsound(loc, 'sound/items/weapons/smash.ogg', 50, TRUE) // NOVA EDIT REMOVAL
 				//NOVA EDIT ADDITION - CREDITS TO WHITEDREAM(valtos)
-				playsound(src, pick('modular_babylon/master_files/sound/effects/metalblock1.wav', 'modular_babylon/master_files/sound/effects/metalblock2.wav', \
-									'modular_babylon/master_files/sound/effects/metalblock3.wav', 'modular_babylon/master_files/sound/effects/metalblock4.wav', \
-									'modular_babylon/master_files/sound/effects/metalblock5.wav', 'modular_babylon/master_files/sound/effects/metalblock6.wav', \
-									'modular_babylon/master_files/sound/effects/metalblock7.wav', 'modular_babylon/master_files/sound/effects/metalblock8.wav'), 50, TRUE)
+				playsound(src, pick('modular_nova/master_files/sound/effects/metalblock1.wav', 'modular_nova/master_files/sound/effects/metalblock2.wav', \
+									'modular_nova/master_files/sound/effects/metalblock3.wav', 'modular_nova/master_files/sound/effects/metalblock4.wav', \
+									'modular_nova/master_files/sound/effects/metalblock5.wav', 'modular_nova/master_files/sound/effects/metalblock6.wav', \
+									'modular_nova/master_files/sound/effects/metalblock7.wav', 'modular_nova/master_files/sound/effects/metalblock8.wav'), 50, TRUE)
 				//NOVA EDIT END
 			else
 				playsound(src, 'sound/items/weapons/tap.ogg', 50, TRUE)
@@ -792,5 +792,5 @@
 		return ..()
 	return ..(0)
 
-//#undef DOOR_CLOSE_WAIT // NOVA EDIT REMOVAL - moved to code/__DEFINES/~babylon_defines/airlock.dm
+//#undef DOOR_CLOSE_WAIT // NOVA EDIT REMOVAL - moved to code/__DEFINES/~nova_defines/airlock.dm
 #undef TRAIT_UNRESTRICTED_AIRLOCK_OPENING

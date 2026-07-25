@@ -568,7 +568,7 @@
 	dir = 1;
 	name = "vehicle console";
 	icon_screen = "shuttle";
-	icon = 'modular_babylon/modules/advanced_shuttles/icons/computer.dmi';
+	icon = 'modular_nova/modules/advanced_shuttles/icons/computer.dmi';
 	icon_state = "intercom";
 	desc = "An armored vehicle control computer. Doesn't work anymore... who would've thought.";
 	density = 0;
@@ -1540,10 +1540,10 @@
 /area/virtual_domain/ancient_milsim/loot_camp)
 "Mq" = (
 /obj/effect/baseturf_helper/virtual_domain/ancient_milsim,
-/turf/closed/wall/mineral/titanium/survival,
+/turf/closed/wall/mineral/plastitanium/survival/pod,
 /area/virtual_domain/ancient_milsim/carrier)
 "Mv" = (
-/turf/closed/wall/mineral/titanium/survival,
+/turf/closed/wall/mineral/plastitanium/survival/pod,
 /area/virtual_domain/ancient_milsim/carrier)
 "My" = (
 /obj/structure/table,
