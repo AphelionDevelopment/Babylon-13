@@ -71,7 +71,7 @@
 	materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 5, /datum/material/glass = SHEET_MATERIAL_AMOUNT * 2.5)
 	//The cable coils don't count toward the total mats of the item to avoid a possible way to generate more iron and glass.
 	transfered_materials = list(
-		/obj/item/rwd/loaded = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 5 - 210, /datum/material/glass = SHEET_MATERIAL_AMOUNT * 2.5 - 210),
+		/obj/item/rwd/loaded = /obj/item/rwd::custom_materials,
 	)
 	build_path = /obj/item/rwd/loaded
 	category = list(
