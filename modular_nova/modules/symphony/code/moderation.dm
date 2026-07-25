@@ -16,9 +16,9 @@
 		.["success"] = FALSE
 		.["message"] = "not connected"
 		return
-	to_chat(found, span_userdanger("You have been kicked from the server by [admin_name]."))
+	to_chat(found, span_userdanger("You have been kicked from the server by [html_encode(admin_name)]."))
 	log_admin("[admin_name] (via Symphony) kicked [key_name(found)].")
-	message_admins("[admin_name] (via Symphony) kicked [key_name(found)].")
+	message_admins("[html_encode(admin_name)] (via Symphony) kicked [key_name(found)].")
 	qdel(found) // routes through /client/Destroy — clean disconnect
 	.["success"] = TRUE
 
@@ -92,7 +92,10 @@
 		"ckey" = target_ckey,
 		"ip" = player_ip,
 		"computerid" = player_cid,
-		"a_ckey" = ckey(admin_name) || "symphony",
+		// Fixed marker, not the caller-supplied name: a_ckey is otherwise free text from the panel, so
+		// anyone able to rename their own account could stamp a real staff ckey on their bans. Who
+		// actually did it is recorded by the log_admin/message_admins lines below.
+		"a_ckey" = "symphony",
 		"a_ip" = 0,
 		"a_computerid" = "symphony",
 		"who" = "",
@@ -106,16 +109,21 @@
 	var/dur_txt = duration ? "for [duration] minutes" : "permanently"
 	var/what = (role == "Server") ? "server-banned" : "role-banned ([role])"
 	log_admin("[admin_name] (via Symphony) [what] [target_ckey] [dur_txt]. Reason: [reason]")
-	message_admins("[admin_name] (via Symphony) [what] [target_ckey] [dur_txt]. Reason: [reason]")
+	// Escaped: reason/admin_name/role are free text from the panel or a Discord command, and
+	// message_admins renders straight into every admin's chat pane as HTML.
+	var/safe_admin = html_encode(admin_name)
+	var/safe_reason = html_encode(reason)
+	var/safe_what = html_encode(what)
+	message_admins("[safe_admin] (via Symphony) [safe_what] [target_ckey] [dur_txt]. Reason: [safe_reason]")
 
 	var/client/found = GLOB.directory[target_ckey]
 	if(found)
 		build_ban_cache(found) // in-round role bans take effect without a relog
 		if(role == "Server")
-			to_chat(found, span_userdanger("You have been [duration ? "" : "permanently "]banned by [admin_name].\nReason: [reason]"))
+			to_chat(found, span_userdanger("You have been [duration ? "" : "permanently "]banned by [safe_admin].\nReason: [safe_reason]"))
 			qdel(found)
 		else
-			to_chat(found, span_userdanger("You have been [what] by [admin_name]. Reason: [reason]"))
+			to_chat(found, span_userdanger("You have been [safe_what] by [safe_admin]. Reason: [safe_reason]"))
 	.["success"] = TRUE
 	.["role"] = role
 	.["permanent"] = isnull(duration)

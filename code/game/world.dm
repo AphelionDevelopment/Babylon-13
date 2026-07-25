@@ -287,8 +287,12 @@ GLOBAL_VAR_INIT(last_maptick_time, 0)
 			handler = topic_handlers[I]
 			break
 
+	// BABYLON EDIT ADDITION START - the comms key must never reach the log. The raw query and the key
+	// argument were both written verbatim, and game.log is served to staff by the Symphony panel.
 	if((!handler || initial(handler.log)) && config && CONFIG_GET(flag/log_world_topic))
-		log_topic("\"[T]\", from:[addr], master:[master], key:[key]")
+		var/static/regex/comms_key_scrub = regex("key=\[^&]*", "g")
+		log_topic("\"[comms_key_scrub.Replace(T, "key=***")]\", from:[addr], master:[master]")
+	// BABYLON EDIT ADDITION END
 
 	if(!handler)
 		return

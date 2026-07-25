@@ -1,3 +1,16 @@
+/// Entries that carry a credential but are NOT marked CONFIG_ENTRY_HIDDEN upstream — webhook URLs are
+/// bearer tokens in a URL, so exposing one lets the holder post as the server (or redirect adminhelps).
+/// Matched by name so a new entry of the same shape is covered without needing an upstream change.
+/proc/symphony_config_is_secret(entry_name)
+	return findtext(entry_name, "webhook") \
+		|| findtext(entry_name, "password") \
+		|| findtext(entry_name, "passwd") \
+		|| findtext(entry_name, "secret") \
+		|| findtext(entry_name, "token") \
+		|| findtext(entry_name, "comms_key") \
+		|| findtext(entry_name, "invoke_") \
+		|| findtext(entry_name, "_key")
+
 /// Read all NON-hidden game config entries so the panel can list and edit them. Optional `filter` narrows by name.
 /datum/world_topic/symphony_config_get
 	keyword = "symphony_config_get"
@@ -13,6 +26,8 @@
 			continue
 		var/datum/config_entry/entry = global.config.entries[entry_name]
 		if(entry.protection & CONFIG_ENTRY_HIDDEN) // never expose comms_key / DB creds
+			continue
+		if(symphony_config_is_secret(entry_name)) // webhook URLs etc. aren't HIDDEN upstream but are secrets
 			continue
 		var/etype = "string"
 		if(istype(entry, /datum/config_entry/flag))
@@ -60,6 +75,10 @@
 		.["success"] = FALSE
 		.["message"] = "hidden entry"
 		return
+	if(symphony_config_is_secret(entry_name))
+		.["success"] = FALSE
+		.["message"] = "protected entry"
+		return
 	if(entry.protection & CONFIG_ENTRY_LOCKED)
 		.["success"] = FALSE
 		.["message"] = "locked — change persisted to file, applies on restart"
@@ -79,10 +98,17 @@
 			element = trim(element)
 			if(!element)
 				continue
-			if(keyed && !findtext(element, " ")) // keyed_list needs "key value"; skip malformed to avoid a null-parse runtime
-				continue
+			// keyed_list needs "key value". A line without a separator used to be skipped silently, which
+			// reported success while quietly dropping it — refuse the whole write instead.
+			if(keyed && !findtext(element, " "))
+				ok = FALSE
+				break
 			if(!entry.ValidateAndSet(element))
 				ok = FALSE
+				break
+		// The live list was emptied before validating, so a rejected line must not leave it truncated.
+		if(!ok)
+			entry.config_entry_value = old_value
 	else
 		ok = entry.ValidateAndSet("[new_value]") // writes config_entry_value in place -> CONFIG_GET is live immediately
 	if(!ok)
