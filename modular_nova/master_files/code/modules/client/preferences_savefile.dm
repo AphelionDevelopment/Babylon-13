@@ -59,7 +59,11 @@
 	mismatched_customization = save_data["mismatched_customization"]
 	allow_advanced_colors = save_data["allow_advanced_colors"]
 
-	alt_job_titles = save_data["alt_job_titles"]
+	// BABYLON EDIT ADDITION - was assigned straight from the savefile. The UI path checks the title
+	// against job.alt_titles (middleware/jobs.dm), but the load path did not, so an edited savefile put
+	// an arbitrary string on the ID card, the manifest and the arrival announcement. A non-list value
+	// also runtimed later in record creation.
+	alt_job_titles = sanitize_alt_job_titles(save_data["alt_job_titles"])
 
 	general_record = sanitize_text(general_record)
 	security_record = sanitize_text(security_record)
@@ -623,3 +627,20 @@
 #undef VERSION_AUGMENT_ITEMS_PATH_CHANGE
 #undef INDEX_UNDERWEAR
 #undef INDEX_BRA
+
+/// Shape check only: an assoc list of text to text. Deliberately does NOT consult SSjob, because loading
+/// happens at client connect and can run before SSjob is initialised, which would silently wipe every
+/// player's titles. Whether a title is actually offered is checked at the point of use by
+/// get_alt_job_title(), where SSjob is always up.
+/proc/sanitize_alt_job_titles(raw)
+	if(!islist(raw))
+		return list()
+	var/list/out = list()
+	for(var/job_title in raw)
+		if(!istext(job_title))
+			continue
+		var/new_title = raw[job_title]
+		if(!istext(new_title))
+			continue
+		out[job_title] = new_title
+	return out

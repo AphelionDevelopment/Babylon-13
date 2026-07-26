@@ -79,3 +79,22 @@
 	GLOB.chat_colors_by_mob_name[character.name] = list(character.chat_color, character.chat_color_darkened) // by now the mob has had its prefs applied to it
 
 #undef MAX_MUTANT_ROWS
+
+/**
+ * The player's chosen alternative title for a job, validated against what that job actually offers.
+ *
+ * Always use this rather than indexing alt_job_titles directly. The savefile load path cannot check
+ * membership (SSjob may not be up yet), so an edited savefile can carry any string until it is read;
+ * checking here means the ID card, manifest and arrival announcement can never show a title the job
+ * does not define. Falls back to the real job title.
+ */
+/datum/preferences/proc/get_alt_job_title(job_title)
+	if(!istext(job_title))
+		return job_title
+	var/chosen = LAZYACCESS(alt_job_titles, job_title)
+	if(!istext(chosen) || chosen == job_title)
+		return job_title
+	var/datum/job/job = SSjob?.get_job(job_title)
+	if(isnull(job) || !(chosen in job.alt_titles))
+		return job_title
+	return chosen
