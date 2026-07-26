@@ -25,6 +25,11 @@
 	history["supply"] = list()
 	history["demand"] = list()
 
+// TEMP FIX: drop once upstream patches the processing_late leak (tg has no Destroy here; see NovaSector/NovaSector#7664)
+/obj/machinery/computer/monitor/Destroy()
+	SSmachines.processing_late -= src
+	return ..()
+
 /obj/machinery/computer/monitor/process_late()
 	if(!get_powernet())
 		update_use_power(IDLE_POWER_USE)
