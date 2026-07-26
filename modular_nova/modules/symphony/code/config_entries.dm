@@ -1,4 +1,4 @@
-/// Master switch. Off by default — the whole module is inert until an operator enables it.
+/// Master switch. Off by default, the whole module is inert until an operator enables it.
 /datum/config_entry/flag/symphony_enabled
 
 /// Base URL of the SSymphony service, e.g. https://symphony.example.com
