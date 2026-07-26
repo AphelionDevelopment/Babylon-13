@@ -117,10 +117,6 @@
 	var/async_flags = handle_async()
 	if(async_flags)
 		return async_flags
-<<<<<<< HEAD
-
-=======
->>>>>>> 9d912d73d24 (Moves a couple of AI Triggers() to perform_async() (#97077))
 	var/mob/living/living_target = controller.blackboard[target_key]
 	if(QDELETED(living_target))
 		return AI_BEHAVIOR_DELAY | AI_BEHAVIOR_FAILED
@@ -135,17 +131,10 @@
 
 /datum/bt_node/ai_behavior/play_with_clown/perform_async(datum/ai_controller/controller)
 	var/datum/action/honk_ability = controller.blackboard[BB_HONK_ABILITY]
-<<<<<<< HEAD
-	honk_ability?.Trigger()
-	if(!async_still_valid())
-		return
-	finish_async(AI_BEHAVIOR_SUCCEEDED)
-=======
 	var/result = honk_ability?.Trigger()
 	if(!async_still_valid())
 		return
 	finish_async(result ? AI_BEHAVIOR_SUCCEEDED : AI_BEHAVIOR_FAILED)
->>>>>>> 9d912d73d24 (Moves a couple of AI Triggers() to perform_async() (#97077))
 
 /datum/bt_node/ai_behavior/play_with_clown/finish_action(datum/ai_controller/basic_controller/bot/controller, succeeded)
 	. = ..()
