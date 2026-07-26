@@ -14,5 +14,5 @@
 	var/mob/living/pawn = controller.pawn
 	if(!isobj(pawn.buckled))
 		return FALSE
-	controller.set_blackboard_key(target_key, pawn.buckled)
+	controller.set_blackboard_key(target_key, pawn.buckled) // BABYLON_EDIT: BLACKBOARD HARD REF CAUSES MONKEY CI FAILURE
 	return TRUE
