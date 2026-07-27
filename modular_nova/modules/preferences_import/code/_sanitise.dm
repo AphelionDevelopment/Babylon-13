@@ -1,29 +1,16 @@
 /**
  * Savefile import sanitising.
  *
- * A savefile that arrives from outside is hostile input. The preference system validates on the UI path
- * (`write()` calls `is_valid()`) but NOT on the load path (`read()` only calls `deserialize()`), so an
- * uploaded file otherwise reaches the game with every entitlement and format check bypassed.
- *
- * Two passes, because the checks need different things:
- *
- *  - PASS 1 runs at import time on the raw JSON tree. There is no /datum/preferences for the target
- *    player yet, so `is_valid()` (which many implementations resolve against a preferences datum) cannot
- *    run. Pass 1's job is to make the file safe to LOAD: structural bounds, plus the handful of
- *    structures that live outside the /datum/preference type system and therefore get no deserialize()
- *    sanitising at all. Unknown keys are KEPT, because savefile migration legitimately reads keys that
- *    no longer correspond to a preference.
- *
- *  - PASS 2 runs on the next load, after migration has brought the file up to date and a real
- *    preferences datum exists. It rebuilds every registry-known preference, in every character slot,
- *    through the validating write path. It does NOT delete unrecognised keys: see
- *    prefs_import_prune_unknown for why that was removed.
+ * An imported savefile is hostile input, and the load path never validates - only the UI write path calls is_valid().
+ * PASS 1 runs at import on the raw JSON, before any preferences datum exists: structural bounds, plus the structures
+ * no deserialize() covers. Unknown keys are KEPT, because migration reads them.
+ * PASS 2 runs on the next load, after migration, and rebuilds every known preference in every slot through the
+ * validating write path.
  */
 
-/// Bounds on an imported file. The 2 MB config default is far larger than any real export: a one-slot
-/// export measures ~31 KB, so even a full 45 slots lands well under this.
+/// Bounds on an imported file. A one-slot export is ~31 KB, so even a full 45 slots lands well under this.
 #define PREFS_IMPORT_MAX_BYTES (1024 * 1024)
-/// Refuse absurdly nested JSON before it reaches json_decode, which has no depth limit of its own.
+/// Cap on JSON nesting depth. json_decode has no depth limit of its own.
 #define PREFS_IMPORT_MAX_DEPTH 24
 /// Cap on character slots in an imported file.
 #define PREFS_IMPORT_MAX_SLOTS 60
@@ -35,22 +22,13 @@
 /**
  * Depth check on the DECODED tree, not the raw text.
  *
- * The previous version scanned the text character by character in DM, and was a worse denial of service
- * than the one it prevented. It looped `length(text)` (a BYTE count) while calling `copytext_char` (a
- * CHARACTER index), so on a 512 KB upload it allocated half a million single-character strings on the
- * calling tick with no CHECK_TICK, and on any non-ASCII input the character indexing turned it
- * quadratic. json_decode is native C over the same bytes and is far cheaper than interpreted DM ever
- * could be, so the sane order is: decode first (already bounded by the upload limit), then measure.
- *
- * Iterative with an explicit stack rather than recursive: the input is hostile, and a recursive walk
- * over a deliberately deep tree is its own stack overflow. Bails the moment the cap is exceeded, so a
- * pathological file costs the depth limit rather than the whole tree.
+ * Decoding first is cheaper - json_decode is native C, and the upload limit already bounds it. Iterative with an
+ * explicit stack rather than recursive, because a recursive walk over a deliberately deep tree is its own overflow.
  */
 /proc/prefs_import_tree_too_deep(tree)
 	if(!islist(tree))
 		return FALSE
-	// Parallel stacks of (node, depth-of-node). DM has no tuple, and this keeps the walk allocation-free
-	// apart from the two lists.
+	// Parallel stacks of node and its depth - DM has no tuple.
 	var/list/nodes = list(tree)
 	var/list/depths = list(1)
 	while(length(nodes))
@@ -74,20 +52,15 @@
 			depths += depth + 1
 	return FALSE
 
-/**
- * Structural checks on a decoded tree. Returns an error string, or null when the tree is acceptable.
- * These are the bounds that do not need any knowledge of individual preferences.
- */
+/// Structural checks on a decoded tree. Returns an error string, or null when the tree is fine.
 /proc/prefs_import_prevalidate(list/json_tree, datum/preferences/prefs)
 	if(!islist(json_tree) || !length(json_tree))
 		return "file is empty or not a savefile"
 	var/version = json_tree["version"]
 	if(!isnum(version))
 		return "missing version"
-	// SAVEFILE_VERSION_MIN/MAX are #undef'd at the end of preferences_savefile.dm, so go through the
-	// datum's own helper. Below MIN the loader would wipe the directory outright rather than migrate.
-	// A file from a NEWER build is allowed through: migration will not run for it, but pass 2 rebuilds
-	// every preference and prunes unrecognised keys regardless.
+	// SAVEFILE_VERSION_MIN/MAX are #undef'd at the end of preferences_savefile.dm, so go through the datum's helper.
+	// Below MIN the loader wipes the directory rather than migrating. Newer files pass, since pass 2 rebuilds anyway.
 	if(prefs?.check_savedata_version(json_tree) == SAVE_DATA_OBSOLETE)
 		return "savefile version [version] is too old to be migrated"
 	var/slots = 0
@@ -98,10 +71,8 @@
 		return "too many character slots ([slots])"
 	return null
 
-/**
- * PASS 1. Sanitise the structures that no deserialize() protects, in place, and return the tree.
- * Deliberately conservative: it does not drop unknown keys, because migration reads them.
- */
+/// PASS 1. Sanitise the structures no deserialize() protects, in place, and return the tree.
+/// Does not drop unknown keys, because migration reads them.
 /proc/prefs_import_pass1(list/json_tree)
 	for(var/key in json_tree)
 		if(findtext(key, "character") != 1)
@@ -118,12 +89,8 @@
 	json_tree[PREFS_IMPORT_PENDING_KEY] = TRUE
 	return json_tree
 
-/**
- * Loadout entries carry free-text name and description that are applied to the spawned item and shown
- * to everyone who examines it. The UI path writes them through tgui_input_text(encode = TRUE), which
- * html-encodes and length-caps; the load path does neither, so an imported file can inject markup into
- * every examiner's chat. Re-apply both here.
- */
+/// Loadout names and descriptions are free text shown to everyone who examines the item.
+/// The UI writes them through tgui_input_text(encode = TRUE) and the load path does neither, so re-apply both here.
 /proc/prefs_import_clean_loadout(raw)
 	if(!islist(raw))
 		return list()
@@ -145,8 +112,7 @@
 		out[path] = clean
 	return out
 
-/// Keep only text-keyed entries, dropping anything structurally wrong. The owning loaders resolve these
-/// against their own globals; this only guarantees they receive a list of the shape they expect.
+/// Keep only text or path keyed entries. The owning loaders resolve them, we just guarantee the shape.
 /proc/prefs_import_clean_assoc_paths(raw)
 	if(!islist(raw))
 		return list()
@@ -160,9 +126,8 @@
 /**
  * PASS 2. Runs on the next load, after migration, with a real preferences datum.
  *
- * Rebuilds every registry-known preference through write_preference(), which deserialises and then
- * validates via is_valid() before writing, replacing anything invalid with an informed default.
- * Unrecognised keys are left alone; only out-of-range character slots are dropped.
+ * Rebuilds every registry-known preference through write_preference(), which validates and falls back to an
+ * informed default. Unrecognised keys are left alone - only out-of-range slots are dropped.
  */
 /datum/preferences/proc/prefs_import_finalise()
 	if(!savefile)
@@ -187,8 +152,7 @@
 	// Player scope lives at the savefile root, so one pass covers it.
 	prefs_import_rebuild(player_prefs, counts)
 
-	// Character scope resolves through default_slot, so each slot has to be visited in turn. Rebuilding
-	// once would validate only the default slot and leave every other character on pass 1 alone.
+	// Character scope resolves through default_slot, so every slot has to be visited in turn.
 	var/original_slot = default_slot
 	var/slots = 0
 	var/list/tree = savefile.get_entry()
@@ -228,8 +192,7 @@
 			usable = FALSE
 		var/written
 		if(usable)
-			// Serialise on the way back in: write_preference deserialises, and read_preference already
-			// handed back the deserialised form.
+			// Serialise on the way back in - write_preference deserialises, and read_preference already gave us that.
 			written = write_preference(preference, preference.serialize(value))
 		else
 			written = write_preference(preference, preference.create_informed_default_value(src))
@@ -242,12 +205,8 @@
 	for(var/datum/preference/preference as anything in preferences)
 		value_cache -= preference.type
 
-/**
- * Savefile migration turns a loadout path it can no longer resolve into a null key, because
- * update_character_nova does `save_loadout[_text2path(loadout)] = entry` without checking the result.
- * That key then makes sanitize_loadout_list stack_trace on every read. Migration has already run by the
- * time we get here, so drop those keys before the rebuild reads the list.
- */
+/// Migration leaves a null key behind for any loadout path it cannot resolve, and that makes
+/// sanitize_loadout_list stack_trace on every read. Drop them before the rebuild reads the list.
 /proc/prefs_import_strip_empty_loadout_keys(list/slot)
 	var/list/loadout = slot["loadout_list"]
 	if(!islist(loadout))
@@ -263,22 +222,11 @@
 /**
  * Drops character slots whose number is out of range, and NOTHING else.
  *
- * This deliberately does not remove unrecognised keys, and it must stay that way. Earlier versions
- * dropped any key that was neither a registered preference nor on a hand-maintained whitelist. That
- * whitelist was wrong three times running, and each time it silently destroyed real player data: first
- * keybindings, chat toggles and the ignore list, then the per-slot `version` (which made every imported
- * character fail to load and get replaced by a random one), along with scars, body features, food
- * preferences and much else.
+ * Unrecognised keys stay, and must keep staying. The savefile is only ever read by name, so a key nobody asks for
+ * is inert, and file size is already bounded by PREFS_IMPORT_MAX_BYTES at import time.
  *
- * The reasoning that justified pruning was wrong. An unrecognised key is INERT: the savefile is only
- * ever read by name, via get_entry("...") or save_data["..."], so a key nobody asks for is never read
- * and cannot do anything. Pruning bought no safety at all, while carrying unbounded blast radius that
- * grows every time upstream adds a savefile key we do not know about. File size is already bounded by
- * PREFS_IMPORT_MAX_BYTES at import time.
- *
- * Slot numbers are different, and are still checked, because load_preferences derives max_save_slots by
- * SCANNING these key names. That is a genuine read path, so an injected "character99999999" would take
- * effect rather than sit inert.
+ * Slot numbers are different, because load_preferences derives max_save_slots by SCANNING these key names. That is
+ * a real read path, so an injected "character99999999" would take effect rather than sit inert.
  */
 /datum/preferences/proc/prefs_import_prune_unknown()
 	var/list/tree = savefile.get_entry()

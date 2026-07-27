@@ -11,9 +11,7 @@
 	var/check_mode = TRICOLOR_CHECK_BOOLEAN
 
 /datum/preference/tri_color/deserialize(input, datum/preferences/preferences)
-	// BABYLON EDIT ADDITION - savefile values reach deserialize() without is_valid() ever running, so a
-	// wrong-typed value here indexes a non-list and runtimes all the way out through client/New(). The
-	// savefile is re-read on every reconnect, so that locks the ckey out with no in-game recovery.
+	// BABYLON EDIT ADDITION - savefile values get here without is_valid() ever running, and a runtime out through client/New() locks the ckey out on every reconnect.
 	if(!islist(input) || length(input) < 3)
 		return create_default_value()
 	var/list/input_colors = input

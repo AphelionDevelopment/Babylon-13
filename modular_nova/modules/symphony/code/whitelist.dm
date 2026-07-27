@@ -1,6 +1,5 @@
 /// TRUE if the ckey's linked Discord holds any role that grants the given in-game role key.
-/// Reads the SSymphony grants table (grant_type='ingame'); modular - 'whitelist' now, 'staff'/'donator' later.
-/// Fail-closed: any error (no DB, query failure) returns FALSE.
+/// Reads the SSymphony grants table (grant_type='ingame'). Fail-closed - any DB error returns FALSE.
 /proc/symphony_has_ingame_role(target_ckey, role_key)
 	target_ckey = ckey(target_ckey)
 	if(!target_ckey || !role_key)
@@ -22,9 +21,8 @@
 	qdel(query)
 
 /// Every ckey that currently holds the given in-game role key, as an assoc set (ckey -> TRUE).
-/// One query for the whole server, so callers building a player list don't run a query per player.
-/// Fail-closed: returns null (not an empty list) on any DB error, so callers can tell "nobody holds it"
-/// apart from "couldn't check" and stay consistent with the single-ckey path.
+/// One query for the whole server, so building a player list doesn't cost a query per player.
+/// Fail-closed - returns null, not an empty list, so callers can tell "nobody holds it" from "couldn't check".
 /proc/symphony_ingame_role_ckeys(role_key)
 	if(!role_key || !SSdbcore.Connect())
 		return null
@@ -45,17 +43,7 @@
 	qdel(query)
 	return holders
 
-/**
- * Short-lived cache of whitelist answers, keyed by ckey.
- *
- * The lookup is a three-table JOIN and had no cache, so it ran per call for whitelisted players too.
- * Fine for one click, bad on the paths that fan out: show_title_screen() renders for EVERY lobby mob and
- * is called on each dynamic ruleset queue and again from create_characters() at round start, so a
- * 50-strong lobby cost 50 queries at the most timing-sensitive tick of the round.
- *
- * Deliberately brief, and dropped outright on every grant, revoke and sweep. Those pushes are the
- * authority; this only collapses bursts within a single render.
- */
+/// Short-lived cache of whitelist answers, keyed by ckey. Only collapses bursts - grants, revokes and sweeps drop it outright.
 GLOBAL_LIST_EMPTY(symphony_whitelist_cache)
 /// world.time at which each cached answer stops being trusted.
 GLOBAL_LIST_EMPTY(symphony_whitelist_cache_expiry)
@@ -74,10 +62,7 @@ GLOBAL_LIST_EMPTY(symphony_whitelist_cache_expiry)
 /**
  * TRUE if the gate is off, or the ckey holds the in-game "whitelist" role.
  *
- * Fail-OPEN when the module is disabled, which is right for a GATE (do not lock a server out of its own
- * lobby) and wrong for an ENTITLEMENT. Callers deciding "may this player use a restricted feature"
- * must use symphony_holds_whitelist_role() instead, or the feature unlocks for everyone precisely when
- * Symphony is switched off.
+ * Fail-OPEN when disabled - right for a GATE, wrong for an ENTITLEMENT. "May this player use a restricted feature" wants symphony_holds_whitelist_role().
  */
 /proc/is_symphony_whitelisted(target_ckey)
 	if(!CONFIG_GET(flag/symphony_enabled))
@@ -92,14 +77,8 @@ GLOBAL_LIST_EMPTY(symphony_whitelist_cache_expiry)
 	GLOB.symphony_whitelist_cache[target_ckey] = .
 	GLOB.symphony_whitelist_cache_expiry[target_ckey] = world.time + SYMPHONY_WHITELIST_CACHE_TIME
 
-/**
- * TRUE only when the ckey actually holds the whitelist role. Fail-CLOSED: a disabled module means nobody
- * holds it, because nothing has granted it.
- *
- * This is the entitlement form. The preferences importer used the gate form, so on a stock server (where
- * symphony_enabled defaults off) every connecting player was handed the verb AND advertised it by the
- * one-time notice, which is the exact inverse of what the module documents.
- */
+/// The entitlement form - TRUE only when the ckey actually holds the whitelist role.
+/// Fail-CLOSED: a disabled module means nobody holds it, because nothing has granted it.
 /proc/symphony_holds_whitelist_role(target_ckey)
 	if(!CONFIG_GET(flag/symphony_enabled))
 		return FALSE

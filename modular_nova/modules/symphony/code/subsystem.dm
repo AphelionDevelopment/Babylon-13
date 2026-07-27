@@ -8,9 +8,7 @@ SUBSYSTEM_DEF(symphony)
 /datum/controller/subsystem/symphony/fire()
 	if(!CONFIG_GET(flag/symphony_enabled))
 		return
-	// One query for the whole server rather than a blocking round-trip per player. null means "couldn't
-	// check" (no DB, query failed) - do nothing, so a transient blip can't mass-revoke everyone. An
-	// empty list genuinely means nobody holds the role.
+	// One query for the whole server. null means "couldn't check" so we bail, an empty list means nobody holds it.
 	var/list/holders = symphony_ingame_role_ckeys("whitelist")
 	if(isnull(holders))
 		return
@@ -18,19 +16,14 @@ SUBSYSTEM_DEF(symphony)
 	for(var/client/checked as anything in GLOB.clients.Copy())
 		if(!checked || !checked.ckey)
 			continue
-		// The sweep already holds the authoritative answer for everyone, so seed the per-ckey cache from
-		// it instead of letting the next lobby render re-query what we just fetched in bulk.
+		// We already have the authoritative answer in bulk, so bin the stale per-ckey cache here.
 		symphony_invalidate_whitelist_cache(checked.ckey)
 		if(holders[checked.ckey])
 			continue
-		// Staff exemption, matching gate.dm. Missing here it bit twice: a non-whitelisted admin was
-		// pulled out of their body, and the quieter one - a readied-up admin (which the gate explicitly
-		// permits) was silently reset to NOT_READY every sweep and dropped from round start.
+		// Staff exemption, matching gate.dm - admins keep both their body and their readiness.
 		if(checked.holder)
 			continue
-		// Lobby players used to be skipped entirely, so a revoke push lost in transit was never repaired
-		// and they still spawned at round start. Only act when they are actually ready, so this doesn't
-		// re-notify every five minutes.
+		// Lobby players need unreadying too, or a lost revoke push still spawns them. Only touch the ready ones.
 		if(isnewplayer(checked.mob))
 			var/mob/dead/new_player/lobby = checked.mob
 			if(lobby.ready != PLAYER_NOT_READY)

@@ -1,13 +1,7 @@
 /**
- * Version of this game module, reported to SSymphony so it can detect a mismatched pair.
+ * Version of this game module, reported to SSymphony so it can spot a mismatched pair.
  *
- * The two halves share database tables and this topic protocol, and drift between them fails SILENTLY
- * rather than loudly: the symptom is usually "nobody gets whitelisted" with no error anywhere. SSymphony
- * compares this against the minimum it needs and warns on the panel.
- *
- * BUMP THIS whenever the module changes in a way SSymphony can observe: a new or changed world_topic,
- * a change to what an existing topic returns, or a change to a shared database table. Then raise
- * REQUIRED_GAME_MODULE in SSymphony (src/core/gameModule.ts) to match, and tag that release vX.Y.Z-dm.
+ * Bump it whenever a topic, its response, or a shared table changes, and raise REQUIRED_GAME_MODULE in SSymphony to match.
  */
 #define SYMPHONY_MODULE_VERSION 3
 
@@ -19,8 +13,7 @@
 
 /datum/world_topic/symphony_server_status/Run(list/input)
 	. = list()
-	// Absent from the response entirely on a module older than this field, which is itself the signal
-	// that the game side predates version reporting.
+	// A missing module_version is itself the signal that the game side predates version reporting.
 	.["module_version"] = SYMPHONY_MODULE_VERSION
 	var/state = SSticker?.current_state
 	.["game_state"] = state
@@ -81,13 +74,9 @@
 /datum/world_topic/symphony_player_list/Run(list/input)
 	. = list()
 	var/list/players = list()
-	// Audit line: this returns the complete live antagonist roster by ckey, and was pollable at any rate
-	// with zero trace. log = FALSE stays (it keeps the comms key out of the topic log); this is explicit.
+	// Audit line - this hands out the whole live antag roster, and log = FALSE keeps the comms key out of the topic log.
 	log_admin("Symphony: player list read via topic ([length(GLOB.clients)] clients).")
-	// Fetch the whitelist-role holders once, instead of a per-player query inside the loop (60 players
-	// was 60 serial DB round-trips with the game stalled on each panel refresh). This reports actual
-	// role-holding, independent of whether the gate is enforced - same as the old per-player call. null
-	// means the lookup failed; everyone then reads FALSE, matching the single-ckey path's fail-closed.
+	// Grab the whitelist holders in one query rather than one per player. null means the lookup failed and everyone reads FALSE - fail closed.
 	var/list/whitelisted_ckeys = symphony_ingame_role_ckeys("whitelist")
 	// GLOB.clients covers lobby + in-round + observers, one client per connected player.
 	for(var/client/connected as anything in GLOB.clients)

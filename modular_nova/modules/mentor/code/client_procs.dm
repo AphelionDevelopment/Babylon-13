@@ -13,8 +13,7 @@
 		connect_to_relay()
 		return TRUE
 
-	// BABYLON EDIT ADDITION - link target for the one-time preferences import notice. The verb re-checks
-	// every gate itself, so this is only a shortcut to it.
+	// BABYLON EDIT ADDITION - link target for the one-time preferences import notice, the verb re-checks every gate itself.
 	if(href_list["babylon_import_prefs"])
 		import_preferences()
 		return TRUE

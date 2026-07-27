@@ -59,10 +59,7 @@
 	mismatched_customization = save_data["mismatched_customization"]
 	allow_advanced_colors = save_data["allow_advanced_colors"]
 
-	// BABYLON EDIT ADDITION - was assigned straight from the savefile. The UI path checks the title
-	// against job.alt_titles (middleware/jobs.dm), but the load path did not, so an edited savefile put
-	// an arbitrary string on the ID card, the manifest and the arrival announcement. A non-list value
-	// also runtimed later in record creation.
+	// BABYLON EDIT ADDITION - never take this straight from the savefile, an edited one can put any string on the ID card and the manifest.
 	alt_job_titles = sanitize_alt_job_titles(save_data["alt_job_titles"])
 
 	general_record = sanitize_text(general_record)
@@ -255,11 +252,7 @@
 
 	if(current_version < VERSION_TG_LOADOUT)
 		var/list/save_loadout = SANITIZE_LIST(save_data["loadout_list"])
-		// BABYLON EDIT CHANGE BEGIN - was rewriting save_loadout in place while iterating it, and stored
-		// the result of _text2path unchecked. _text2path returns null for a path that no longer exists
-		// (a renamed or removed item), which wrote a null key and made sanitize_loadout_list stack_trace
-		// on "(Path: )". Build a new list instead: correct regardless of how DM orders a list that is
-		// mutated mid-iteration, and unresolvable paths are simply dropped.
+		// BABYLON EDIT CHANGE BEGIN - build a new list instead of mutating save_loadout while iterating it, and drop paths _text2path can't resolve rather than storing a null key.
 		// ORIGINAL:
 		// for(var/loadout in save_loadout)
 		// 	var/entry = save_loadout[loadout]
@@ -644,10 +637,7 @@
 #undef INDEX_UNDERWEAR
 #undef INDEX_BRA
 
-/// Shape check only: an assoc list of text to text. Deliberately does NOT consult SSjob, because loading
-/// happens at client connect and can run before SSjob is initialised, which would silently wipe every
-/// player's titles. Whether a title is actually offered is checked at the point of use by
-/// get_alt_job_title(), where SSjob is always up.
+/// Shape check only, an assoc list of text to text. Never ask SSjob in here, it can be down at client connect and we would wipe everyone's titles - get_alt_job_title() does that check instead.
 /proc/sanitize_alt_job_titles(raw)
 	if(!islist(raw))
 		return list()

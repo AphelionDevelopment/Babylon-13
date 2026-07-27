@@ -1,12 +1,7 @@
 /**
  * Player-facing preferences import, for people bringing a character across from another server.
  *
- * Restricted to players holding the in-game whitelist role. That is not the security boundary (the
- * sanitiser is), but it keeps the surface to accounts that have already linked a Discord identity and
- * been granted access, which makes abuse attributable.
- *
- * Always imports over the CALLER's own savefile. There is no target parameter, so unlike the admin verb
- * this cannot be pointed at somebody else.
+ * Whitelisted players only, and always over the CALLER's own savefile - there is no target parameter.
  */
 /client/proc/import_preferences()
 	set name = "Import Preferences"
@@ -25,9 +20,7 @@
 		to_chat(src, span_warning("Guest accounts cannot import preferences."))
 		return
 
-	// Whitelisted players only, using the ENTITLEMENT form. Fail-closed on both a database problem and a
-	// disabled module: the gate form returns TRUE when Symphony is off, which handed this verb to every
-	// player on a stock server - the exact inverse of what this file documents.
+	// The ENTITLEMENT form, not the gate form - fail closed if the database is down or Symphony is off.
 	if(!symphony_holds_whitelist_role(ckey))
 		to_chat(src, span_warning("Importing preferences is only available to whitelisted players."))
 		return
@@ -81,9 +74,7 @@
 		log_game("Preferences import by [ckey] failed to parse: [err]")
 		return
 
-	// Depth is measured on the DECODED tree. Decoding first is deliberate: json_decode is native C and
-	// the size is already bounded by the upload limit, whereas the old pre-decode text scan was itself
-	// the denial of service it was meant to prevent.
+	// Depth is measured on the DECODED tree - a pre-decode text scan is slower than json_decode itself.
 	if(prefs_import_tree_too_deep(json_tree))
 		to_chat(src, span_warning("That file is nested too deeply to be a preferences file."))
 		log_admin("[key_name(src)] attempted a preferences import with excessive JSON nesting.")
@@ -107,8 +98,7 @@
 	fdel("[savefile_path].updatebac") // else load_preferences can revert to a stale migration backup
 	text2file(json_encode(json_tree), file(savefile_path))
 
-	// Drop the cached datum so the file is re-read. The still-connected client would otherwise write its
-	// stale in-memory preferences back over the import.
+	// Drop the cached datum, else the still-connected client writes its stale prefs back over the import.
 	GLOB.preferences_datums[ckey] = null
 
 	log_admin("[key_name(src)] imported their own preferences ([filesize] bytes).")
@@ -118,11 +108,7 @@
 	to_chat(src, span_notice("Anything the server could not accept will be reset to a default when you return."))
 	QDEL_IN(src, 2)
 
-/**
- * Copy the current savefile aside as a pruning ring buffer. Unlike the admin verb, which refuses the
- * import once its backup limit is reached, this discards the oldest so a player can never lock
- * themselves out of importing.
- */
+/// Copies the current savefile aside into a ring buffer, dropping the oldest so nobody locks themselves out.
 /proc/prefs_import_backup(savefile_path)
 	if(!fexists(savefile_path))
 		return TRUE // nothing to back up, which is fine

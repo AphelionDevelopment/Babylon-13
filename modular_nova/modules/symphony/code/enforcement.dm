@@ -1,22 +1,19 @@
-/// Begins revocation for a ckey: warn, wait out the grace period, then re-check and return them to the lobby if still not whitelisted.
+/// Starts a revoke for a ckey. Warn them, wait out the grace period, then send them to the lobby if still unwhitelisted.
 /proc/symphony_revoke(target_ckey)
 	target_ckey = ckey(target_ckey)
-	// The push IS the news, so drop any cached answer rather than letting the TTL delay enforcement.
+	// The push is the news, so drop any cached answer instead of waiting out the TTL.
 	symphony_invalidate_whitelist_cache(target_ckey)
 	var/client/found = GLOB.directory[target_ckey]
 	if(!found)
 		return
-	// Staff exemption, matching gate.dm. Without it, an admin who is simply not in the Discord with the
-	// mapped role - exactly the state that exemption exists to tolerate - is torn out of their body
-	// within one sweep, leaving nobody able to fix it in-round.
+	// Staff exemption, matching gate.dm - an admin who isn't in the Discord keeps their body.
 	if(found.holder)
 		return
 	// Already in the lobby - just refresh the title screen to the gate, no grace needed.
 	if(isnewplayer(found.mob))
 		var/mob/dead/new_player/lobby = found.mob
 		to_chat(found, span_userdanger("Your Discord whitelist role was removed."))
-		// Clearing readiness is the point: round start reads `ready` directly and never consults the
-		// gate, so a player who readied up while whitelisted would still be spawned as crew.
+		// Round start reads `ready` directly and never consults the gate, so clear it or they still spawn as crew.
 		lobby.ready = PLAYER_NOT_READY
 		lobby.show_title_screen()
 		return
@@ -43,22 +40,16 @@
 	var/mob/old_mob = target.mob
 	if(old_mob && !isnewplayer(old_mob))
 		old_mob.log_message("returned to lobby by discord whitelist enforcement", LOG_GAME)
-		// The lobby mob's Login() mints a fresh /datum/mind for this key. Retiring the old one first
-		// stops the same key owning two active minds (and two bodies) if the role is later restored.
+		// The lobby mob's Login() mints a fresh mind, so retire the old one or the key ends up owning two.
 		if(old_mob.mind)
 			old_mob.mind.active = FALSE
 	var/mob/dead/new_player/lobby = new()
 	lobby.key = target.key
 	lobby.show_title_screen()
-	// Tell the admins. The body is deliberately left behind rather than gibbed, which means a revoke
-	// landing on an antagonist mid-round orphans a live body still holding its objectives and gear. That
-	// is the intended behaviour, but it must not be silent: without this the first anyone knew was a
-	// confused player, and a bot desync or a compromised Discord account fires the identical path.
+	// The body is left behind on purpose, so a revoke on an antag orphans a live one. Never do that silently.
 	message_admins("Symphony: [key_name_admin(target)] was returned to the lobby by whitelist enforcement. Their body was left in place[old_mob ? " at [AREACOORD(old_mob)]" : ""].")
 
-/// A revoke that lands while the player is disconnected is lost: the grace timer is one-shot and
-/// returns without rescheduling when the client is gone. Re-check on connect so a relog can't be used
-/// to sit out enforcement.
+/// Re-check on connect. The grace timer is one-shot, so a relog could otherwise sit out enforcement.
 /client/New()
 	. = ..()
 	if(!.)
@@ -73,7 +64,7 @@
 		return
 	symphony_revoke(ckey)
 
-/// whitelist_grant handler effect: tell a waiting player they can now join and refresh their lobby.
+/// Tells a waiting player their role came through and refreshes their lobby.
 /proc/symphony_notify_grant(target_ckey)
 	symphony_invalidate_whitelist_cache(target_ckey)
 	var/client/found = GLOB.directory[ckey(target_ckey)]

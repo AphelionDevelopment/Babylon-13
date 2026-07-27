@@ -1,18 +1,4 @@
-/**
- * Whitelist enforcement toggle.
- *
- * This file used to expose a general-purpose config read and write pair: every non-hidden, non-locked
- * entry in the game's whole config namespace was live-writable by any comms-key holder, filtered only
- * by a name-substring deny-list. That design fails open on every entry upstream adds, and it did:
- * admin_2fa_url (remote deadmin, plus an attacker URL rendered into every admin's chat where a 2FA link
- * is expected), panic_bunker with panic_server_address (redirect every new connector to another
- * server), and the ipintel_* family (real-time player IP exfiltration and control over who may connect
- * at all) were all reachable, and none of them existed when the deny-list was written.
- *
- * The general editor is gone. Game config belongs to TGS and the config files. What remains is the one
- * switch the panel genuinely needs to flip quickly, hardcoded to a single entry name so there is no
- * namespace to walk.
- */
+// The rest of the game config belongs to TGS and the config files. This is the one switch the panel gets.
 
 /// Turn the whitelist gate on or off at runtime. The panel also persists it to file for the next boot.
 /datum/world_topic/symphony_set_enforcement
@@ -21,8 +7,7 @@
 
 /datum/world_topic/symphony_set_enforcement/Run(list/input)
 	. = list()
-	// Deliberately NOT behind symphony_enabled, unlike every other topic in the module: this is the topic
-	// that turns that flag on, so gating it on the flag would make enforcement impossible to enable.
+	// Deliberately not behind symphony_enabled, unlike the rest of the module - this is what turns that flag on.
 	var/admin_name = input["admin_name"] || "Discord Admin"
 	var/raw = input["enabled"]
 	if(isnull(raw))
@@ -31,7 +16,7 @@
 		return
 	var/enabled = (raw == "1" || raw == "true" || raw == 1)
 
-	// Hardcoded entry name. There is deliberately no way to name a different one: that was the defect.
+	// Hardcoded entry name - there is deliberately no way to ask for a different one.
 	var/datum/config_entry/entry = global.config.entries["symphony_enabled"]
 	if(!entry)
 		.["success"] = FALSE

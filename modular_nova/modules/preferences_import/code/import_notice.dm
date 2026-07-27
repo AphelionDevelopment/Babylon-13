@@ -1,18 +1,13 @@
 /**
  * One-time chat notice telling an arriving player they can bring their characters with them.
  *
- * Shown once per player, tracked by a savefile key rather than player_age, so it does not depend on the
- * database being up and cannot fire twice if someone reconnects during their first round.
+ * Tracked by a savefile key rather than player_age, so it needs no database and cannot fire twice.
  */
 
-/// How long after login to print the notice. Long enough to land under the MOTD and changelog rather
-/// than in the middle of them.
+/// How long after login to print the notice, late enough to land under the MOTD and changelog.
 #define PREFS_IMPORT_NOTICE_DELAY (12 SECONDS)
 
-/**
- * Queues the import notice. Deferred off the login tick deliberately: the whitelist lookup is a database
- * query, and login is not a place to block on one.
- */
+/// Queues the import notice. Deferred off the login tick, since the whitelist lookup hits the database.
 /client/proc/babylon_offer_preferences_import()
 	addtimer(CALLBACK(src, PROC_REF(babylon_show_import_notice)), PREFS_IMPORT_NOTICE_DELAY)
 

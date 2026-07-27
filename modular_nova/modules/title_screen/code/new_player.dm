@@ -18,11 +18,9 @@
 		return
 
 	// BABYLON EDIT ADDITION START - discord whitelist gate.
-	// Allow-list, not deny-list: the old enumeration of blocked hrefs silently let anything new through
-	// (crew manifest, character directory, polls). The href is checked BEFORE the gate so an unwhitelisted
-	// client can't make every lobby click cost a whitelist query.
-	// EXCLUSIVITY, not presence: see symphony_gate_free_hrefs. Testing presence let one extra parameter
-	// unlock every handler in the same Topic call.
+	// Allow-list, not deny-list - anything outside symphony_gate_free_hrefs is gated.
+	// Those keys are checked for EXCLUSIVITY, so one extra parameter can't unlock the rest of this Topic.
+	// get_whitelisted is handled above the gate so lobby clicks don't each cost a whitelist query.
 	if(!symphony_href_is_gate_free(href_list) && symphony_blocks_play())
 		symphony_gate_notice()
 		return

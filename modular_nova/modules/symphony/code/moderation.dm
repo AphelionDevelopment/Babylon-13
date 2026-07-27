@@ -28,8 +28,7 @@
 	require_comms_key = TRUE
 	log = FALSE
 
-/// The canonical list of bannable roles. Shared by the topic and by symphony_ban's validation so the
-/// two can't drift.
+/// The canonical list of bannable roles. Shared by the topic and symphony_ban's validation so they can't drift.
 /proc/symphony_bannable_roles()
 	var/list/roles = list("Server", "OOC", "Deadchat", "Emote", "Appearance", "Urgent Adminhelp")
 	for(var/datum/job/job_datum as anything in SSjob?.all_occupations)
@@ -37,8 +36,7 @@
 			roles += job_datum.title
 	return roles
 
-/// Resolve caller-supplied text to the exact stored role title, case-insensitively. The DM ban cache is
-/// case-sensitive, so a mis-cased role produced a ban row that never matched and silently did nothing.
+/// Resolve caller-supplied text to the exact stored role title. The ban cache is case-sensitive, so the casing has to match.
 /proc/symphony_resolve_role(supplied)
 	supplied = trim(supplied)
 	if(!supplied)
@@ -52,9 +50,8 @@
 	. = list()
 	.["roles"] = symphony_bannable_roles()
 
-/// Ban a ckey. role='Server' = permanent/temp full server ban (login-enforced + kick); any other role =
-/// in-round role/job ban. duration_mins null/0 = permanent, else a temporary ban of that many minutes.
-/// A world_topic has no usr, so create_ban is unusable - insert the ban row directly.
+/// Ban a ckey. role 'Server' is a full login-enforced ban, anything else is an in-round role ban. duration_mins null/0 = permanent.
+/// A world topic has no usr, so create_ban is unusable - we insert the ban row ourselves.
 /datum/world_topic/symphony_ban
 	keyword = "symphony_ban"
 	require_comms_key = TRUE
@@ -76,8 +73,7 @@
 		.["success"] = FALSE
 		.["message"] = "unknown role - use one of the roles from symphony_bannable_roles"
 		return
-	// applies_to_admins is 0 below, so a ban on staff would insert a row the login check ignores and
-	// report success while doing nothing. Refuse instead of lying to the operator.
+	// applies_to_admins is 0, so a staff ban would insert a row the login check ignores. Refuse rather than report a fake success.
 	if(GLOB.admin_datums[target_ckey] || GLOB.deadmins[target_ckey])
 		.["success"] = FALSE
 		.["message"] = "target is staff - use the in-game ban panel"
@@ -87,9 +83,7 @@
 		.["message"] = "no database"
 		return
 
-	// Optionally widen the ban to the target's last-known IP/CID so it isn't trivially evaded. This also
-	// catches unrelated accounts behind the same connection or PC (shared houses, student halls, VPNs),
-	// so the caller decides; omitted means widen, preserving the previous behaviour.
+	// Optionally widen the ban to the target's last known IP/CID. It catches shared connections too, so the caller decides - omitted means widen.
 	var/widen = TRUE
 	if("match_ip_cid" in input)
 		widen = text2num(input["match_ip_cid"]) ? TRUE : FALSE
@@ -121,9 +115,7 @@
 		"ckey" = target_ckey,
 		"ip" = player_ip,
 		"computerid" = player_cid,
-		// Fixed marker, not the caller-supplied name: a_ckey is otherwise free text from the panel, so
-		// anyone able to rename their own account could stamp a real staff ckey on their bans. Who
-		// actually did it is recorded by the log_admin/message_admins lines below.
+		// Fixed marker, never the caller-supplied name - otherwise anyone could stamp a real staff ckey on their bans.
 		"a_ckey" = "symphony",
 		"a_ip" = 0,
 		"a_computerid" = "symphony",
@@ -135,18 +127,13 @@
 		.["message"] = "insert failed"
 		return
 
-	// Mirror the in-game ban panel and leave a note, so a Discord-issued ban is visible in the notes
-	// workflow instead of only existing in the ban table.
-	//
-	// Written directly rather than through create_message(): that proc bails on `if(QDELETED(usr))`, and a
-	// world topic has no usr, so the note silently never landed while this topic still reported success.
+	// Leave a note like the in-game ban panel does, so a Discord ban shows up in the notes workflow too.
 	symphony_write_ban_note(target_ckey, admin_name, role, reason)
 
 	var/dur_txt = duration ? "for [duration] minutes" : "permanently"
 	var/what = (role == "Server") ? "server-banned" : "role-banned ([role])"
 	log_admin("[admin_name] (via Symphony) [what] [target_ckey] [dur_txt]. Reason: [reason]")
-	// Escaped: reason/admin_name/role are free text from the panel or a Discord command, and
-	// message_admins renders straight into every admin's chat pane as HTML.
+	// Escaped - these are free text from the panel, and message_admins renders as HTML in every admin's chat.
 	var/safe_admin = html_encode(admin_name)
 	var/safe_reason = html_encode(reason)
 	var/safe_what = html_encode(what)
@@ -168,9 +155,7 @@
 /**
  * Insert a ban note for a Symphony-issued ban.
  *
- * create_message() cannot be used from a world topic: it early-returns on a null usr, so the note was
- * never written while the topic reported success. Mirrors the column set create_message() uses; the
- * NOT NULL columns without defaults (server_ip, server_port, secret) are supplied explicitly.
+ * create_message() early-returns on a null usr and a world topic has no usr, so we write the row ourselves.
  */
 /proc/symphony_write_ban_note(target_ckey, admin_name, role, reason)
 	if(!SSdbcore.Connect())

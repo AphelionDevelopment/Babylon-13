@@ -81,12 +81,9 @@
 #undef MAX_MUTANT_ROWS
 
 /**
- * The player's chosen alternative title for a job, validated against what that job actually offers.
+ * The player's chosen alt title for a job
  *
- * Always use this rather than indexing alt_job_titles directly. The savefile load path cannot check
- * membership (SSjob may not be up yet), so an edited savefile can carry any string until it is read;
- * checking here means the ID card, manifest and arrival announcement can never show a title the job
- * does not define. Falls back to the real job title.
+ * Always use this rather than indexing alt_job_titles directly - the load path can't check the title against the job, so this is where a made-up one gets caught. Falls back to the real title.
  */
 /datum/preferences/proc/get_alt_job_title(job_title)
 	if(!istext(job_title))
