@@ -129,3 +129,5 @@
 
 	.["count"] = length(players)
 	.["players"] = players
+
+#undef SYMPHONY_MODULE_VERSION
