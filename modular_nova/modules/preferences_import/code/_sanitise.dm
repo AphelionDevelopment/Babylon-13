@@ -31,10 +31,36 @@
 /// Records that the one-time "you can import your characters" notice has been shown.
 #define PREFS_IMPORT_NOTICE_KEY "babylon_import_notice_seen"
 
-/// Top-level keys that are not /datum/preference backed but are legitimately part of a savefile.
+/**
+ * Top-level keys that are not /datum/preference backed but are legitimately part of a savefile.
+ *
+ * This list is load bearing: anything missing from it gets DELETED by prefs_import_prune_unknown. It is
+ * the full set of literal keys passed to savefile.get_entry()/set_entry() outside the preference
+ * registry, taken from code/modules/client/preferences_savefile.dm and the Nova master_files override.
+ * The sound_* entries are read only by legacy migration and are listed so a pre-migration file keeps
+ * them. If you add a savefile key anywhere, add it here too.
+ */
 GLOBAL_LIST_INIT(prefs_import_player_keys, list(
 	"version",
 	"default_slot",
+	"lastchangelog",
+	"be_special",
+	"toggles",
+	"chat_toggles",
+	"ignoring",
+	"key_bindings",
+	"hearted_until",
+	"favorite_outfits",
+	"favorite_verbs",
+	"sound_ai_vox",
+	"sound_ambience_volume",
+	"sound_instruments",
+	"sound_lobby_volume",
+	"sound_midi",
+	"sound_radio_noise",
+	"sound_ship_ambience_volume",
+	"sound_tts",
+	"sound_tts_blips",
 	PREFS_IMPORT_PENDING_KEY,
 	PREFS_IMPORT_NOTICE_KEY,
 ))
@@ -56,6 +82,25 @@ GLOBAL_LIST_INIT(prefs_import_character_keys, list(
 	"mismatched_customization",
 	"allow_advanced_colors",
 	"hairstyle_name",
+	// Read by the Nova per-slot migration. Most are also registered preferences, but they are listed
+	// explicitly so a slot that has not migrated yet does not lose them.
+	"breasts_size",
+	"character_laugh",
+	"character_scream",
+	"feature_ears",
+	"feature_penis",
+	"feature_testicles",
+	"feature_wings",
+	"mutant_bodyparts",
+	"mutant_colors_color",
+	"skin_tone",
+	"skin_tone_toggle",
+	"species",
+	"tts_voice",
+	"undershirt",
+	"undershirt_color",
+	"underwear",
+	"underwear_color",
 ))
 
 /**
@@ -281,27 +326,57 @@ GLOBAL_LIST_INIT(prefs_import_character_keys, list(
 	if(length(clean) != length(loadout))
 		slot["loadout_list"] = clean
 
-/// Removes savefile keys that are neither a registered preference nor a known structural key.
+/**
+ * Removes savefile keys that are neither a registered preference nor a known structural key.
+ *
+ * Deletions are collected first and applied afterwards, so nothing is removed from a list while it is
+ * being iterated. Everything removed is logged: a gap in either whitelist silently destroys real player
+ * data and only surfaces as an unrelated runtime on some later login, which is exactly how the first
+ * version of this proc ate a player's keybindings.
+ */
 /datum/preferences/proc/prefs_import_prune_unknown()
 	var/list/tree = savefile.get_entry()
 	if(!islist(tree))
 		return
+	var/list/pruned = list()
+	var/list/drop_from_tree = list()
+
 	for(var/key in tree)
 		if(findtext(key, "character") == 1)
+			// An out of range slot number would inflate max_save_slots, which load_preferences derives by
+			// scanning these keys.
+			var/slot_number = text2num(copytext(key, 10))
+			if(!isnum(slot_number) || slot_number < 1 || slot_number > PREFS_IMPORT_MAX_SLOTS)
+				drop_from_tree += key
+				pruned += key
+				continue
 			var/list/slot = tree[key]
 			if(!islist(slot))
 				continue
+			var/list/drop_from_slot = list()
 			for(var/slot_key in slot)
 				if(GLOB.preference_entries_by_key[slot_key])
 					continue
 				if(slot_key in GLOB.prefs_import_character_keys)
 					continue
+				drop_from_slot += slot_key
+				pruned += "[key]/[slot_key]"
+			for(var/slot_key in drop_from_slot)
 				slot -= slot_key
 			continue
 		if(GLOB.preference_entries_by_key[key])
 			continue
 		if(key in GLOB.prefs_import_player_keys)
 			continue
+		drop_from_tree += key
+		pruned += key
+
+	for(var/key in drop_from_tree)
 		tree -= key
+
+	if(!length(pruned))
+		return
+	var/list/shown = (length(pruned) > 40) ? (pruned.Copy(1, 41) + "...") : pruned
+	log_game("Preferences import pruned [length(pruned)] unrecognised savefile key\s for [parent?.ckey]: [jointext(shown, ", ")]")
 
 // Deliberately not #undef'd: the import verb in this module reads the byte and depth bounds.
