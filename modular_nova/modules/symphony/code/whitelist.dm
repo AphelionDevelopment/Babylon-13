@@ -45,8 +45,28 @@
 	qdel(query)
 	return holders
 
-/// TRUE if the gate is off, or the ckey holds the in-game "whitelist" role.
+/**
+ * TRUE if the gate is off, or the ckey holds the in-game "whitelist" role.
+ *
+ * Fail-OPEN when the module is disabled, which is right for a GATE (do not lock a server out of its own
+ * lobby) and wrong for an ENTITLEMENT. Callers deciding "may this player use a restricted feature"
+ * must use symphony_holds_whitelist_role() instead, or the feature unlocks for everyone precisely when
+ * Symphony is switched off.
+ */
 /proc/is_symphony_whitelisted(target_ckey)
 	if(!CONFIG_GET(flag/symphony_enabled))
 		return TRUE
+	return symphony_has_ingame_role(target_ckey, "whitelist")
+
+/**
+ * TRUE only when the ckey actually holds the whitelist role. Fail-CLOSED: a disabled module means nobody
+ * holds it, because nothing has granted it.
+ *
+ * This is the entitlement form. The preferences importer used the gate form, so on a stock server (where
+ * symphony_enabled defaults off) every connecting player was handed the verb AND advertised it by the
+ * one-time notice, which is the exact inverse of what the module documents.
+ */
+/proc/symphony_holds_whitelist_role(target_ckey)
+	if(!CONFIG_GET(flag/symphony_enabled))
+		return FALSE
 	return symphony_has_ingame_role(target_ckey, "whitelist")

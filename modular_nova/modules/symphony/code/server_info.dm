@@ -81,6 +81,9 @@
 /datum/world_topic/symphony_player_list/Run(list/input)
 	. = list()
 	var/list/players = list()
+	// Audit line: this returns the complete live antagonist roster by ckey, and was pollable at any rate
+	// with zero trace. log = FALSE stays (it keeps the comms key out of the topic log); this is explicit.
+	log_admin("Symphony: player list read via topic ([length(GLOB.clients)] clients).")
 	// Fetch the whitelist-role holders once, instead of a per-player query inside the loop (60 players
 	// was 60 serial DB round-trips with the game stalled on each panel refresh). This reports actual
 	// role-holding, independent of whether the gate is enforced - same as the old per-player call. null

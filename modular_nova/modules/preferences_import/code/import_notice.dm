@@ -24,7 +24,7 @@
 	if(CONFIG_GET(flag/forbid_preferences_import))
 		return
 	// Not marked as seen when they fail this, so somebody who is whitelisted later still gets told once.
-	if(!is_symphony_whitelisted(ckey))
+	if(!symphony_holds_whitelist_role(ckey))
 		return
 
 	prefs.savefile.set_entry(PREFS_IMPORT_NOTICE_KEY, TRUE)

@@ -21,13 +21,14 @@
 		to_chat(src, span_warning("Your preferences are not loaded yet. Try again in a moment."))
 		return
 
-	if(is_guest_key(ckey))
+	if(is_guest_key(key)) // `key`, not `ckey` - ckey() strips the hyphen that is_guest_key matches on
 		to_chat(src, span_warning("Guest accounts cannot import preferences."))
 		return
 
-	// Whitelisted players only. Fail-closed: is_symphony_whitelisted returns FALSE on any database
-	// problem, which is the safe direction here.
-	if(!is_symphony_whitelisted(ckey))
+	// Whitelisted players only, using the ENTITLEMENT form. Fail-closed on both a database problem and a
+	// disabled module: the gate form returns TRUE when Symphony is off, which handed this verb to every
+	// player on a stock server - the exact inverse of what this file documents.
+	if(!symphony_holds_whitelist_role(ckey))
 		to_chat(src, span_warning("Importing preferences is only available to whitelisted players."))
 		return
 
@@ -48,7 +49,7 @@
 		return
 
 	// Re-check after the prompt: the player may have been sitting on the dialog.
-	if(!is_symphony_whitelisted(ckey) || CONFIG_GET(flag/forbid_preferences_import))
+	if(!symphony_holds_whitelist_role(ckey) || CONFIG_GET(flag/forbid_preferences_import))
 		to_chat(src, span_warning("Importing is no longer available."))
 		return
 

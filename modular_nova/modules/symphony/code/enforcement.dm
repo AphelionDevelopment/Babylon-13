@@ -4,6 +4,11 @@
 	var/client/found = GLOB.directory[target_ckey]
 	if(!found)
 		return
+	// Staff exemption, matching gate.dm. Without it, an admin who is simply not in the Discord with the
+	// mapped role - exactly the state that exemption exists to tolerate - is torn out of their body
+	// within one sweep, leaving nobody able to fix it in-round.
+	if(found.holder)
+		return
 	// Already in the lobby - just refresh the title screen to the gate, no grace needed.
 	if(isnewplayer(found.mob))
 		var/mob/dead/new_player/lobby = found.mob
@@ -21,6 +26,9 @@
 /proc/symphony_enforce_kick(target_ckey)
 	var/client/found = GLOB.directory[target_ckey]
 	if(!found || isnewplayer(found.mob))
+		return
+	// Re-checked here too: the grace period is long enough for someone to be adminned in between.
+	if(found.holder)
 		return
 	if(is_symphony_whitelisted(target_ckey))
 		to_chat(found, span_notice("Whitelist role restored - you may continue playing."))
@@ -51,6 +59,8 @@
 	if(!CONFIG_GET(flag/symphony_enabled))
 		return
 	if(!ckey || !mob || isnewplayer(mob)) // the lobby has its own gate
+		return
+	if(holder) // staff exemption, as in gate.dm
 		return
 	if(is_symphony_whitelisted(ckey))
 		return

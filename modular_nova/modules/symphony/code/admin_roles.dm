@@ -65,9 +65,15 @@
  */
 /proc/symphony_refresh_admin_role_keys()
 	// Drop any previously generated keys so a renamed or removed rank does not linger in the panel.
+	// Collected first, removed after: deleting inside the loop shifts the next element into the current
+	// index while the iterator advances past it, so a contiguous run of admin: keys lost every other one.
+	// The survivors are pure residue once sync is switched off, and the panel keeps offering them.
+	var/list/stale = list()
 	for(var/key in GLOB.symphony_ingame_roles)
 		if(findtext(key, SYMPHONY_ADMIN_ROLE_PREFIX) == 1)
-			GLOB.symphony_ingame_roles -= key
+			stale += key
+	for(var/key in stale)
+		GLOB.symphony_ingame_roles -= key
 
 	if(!symphony_discord_admin_sync_enabled())
 		return

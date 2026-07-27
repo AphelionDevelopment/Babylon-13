@@ -21,7 +21,9 @@
 	// Allow-list, not deny-list: the old enumeration of blocked hrefs silently let anything new through
 	// (crew manifest, character directory, polls). The href is checked BEFORE the gate so an unwhitelisted
 	// client can't make every lobby click cost a whitelist query.
-	if(!(href_list["title_is_ready"] || href_list["server_swap"]) && symphony_blocks_play())
+	// EXCLUSIVITY, not presence: see symphony_gate_free_hrefs. Testing presence let one extra parameter
+	// unlock every handler in the same Topic call.
+	if(!symphony_href_is_gate_free(href_list) && symphony_blocks_play())
 		symphony_gate_notice()
 		return
 	// BABYLON EDIT ADDITION END

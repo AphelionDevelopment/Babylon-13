@@ -137,7 +137,10 @@
 
 	// Mirror the in-game ban panel and leave a note, so a Discord-issued ban is visible in the notes
 	// workflow instead of only existing in the ban table.
-	create_message("note", target_ckey, "symphony", "Banned via Symphony by [admin_name] ([role]): [reason]", null, null, 0, 0, null, 0, null)
+	//
+	// Written directly rather than through create_message(): that proc bails on `if(QDELETED(usr))`, and a
+	// world topic has no usr, so the note silently never landed while this topic still reported success.
+	symphony_write_ban_note(target_ckey, admin_name, role, reason)
 
 	var/dur_txt = duration ? "for [duration] minutes" : "permanently"
 	var/what = (role == "Server") ? "server-banned" : "role-banned ([role])"
@@ -160,3 +163,26 @@
 	.["success"] = TRUE
 	.["role"] = role
 	.["permanent"] = isnull(duration)
+
+
+/**
+ * Insert a ban note for a Symphony-issued ban.
+ *
+ * create_message() cannot be used from a world topic: it early-returns on a null usr, so the note was
+ * never written while the topic reported success. Mirrors the column set create_message() uses; the
+ * NOT NULL columns without defaults (server_ip, server_port, secret) are supplied explicitly.
+ */
+/proc/symphony_write_ban_note(target_ckey, admin_name, role, reason)
+	if(!SSdbcore.Connect())
+		return FALSE
+	var/datum/db_query/query = SSdbcore.NewQuery(
+		"INSERT INTO [format_table_name("messages")] 		(type, targetckey, adminckey, text, timestamp, server_ip, server_port, round_id, secret, deleted) 		VALUES ('note', :target_ckey, :admin_ckey, :text, Now(), 0, 0, :round_id, 0, 0)",
+		list(
+			"target_ckey" = target_ckey,
+			"admin_ckey" = "symphony",
+			"text" = "Banned via Symphony by [admin_name] ([role]): [reason]",
+			"round_id" = GLOB.round_id,
+		),
+	)
+	. = query.warn_execute()
+	qdel(query)

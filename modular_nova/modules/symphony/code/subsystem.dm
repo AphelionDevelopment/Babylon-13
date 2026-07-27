@@ -18,6 +18,11 @@ SUBSYSTEM_DEF(symphony)
 	for(var/client/checked as anything in GLOB.clients.Copy())
 		if(!checked || !checked.ckey || holders[checked.ckey])
 			continue
+		// Staff exemption, matching gate.dm. Missing here it bit twice: a non-whitelisted admin was
+		// pulled out of their body, and the quieter one - a readied-up admin (which the gate explicitly
+		// permits) was silently reset to NOT_READY every sweep and dropped from round start.
+		if(checked.holder)
+			continue
 		// Lobby players used to be skipped entirely, so a revoke push lost in transit was never repaired
 		// and they still spawned at round start. Only act when they are actually ready, so this doesn't
 		// re-notify every five minutes.

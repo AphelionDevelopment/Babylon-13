@@ -19,7 +19,16 @@
 
 /datum/world_topic/symphony_config_get/Run(list/input)
 	. = list()
+	// Behind the master switch like every other file in the module. Without this, "the bridge is inert
+	// until you enable it" was false for its highest-value surface: an operator who compiled the module
+	// but left symphony_enabled off still exposed live config read AND write.
+	if(!CONFIG_GET(flag/symphony_enabled))
+		.["error"] = "symphony is disabled on this server"
+		return
 	var/filter = LOWER_TEXT(trim(input["filter"]))
+	// Deliberate audit line. The WRITE topic logs three ways; the read that maps the namespace for it
+	// logged nothing, so post-incident nobody could tell whether reconnaissance had happened.
+	log_admin("Symphony: config list read via topic[filter ? " (filter: [filter])" : ""].")
 	var/list/entries = list()
 	for(var/entry_name in global.config.entries)
 		if(filter && !findtext(entry_name, filter))
@@ -57,6 +66,12 @@
 
 /datum/world_topic/symphony_config_set/Run(list/input)
 	. = list()
+	// Master switch, as on the read topic. This is the module's most dangerous surface and it was the
+	// only one running on a server that never enabled the bridge.
+	if(!CONFIG_GET(flag/symphony_enabled))
+		.["success"] = FALSE
+		.["message"] = "symphony is disabled on this server"
+		return
 	var/entry_name = LOWER_TEXT(trim(input["entry"]))
 	var/new_value = input["value"]
 	var/admin_name = input["admin_name"] || "Discord Admin"
