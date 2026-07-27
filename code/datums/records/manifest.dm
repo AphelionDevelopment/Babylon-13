@@ -131,7 +131,7 @@ GLOBAL_DATUM_INIT(manifest, /datum/manifest, new)
 
 	// NOVA EDIT ADDITION BEGIN - ALTERNATIVE_JOB_TITLES
 	// The alt job title, if user picked one, or the default
-	var/chosen_assignment = person_client?.prefs.alt_job_titles[assignment] || assignment
+	var/chosen_assignment = person_client?.prefs?.get_alt_job_title(assignment) || assignment
 	// NOVA EDIT ADDITION END - ALTERNATIVE_JOB_TITLES
 
 	var/datum/record/locked/lockfile = new(

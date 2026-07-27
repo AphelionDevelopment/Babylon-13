@@ -86,7 +86,7 @@
 		return
 
 	/// The string as it appears in the stat panel
-	var/job_estimation_text = "* [display] [player.client?.prefs.alt_job_titles?[title] || title]"
+	var/job_estimation_text = "* [display] [player.client?.prefs?.get_alt_job_title(title) || title]"
 	// If our player is a member of Command or a Silicon, we want to sort them to the top of the list. Otherwise, just add them to the end of the list.
 	// Assistants show up after everyone else.
 	if(player_job.departments_bitflags & (DEPARTMENT_BITFLAG_COMMAND | DEPARTMENT_BITFLAG_SILICON))

@@ -18,7 +18,7 @@
 	preserve_old_id(get_id())
 	build_new_id(get_id())
 	// apply alt-title
-	visitor_id.assignment = client_source.prefs.alt_job_titles[visitor_id.assignment] || visitor_id.assignment
+	visitor_id.assignment = client_source.prefs?.get_alt_job_title(visitor_id.assignment) || visitor_id.assignment
 	visitor_id.update_label()
 
 /datum/quirk/visitor/post_add()
