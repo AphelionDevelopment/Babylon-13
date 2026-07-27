@@ -307,6 +307,8 @@ GLOBAL_LIST_INIT(unrecommended_builds, list(
 	// happened and a real preferences datum exists, so every value can be rebuilt through the validating
 	// write path. No-op unless the file is flagged as freshly imported.
 	prefs.prefs_import_finalise()
+	// BABYLON EDIT ADDITION - one-time pointer at the importer for people arriving from another server.
+	babylon_offer_preferences_import()
 
 	if(fexists(roundend_report_file()))
 		add_verb(src, /client/proc/show_previous_roundend_report)

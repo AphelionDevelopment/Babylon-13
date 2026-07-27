@@ -9561,6 +9561,7 @@
 #include "modular_nova\modules\powerator\powerator.dm"
 #include "modular_nova\modules\preferences_import\code\_sanitise.dm"
 #include "modular_nova\modules\preferences_import\code\config_entries.dm"
+#include "modular_nova\modules\preferences_import\code\import_notice.dm"
 #include "modular_nova\modules\preferences_import\code\import_verb.dm"
 #include "modular_nova\modules\primitive_catgirls\code\clothing.dm"
 #include "modular_nova\modules\primitive_catgirls\code\clothing_vendor.dm"

@@ -13,6 +13,12 @@
 		connect_to_relay()
 		return TRUE
 
+	// BABYLON EDIT ADDITION - link target for the one-time preferences import notice. The verb re-checks
+	// every gate itself, so this is only a shortcut to it.
+	if(href_list["babylon_import_prefs"])
+		import_preferences()
+		return TRUE
+
 	if(href_list["mentor_msg"])
 		if(CONFIG_GET(flag/mentors_mobname_only))
 			var/mob/M = locate(href_list["mentor_msg"])

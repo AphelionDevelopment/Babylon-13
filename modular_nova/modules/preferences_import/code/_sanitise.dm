@@ -28,12 +28,15 @@
 #define PREFS_IMPORT_MAX_SLOTS 60
 /// Marks a file as awaiting the post-migration pass. Removed by pass 2.
 #define PREFS_IMPORT_PENDING_KEY "babylon_import_pending"
+/// Records that the one-time "you can import your characters" notice has been shown.
+#define PREFS_IMPORT_NOTICE_KEY "babylon_import_notice_seen"
 
 /// Top-level keys that are not /datum/preference backed but are legitimately part of a savefile.
 GLOBAL_LIST_INIT(prefs_import_player_keys, list(
 	"version",
 	"default_slot",
 	PREFS_IMPORT_PENDING_KEY,
+	PREFS_IMPORT_NOTICE_KEY,
 ))
 
 /// Per-character-slot keys that are not /datum/preference backed.
@@ -188,29 +191,95 @@ GLOBAL_LIST_INIT(prefs_import_character_keys, list(
 	if(!savefile.get_entry(PREFS_IMPORT_PENDING_KEY))
 		return FALSE
 
-	var/rebuilt = 0
-	var/reset = 0
+	var/list/player_prefs = list()
+	var/list/character_prefs = list()
 	for(var/key in GLOB.preference_entries_by_key)
 		var/datum/preference/preference = GLOB.preference_entries_by_key[key]
 		if(isnull(preference))
 			continue
-		var/value
-		try
-			value = read_preference(preference.type)
-		catch
-			value = null
-		if(isnull(value) || !preference.is_valid(value, src))
-			value = preference.create_informed_default_value(src)
-			reset++
-		if(write_preference(preference, value))
-			rebuilt++
+		switch(preference.savefile_identifier)
+			if(PREFERENCE_PLAYER)
+				player_prefs += preference
+			if(PREFERENCE_CHARACTER)
+				character_prefs += preference
+
+	var/list/counts = list("rebuilt" = 0, "reset" = 0)
+
+	// Player scope lives at the savefile root, so one pass covers it.
+	prefs_import_rebuild(player_prefs, counts)
+
+	// Character scope resolves through default_slot, so each slot has to be visited in turn. Rebuilding
+	// once would validate only the default slot and leave every other character on pass 1 alone.
+	var/original_slot = default_slot
+	var/slots = 0
+	var/list/tree = savefile.get_entry()
+	if(islist(tree))
+		for(var/tree_key in tree)
+			if(findtext(tree_key, "character") != 1)
+				continue
+			var/slot_number = text2num(copytext(tree_key, 10))
+			if(!isnum(slot_number) || !islist(tree[tree_key]))
+				continue
+			default_slot = slot_number
+			prefs_import_forget(character_prefs)
+			prefs_import_strip_empty_loadout_keys(tree[tree_key])
+			prefs_import_rebuild(character_prefs, counts)
+			slots++
+
+	default_slot = original_slot
+	prefs_import_forget(character_prefs)
+	savefile.set_entry("default_slot", original_slot)
 
 	prefs_import_prune_unknown()
 	savefile.remove_entry(PREFS_IMPORT_PENDING_KEY)
 	savefile.save()
 
-	log_game("Preferences import finalised for [parent?.ckey]: [rebuilt] preferences rebuilt, [reset] reset to defaults.")
+	log_game("Preferences import finalised for [parent?.ckey]: [slots] slot\s, [counts["rebuilt"]] preferences rebuilt, [counts["reset"]] reset to defaults.")
 	return TRUE
+
+/// Round-trips each preference through the validating write path, counting into an assoc of tallies.
+/datum/preferences/proc/prefs_import_rebuild(list/preferences, list/counts)
+	for(var/datum/preference/preference as anything in preferences)
+		var/value
+		var/usable = FALSE
+		try
+			value = read_preference(preference.type)
+			usable = !isnull(value) && preference.is_valid(value, src)
+		catch
+			usable = FALSE
+		var/written
+		if(usable)
+			// Serialise on the way back in: write_preference deserialises, and read_preference already
+			// handed back the deserialised form.
+			written = write_preference(preference, preference.serialize(value))
+		else
+			written = write_preference(preference, preference.create_informed_default_value(src))
+			counts["reset"]++
+		if(written)
+			counts["rebuilt"]++
+
+/// Drops cached character values so the next read resolves against the slot default_slot now points at.
+/datum/preferences/proc/prefs_import_forget(list/preferences)
+	for(var/datum/preference/preference as anything in preferences)
+		value_cache -= preference.type
+
+/**
+ * Savefile migration turns a loadout path it can no longer resolve into a null key, because
+ * update_character_nova does `save_loadout[_text2path(loadout)] = entry` without checking the result.
+ * That key then makes sanitize_loadout_list stack_trace on every read. Migration has already run by the
+ * time we get here, so drop those keys before the rebuild reads the list.
+ */
+/proc/prefs_import_strip_empty_loadout_keys(list/slot)
+	var/list/loadout = slot["loadout_list"]
+	if(!islist(loadout))
+		return
+	var/list/clean = list()
+	for(var/path in loadout)
+		if(isnull(path) || (istext(path) && !length(path)))
+			continue
+		clean[path] = loadout[path]
+	if(length(clean) != length(loadout))
+		slot["loadout_list"] = clean
 
 /// Removes savefile keys that are neither a registered preference nor a known structural key.
 /datum/preferences/proc/prefs_import_prune_unknown()
