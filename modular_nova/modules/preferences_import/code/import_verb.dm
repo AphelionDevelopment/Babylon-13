@@ -73,19 +73,20 @@
 		to_chat(src, span_warning("That file was empty or unreadable."))
 		return
 
-	// Depth is checked before decoding: json_decode has no depth limit and a nested payload would be
-	// parsed on the login tick.
-	if(prefs_import_too_deep(raw))
-		to_chat(src, span_warning("That file is nested too deeply to be a preferences file."))
-		log_admin("[key_name(src)] attempted a preferences import with excessive JSON nesting.")
-		return
-
 	var/list/json_tree
 	try
 		json_tree = json_decode(raw)
 	catch(var/exception/err)
 		to_chat(src, span_warning("That file is not valid JSON."))
 		log_game("Preferences import by [ckey] failed to parse: [err]")
+		return
+
+	// Depth is measured on the DECODED tree. Decoding first is deliberate: json_decode is native C and
+	// the size is already bounded by the upload limit, whereas the old pre-decode text scan was itself
+	// the denial of service it was meant to prevent.
+	if(prefs_import_tree_too_deep(json_tree))
+		to_chat(src, span_warning("That file is nested too deeply to be a preferences file."))
+		log_admin("[key_name(src)] attempted a preferences import with excessive JSON nesting.")
 		return
 
 	var/problem = prefs_import_prevalidate(json_tree, prefs)

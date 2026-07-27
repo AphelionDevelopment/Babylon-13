@@ -16,7 +16,12 @@ SUBSYSTEM_DEF(symphony)
 		return
 	// Iterate a copy: revoking can qdel a client, and mutating GLOB.clients mid-loop skips entries.
 	for(var/client/checked as anything in GLOB.clients.Copy())
-		if(!checked || !checked.ckey || holders[checked.ckey])
+		if(!checked || !checked.ckey)
+			continue
+		// The sweep already holds the authoritative answer for everyone, so seed the per-ckey cache from
+		// it instead of letting the next lobby render re-query what we just fetched in bulk.
+		symphony_invalidate_whitelist_cache(checked.ckey)
+		if(holders[checked.ckey])
 			continue
 		// Staff exemption, matching gate.dm. Missing here it bit twice: a non-whitelisted admin was
 		// pulled out of their body, and the quieter one - a readied-up admin (which the gate explicitly

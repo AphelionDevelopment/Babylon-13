@@ -46,6 +46,32 @@
 	return holders
 
 /**
+ * Short-lived cache of whitelist answers, keyed by ckey.
+ *
+ * The lookup is a three-table JOIN and had no cache, so it ran per call for whitelisted players too.
+ * Fine for one click, bad on the paths that fan out: show_title_screen() renders for EVERY lobby mob and
+ * is called on each dynamic ruleset queue and again from create_characters() at round start, so a
+ * 50-strong lobby cost 50 queries at the most timing-sensitive tick of the round.
+ *
+ * Deliberately brief, and dropped outright on every grant, revoke and sweep. Those pushes are the
+ * authority; this only collapses bursts within a single render.
+ */
+GLOBAL_LIST_EMPTY(symphony_whitelist_cache)
+/// world.time at which each cached answer stops being trusted.
+GLOBAL_LIST_EMPTY(symphony_whitelist_cache_expiry)
+
+/// How long a cached whitelist answer is reused for.
+#define SYMPHONY_WHITELIST_CACHE_TIME (10 SECONDS)
+
+/// Drop a ckey's cached answer, so a grant or revoke is visible immediately rather than after the TTL.
+/proc/symphony_invalidate_whitelist_cache(target_ckey)
+	target_ckey = ckey(target_ckey)
+	if(!target_ckey)
+		return
+	GLOB.symphony_whitelist_cache -= target_ckey
+	GLOB.symphony_whitelist_cache_expiry -= target_ckey
+
+/**
  * TRUE if the gate is off, or the ckey holds the in-game "whitelist" role.
  *
  * Fail-OPEN when the module is disabled, which is right for a GATE (do not lock a server out of its own
@@ -56,7 +82,15 @@
 /proc/is_symphony_whitelisted(target_ckey)
 	if(!CONFIG_GET(flag/symphony_enabled))
 		return TRUE
-	return symphony_has_ingame_role(target_ckey, "whitelist")
+	target_ckey = ckey(target_ckey)
+	if(!target_ckey)
+		return FALSE
+	var/expiry = GLOB.symphony_whitelist_cache_expiry[target_ckey]
+	if(expiry && world.time < expiry)
+		return GLOB.symphony_whitelist_cache[target_ckey]
+	. = symphony_has_ingame_role(target_ckey, "whitelist")
+	GLOB.symphony_whitelist_cache[target_ckey] = .
+	GLOB.symphony_whitelist_cache_expiry[target_ckey] = world.time + SYMPHONY_WHITELIST_CACHE_TIME
 
 /**
  * TRUE only when the ckey actually holds the whitelist role. Fail-CLOSED: a disabled module means nobody
@@ -70,3 +104,5 @@
 	if(!CONFIG_GET(flag/symphony_enabled))
 		return FALSE
 	return symphony_has_ingame_role(target_ckey, "whitelist")
+
+#undef SYMPHONY_WHITELIST_CACHE_TIME

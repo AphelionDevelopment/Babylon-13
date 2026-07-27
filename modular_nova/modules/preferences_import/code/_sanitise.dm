@@ -33,40 +33,46 @@
 #define PREFS_IMPORT_NOTICE_KEY "babylon_import_notice_seen"
 
 /**
- * Cheap nesting-depth scan over the raw text, run BEFORE json_decode.
- * Returns the maximum bracket depth found. A deeply nested payload is a decode-time denial of service
- * on the login tick, and the existing admin import path bounds only total file size.
+ * Depth check on the DECODED tree, not the raw text.
+ *
+ * The previous version scanned the text character by character in DM, and was a worse denial of service
+ * than the one it prevented. It looped `length(text)` (a BYTE count) while calling `copytext_char` (a
+ * CHARACTER index), so on a 512 KB upload it allocated half a million single-character strings on the
+ * calling tick with no CHECK_TICK, and on any non-ASCII input the character indexing turned it
+ * quadratic. json_decode is native C over the same bytes and is far cheaper than interpreted DM ever
+ * could be, so the sane order is: decode first (already bounded by the upload limit), then measure.
+ *
+ * Iterative with an explicit stack rather than recursive: the input is hostile, and a recursive walk
+ * over a deliberately deep tree is its own stack overflow. Bails the moment the cap is exceeded, so a
+ * pathological file costs the depth limit rather than the whole tree.
  */
-/proc/prefs_import_max_depth(text)
-	var/depth = 0
-	var/highest = 0
-	var/in_string = FALSE
-	var/escaped = FALSE
-	for(var/i = 1 to length(text))
-		var/char = copytext_char(text, i, i + 1)
-		if(escaped)
-			escaped = FALSE
+/proc/prefs_import_tree_too_deep(tree)
+	if(!islist(tree))
+		return FALSE
+	// Parallel stacks of (node, depth-of-node). DM has no tuple, and this keeps the walk allocation-free
+	// apart from the two lists.
+	var/list/nodes = list(tree)
+	var/list/depths = list(1)
+	while(length(nodes))
+		var/node = nodes[length(nodes)]
+		var/depth = depths[length(depths)]
+		nodes.len--
+		depths.len--
+		if(depth > PREFS_IMPORT_MAX_DEPTH)
+			return TRUE
+		if(!islist(node))
 			continue
-		if(char == "\\")
-			escaped = TRUE
-			continue
-		if(char == "\"")
-			in_string = !in_string
-			continue
-		if(in_string)
-			continue
-		if(char == "{" || char == "\[")
-			depth++
-			highest = max(highest, depth)
-		else if(char == "}" || char == "]")
-			depth--
-	return highest
-
-/// TRUE when the raw text nests more deeply than an imported savefile is allowed to.
-/// A proc rather than a bare define comparison so callers in modules that sort before this one (the
-/// admin import verb) can use it; #defines are include-order sensitive, procs are not.
-/proc/prefs_import_too_deep(text)
-	return prefs_import_max_depth(text) > PREFS_IMPORT_MAX_DEPTH
+		var/list/as_list = node
+		for(var/key in as_list)
+			// Associative values live under the key; plain list entries ARE the key.
+			var/value = key
+			if(!isnum(key) && !isnull(as_list[key]))
+				value = as_list[key]
+			if(!islist(value))
+				continue
+			nodes += list(value)
+			depths += depth + 1
+	return FALSE
 
 /**
  * Structural checks on a decoded tree. Returns an error string, or null when the tree is acceptable.

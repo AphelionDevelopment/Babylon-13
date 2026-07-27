@@ -87,7 +87,7 @@ ADMIN_VERB(import_preferences, R_ADMIN, "Import Preferences", "Upload a characte
 	if(structural_problem)
 		to_chat(user, span_warning("Failed to import: [structural_problem]"), confidential = TRUE)
 		return
-	if(prefs_import_too_deep(new_save))
+	if(prefs_import_tree_too_deep(json_tree))
 		to_chat(user, span_warning("Failed to import: file is nested too deeply."), confidential = TRUE)
 		return
 	json_tree = prefs_import_pass1(json_tree)

@@ -1,6 +1,8 @@
 /// Begins revocation for a ckey: warn, wait out the grace period, then re-check and return them to the lobby if still not whitelisted.
 /proc/symphony_revoke(target_ckey)
 	target_ckey = ckey(target_ckey)
+	// The push IS the news, so drop any cached answer rather than letting the TTL delay enforcement.
+	symphony_invalidate_whitelist_cache(target_ckey)
 	var/client/found = GLOB.directory[target_ckey]
 	if(!found)
 		return
@@ -68,6 +70,7 @@
 
 /// whitelist_grant handler effect: tell a waiting player they can now join and refresh their lobby.
 /proc/symphony_notify_grant(target_ckey)
+	symphony_invalidate_whitelist_cache(target_ckey)
 	var/client/found = GLOB.directory[ckey(target_ckey)]
 	if(!found)
 		return
