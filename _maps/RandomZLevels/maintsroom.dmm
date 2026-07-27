@@ -897,11 +897,7 @@
 /turf/open/floor/mineral/plastitanium,
 /area/awaymission/caves/maintsroom)
 "dd" = (
-<<<<<<< HEAD
-/mob/living/basic/evilborgs/evilborg{
-=======
 /mob/living/basic/evilborgs/evilborg/bigguy{
->>>>>>> a80688c8327 (Fixes bumbles flopping at alarming rates (#7710))
 	faction = list("hostile","cult")
 	},
 /turf/open/floor/circuit/red/off,
@@ -9456,11 +9452,7 @@
 /turf/open/floor/plating,
 /area/awaymission/caves/maintsroom)
 "FT" = (
-<<<<<<< HEAD
-/mob/living/basic/evilborgs/evilborg{
-=======
 /mob/living/basic/evilborgs/evilborg/dogstrong{
->>>>>>> a80688c8327 (Fixes bumbles flopping at alarming rates (#7710))
 	faction = list("hostile","cult")
 	},
 /turf/open/floor/circuit/green,
