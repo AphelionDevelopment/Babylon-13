@@ -15,8 +15,9 @@
  *    no longer correspond to a preference.
  *
  *  - PASS 2 runs on the next load, after migration has brought the file up to date and a real
- *    preferences datum exists. It rebuilds every registry-known preference through the validating
- *    write path and drops keys that are neither a known preference nor structural.
+ *    preferences datum exists. It rebuilds every registry-known preference, in every character slot,
+ *    through the validating write path. It does NOT delete unrecognised keys: see
+ *    prefs_import_prune_unknown for why that was removed.
  */
 
 /// Bounds on an imported file. The 2 MB config default is far larger than any real export: a one-slot
@@ -30,78 +31,6 @@
 #define PREFS_IMPORT_PENDING_KEY "babylon_import_pending"
 /// Records that the one-time "you can import your characters" notice has been shown.
 #define PREFS_IMPORT_NOTICE_KEY "babylon_import_notice_seen"
-
-/**
- * Top-level keys that are not /datum/preference backed but are legitimately part of a savefile.
- *
- * This list is load bearing: anything missing from it gets DELETED by prefs_import_prune_unknown. It is
- * the full set of literal keys passed to savefile.get_entry()/set_entry() outside the preference
- * registry, taken from code/modules/client/preferences_savefile.dm and the Nova master_files override.
- * The sound_* entries are read only by legacy migration and are listed so a pre-migration file keeps
- * them. If you add a savefile key anywhere, add it here too.
- */
-GLOBAL_LIST_INIT(prefs_import_player_keys, list(
-	"version",
-	"default_slot",
-	"lastchangelog",
-	"be_special",
-	"toggles",
-	"chat_toggles",
-	"ignoring",
-	"key_bindings",
-	"hearted_until",
-	"favorite_outfits",
-	"favorite_verbs",
-	"sound_ai_vox",
-	"sound_ambience_volume",
-	"sound_instruments",
-	"sound_lobby_volume",
-	"sound_midi",
-	"sound_radio_noise",
-	"sound_ship_ambience_volume",
-	"sound_tts",
-	"sound_tts_blips",
-	PREFS_IMPORT_PENDING_KEY,
-	PREFS_IMPORT_NOTICE_KEY,
-))
-
-/// Per-character-slot keys that are not /datum/preference backed.
-GLOBAL_LIST_INIT(prefs_import_character_keys, list(
-	"modular_version",
-	"tgui_prefs_migration",
-	"randomise",
-	"all_quirks",
-	"job_preferences",
-	"languages",
-	"augments",
-	"augment_limb_styles",
-	"body_markings",
-	"food_preferences",
-	"loadout_list",
-	"alt_job_titles",
-	"mismatched_customization",
-	"allow_advanced_colors",
-	"hairstyle_name",
-	// Read by the Nova per-slot migration. Most are also registered preferences, but they are listed
-	// explicitly so a slot that has not migrated yet does not lose them.
-	"breasts_size",
-	"character_laugh",
-	"character_scream",
-	"feature_ears",
-	"feature_penis",
-	"feature_testicles",
-	"feature_wings",
-	"mutant_bodyparts",
-	"mutant_colors_color",
-	"skin_tone",
-	"skin_tone_toggle",
-	"species",
-	"tts_voice",
-	"undershirt",
-	"undershirt_color",
-	"underwear",
-	"underwear_color",
-))
 
 /**
  * Cheap nesting-depth scan over the raw text, run BEFORE json_decode.
@@ -226,9 +155,8 @@ GLOBAL_LIST_INIT(prefs_import_character_keys, list(
  * PASS 2. Runs on the next load, after migration, with a real preferences datum.
  *
  * Rebuilds every registry-known preference through write_preference(), which deserialises and then
- * validates via is_valid() before writing, replacing anything invalid with an informed default. Then
- * drops keys that are neither a known preference nor structural, which is safe now because migration
- * has already consumed the legacy keys it needed.
+ * validates via is_valid() before writing, replacing anything invalid with an informed default.
+ * Unrecognised keys are left alone; only out-of-range character slots are dropped.
  */
 /datum/preferences/proc/prefs_import_finalise()
 	if(!savefile)
@@ -327,56 +255,44 @@ GLOBAL_LIST_INIT(prefs_import_character_keys, list(
 		slot["loadout_list"] = clean
 
 /**
- * Removes savefile keys that are neither a registered preference nor a known structural key.
+ * Drops character slots whose number is out of range, and NOTHING else.
  *
- * Deletions are collected first and applied afterwards, so nothing is removed from a list while it is
- * being iterated. Everything removed is logged: a gap in either whitelist silently destroys real player
- * data and only surfaces as an unrelated runtime on some later login, which is exactly how the first
- * version of this proc ate a player's keybindings.
+ * This deliberately does not remove unrecognised keys, and it must stay that way. Earlier versions
+ * dropped any key that was neither a registered preference nor on a hand-maintained whitelist. That
+ * whitelist was wrong three times running, and each time it silently destroyed real player data: first
+ * keybindings, chat toggles and the ignore list, then the per-slot `version` (which made every imported
+ * character fail to load and get replaced by a random one), along with scars, body features, food
+ * preferences and much else.
+ *
+ * The reasoning that justified pruning was wrong. An unrecognised key is INERT: the savefile is only
+ * ever read by name, via get_entry("...") or save_data["..."], so a key nobody asks for is never read
+ * and cannot do anything. Pruning bought no safety at all, while carrying unbounded blast radius that
+ * grows every time upstream adds a savefile key we do not know about. File size is already bounded by
+ * PREFS_IMPORT_MAX_BYTES at import time.
+ *
+ * Slot numbers are different, and are still checked, because load_preferences derives max_save_slots by
+ * SCANNING these key names. That is a genuine read path, so an injected "character99999999" would take
+ * effect rather than sit inert.
  */
 /datum/preferences/proc/prefs_import_prune_unknown()
 	var/list/tree = savefile.get_entry()
 	if(!islist(tree))
 		return
-	var/list/pruned = list()
-	var/list/drop_from_tree = list()
+	var/list/dropped = list()
 
 	for(var/key in tree)
-		if(findtext(key, "character") == 1)
-			// An out of range slot number would inflate max_save_slots, which load_preferences derives by
-			// scanning these keys.
-			var/slot_number = text2num(copytext(key, 10))
-			if(!isnum(slot_number) || slot_number < 1 || slot_number > PREFS_IMPORT_MAX_SLOTS)
-				drop_from_tree += key
-				pruned += key
-				continue
-			var/list/slot = tree[key]
-			if(!islist(slot))
-				continue
-			var/list/drop_from_slot = list()
-			for(var/slot_key in slot)
-				if(GLOB.preference_entries_by_key[slot_key])
-					continue
-				if(slot_key in GLOB.prefs_import_character_keys)
-					continue
-				drop_from_slot += slot_key
-				pruned += "[key]/[slot_key]"
-			for(var/slot_key in drop_from_slot)
-				slot -= slot_key
+		if(findtext(key, "character") != 1)
 			continue
-		if(GLOB.preference_entries_by_key[key])
+		var/slot_number = text2num(copytext(key, 10))
+		if(isnum(slot_number) && slot_number >= 1 && slot_number <= PREFS_IMPORT_MAX_SLOTS)
 			continue
-		if(key in GLOB.prefs_import_player_keys)
-			continue
-		drop_from_tree += key
-		pruned += key
+		dropped += key
 
-	for(var/key in drop_from_tree)
+	for(var/key in dropped)
 		tree -= key
 
-	if(!length(pruned))
+	if(!length(dropped))
 		return
-	var/list/shown = (length(pruned) > 40) ? (pruned.Copy(1, 41) + "...") : pruned
-	log_game("Preferences import pruned [length(pruned)] unrecognised savefile key\s for [parent?.ckey]: [jointext(shown, ", ")]")
+	log_game("Preferences import dropped [length(dropped)] out-of-range character slot\s for [parent?.ckey]: [jointext(dropped, ", ")]")
 
 // Deliberately not #undef'd: the import verb in this module reads the byte and depth bounds.
