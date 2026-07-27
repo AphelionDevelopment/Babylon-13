@@ -9816,6 +9816,7 @@
 #include "modular_nova\modules\subsystems\code\ticket_ping\ticket_ss.dm"
 #include "modular_nova\modules\supersoups\code\soup_mixtures.dm"
 #include "modular_nova\modules\supersoups\code\stove.dm"
+#include "modular_nova\modules\symphony\code\admin_roles.dm"
 #include "modular_nova\modules\symphony\code\config_entries.dm"
 #include "modular_nova\modules\symphony\code\config_topics.dm"
 #include "modular_nova\modules\symphony\code\enforcement.dm"

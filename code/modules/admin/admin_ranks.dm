@@ -326,6 +326,12 @@ GLOBAL_PROTECT(protected_ranks)
 			if(skip)
 				continue
 			new /datum/admins(ranks_from_rank_name(backup_file_json["admins"]["[backup_admin_ckey]"]), ckey("[backup_admin_ckey]"))
+	// BABYLON EDIT ADDITION BEGIN - Discord-granted admin ranks. Must run inside load_admins(), which
+	// Cut()s GLOB.admin_datums above, so applying them anywhere else would be wiped by every reload.
+	// No-op unless symphony_discord_admin_sync is enabled.
+	symphony_refresh_admin_role_keys()
+	symphony_apply_discord_admins()
+	// BABYLON EDIT ADDITION END
 	#ifdef TESTING
 	var/msg = "Admins Built:\n"
 	for(var/ckey in GLOB.admin_datums)

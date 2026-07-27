@@ -12,3 +12,10 @@
 	integer = TRUE
 	min_val = 0
 	max_val = 240
+
+/// Lets Discord roles confer in-game admin ranks, via the `admin:<rank>` in-game role keys.
+/// OFF by default and deliberately so: with it on, anyone who can assign the mapped Discord role can
+/// mint game admins. Turning it off stops Discord from granting admin; it does not touch admins granted
+/// from admins.txt, the admin table, or the panel.
+/datum/config_entry/flag/symphony_discord_admin_sync
+	default = FALSE
