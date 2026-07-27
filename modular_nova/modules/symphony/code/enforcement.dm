@@ -50,6 +50,11 @@
 	var/mob/dead/new_player/lobby = new()
 	lobby.key = target.key
 	lobby.show_title_screen()
+	// Tell the admins. The body is deliberately left behind rather than gibbed, which means a revoke
+	// landing on an antagonist mid-round orphans a live body still holding its objectives and gear. That
+	// is the intended behaviour, but it must not be silent: without this the first anyone knew was a
+	// confused player, and a bot desync or a compromised Discord account fires the identical path.
+	message_admins("Symphony: [key_name_admin(target)] was returned to the lobby by whitelist enforcement. Their body was left in place[old_mob ? " at [AREACOORD(old_mob)]" : ""].")
 
 /// A revoke that lands while the player is disconnected is lost: the grace timer is one-shot and
 /// returns without rescheduling when the client is gone. Re-check on connect so a relog can't be used
