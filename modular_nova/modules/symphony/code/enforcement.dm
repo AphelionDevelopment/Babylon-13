@@ -4,7 +4,7 @@
 	var/client/found = GLOB.directory[target_ckey]
 	if(!found)
 		return
-	// Already in the lobby — just refresh the title screen to the gate, no grace needed.
+	// Already in the lobby - just refresh the title screen to the gate, no grace needed.
 	if(isnewplayer(found.mob))
 		var/mob/dead/new_player/lobby = found.mob
 		to_chat(found, span_userdanger("Your Discord whitelist role was removed."))
@@ -23,7 +23,7 @@
 	if(!found || isnewplayer(found.mob))
 		return
 	if(is_symphony_whitelisted(target_ckey))
-		to_chat(found, span_notice("Whitelist role restored — you may continue playing."))
+		to_chat(found, span_notice("Whitelist role restored - you may continue playing."))
 		return
 	to_chat(found, span_userdanger("Whitelist lost. Returning you to the lobby."))
 	symphony_return_to_lobby(found)
@@ -61,7 +61,7 @@
 	var/client/found = GLOB.directory[ckey(target_ckey)]
 	if(!found)
 		return
-	to_chat(found, span_greentext("You are now whitelisted — you can join the round."))
+	to_chat(found, span_greentext("You are now whitelisted - you can join the round."))
 	var/mob/dead/new_player/lobby_mob = found.mob
 	if(istype(lobby_mob))
 		lobby_mob.show_title_screen()

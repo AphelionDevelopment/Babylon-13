@@ -19,7 +19,7 @@
 	to_chat(found, span_userdanger("You have been kicked from the server by [html_encode(admin_name)]."))
 	log_admin("[admin_name] (via Symphony) kicked [key_name(found)].")
 	message_admins("[html_encode(admin_name)] (via Symphony) kicked [key_name(found)].")
-	qdel(found) // routes through /client/Destroy — clean disconnect
+	qdel(found) // routes through /client/Destroy - clean disconnect
 	.["success"] = TRUE
 
 /// The roles the panel/command can ban: 'Server' (full login-enforced ban) + abstract roles + every job title.
@@ -54,7 +54,7 @@
 
 /// Ban a ckey. role='Server' = permanent/temp full server ban (login-enforced + kick); any other role =
 /// in-round role/job ban. duration_mins null/0 = permanent, else a temporary ban of that many minutes.
-/// A world_topic has no usr, so create_ban is unusable — insert the ban row directly.
+/// A world_topic has no usr, so create_ban is unusable - insert the ban row directly.
 /datum/world_topic/symphony_ban
 	keyword = "symphony_ban"
 	require_comms_key = TRUE
@@ -74,13 +74,13 @@
 		return
 	if(!role)
 		.["success"] = FALSE
-		.["message"] = "unknown role — use one of the roles from symphony_bannable_roles"
+		.["message"] = "unknown role - use one of the roles from symphony_bannable_roles"
 		return
 	// applies_to_admins is 0 below, so a ban on staff would insert a row the login check ignores and
 	// report success while doing nothing. Refuse instead of lying to the operator.
 	if(GLOB.admin_datums[target_ckey] || GLOB.deadmins[target_ckey])
 		.["success"] = FALSE
-		.["message"] = "target is staff — use the in-game ban panel"
+		.["message"] = "target is staff - use the in-game ban panel"
 		return
 	if(!SSdbcore.Connect())
 		.["success"] = FALSE

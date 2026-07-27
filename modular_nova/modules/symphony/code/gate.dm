@@ -5,8 +5,8 @@
 		return FALSE
 	if(!client)
 		return TRUE
-	// Staff are exempt, matching the OOC hook. The gate is fail-closed, so without this a DB blip — or
-	// simply switching enforcement on before any role is mapped — locks the admin team out of joining
+	// Staff are exempt, matching the OOC hook. The gate is fail-closed, so without this a DB blip - or
+	// simply switching enforcement on before any role is mapped - locks the admin team out of joining
 	// and observing, leaving nobody able to fix it in-round.
 	if(client.holder)
 		return FALSE
@@ -19,4 +19,4 @@
 		to_chat(src, span_warning("Guest accounts cannot be whitelisted. Sign in with a real BYOND account and reconnect to play."))
 		return
 	to_chat(src, span_userdanger("You are not whitelisted."))
-	to_chat(src, span_warning("<a href='byond://?src=[REF(src)];get_whitelisted=1'><b>Click here to Get Whitelisted</b></a> — link your Discord account to gain access. You must stay in the Discord with the whitelist role to play."))
+	to_chat(src, span_warning("<a href='byond://?src=[REF(src)];get_whitelisted=1'><b>Click here to Get Whitelisted</b></a> - link your Discord account to gain access. You must stay in the Discord with the whitelist role to play."))

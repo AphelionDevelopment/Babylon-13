@@ -1,4 +1,4 @@
-/// The in-game roles SSymphony can map Discord roles to. THIS list is the source of truth — roles are
+/// The in-game roles SSymphony can map Discord roles to. THIS list is the source of truth - roles are
 /// defined here in code and CANNOT be created from the panel. Key = the role key the game checks via
 /// symphony_has_ingame_role(); value = a human-readable description shown in the panel. Add roles here.
 GLOBAL_LIST_INIT(symphony_ingame_roles, list(

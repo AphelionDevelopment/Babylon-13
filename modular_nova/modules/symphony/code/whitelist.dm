@@ -1,5 +1,5 @@
 /// TRUE if the ckey's linked Discord holds any role that grants the given in-game role key.
-/// Reads the SSymphony grants table (grant_type='ingame'); modular — 'whitelist' now, 'staff'/'donator' later.
+/// Reads the SSymphony grants table (grant_type='ingame'); modular - 'whitelist' now, 'staff'/'donator' later.
 /// Fail-closed: any error (no DB, query failure) returns FALSE.
 /proc/symphony_has_ingame_role(target_ckey, role_key)
 	target_ckey = ckey(target_ckey)

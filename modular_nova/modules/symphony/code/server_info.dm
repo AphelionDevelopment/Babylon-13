@@ -37,7 +37,7 @@
 			.["game_state_name"] = "finished"
 	.["round_id"] = GLOB.round_id
 
-	// This is a Dynamic-based fork — no gamemode/storyteller. tier is null until roundstart.
+	// This is a Dynamic-based fork - no gamemode/storyteller. tier is null until roundstart.
 	var/datum/dynamic_tier/tier = SSdynamic?.current_tier
 	.["dynamic_tier"] = tier?.name
 	var/list/rulesets = list()
@@ -72,7 +72,7 @@
 	.["byond_version"] = "[world.byond_version].[world.byond_build]"
 	.["revision"] = GLOB.revdata?.commit
 
-/// Live player list with per-player detail for the panel. Sensitive (ckeys, antag roles) — comms-key gated.
+/// Live player list with per-player detail for the panel. Sensitive (ckeys, antag roles) - comms-key gated.
 /datum/world_topic/symphony_player_list
 	keyword = "symphony_player_list"
 	require_comms_key = TRUE
@@ -83,7 +83,7 @@
 	var/list/players = list()
 	// Fetch the whitelist-role holders once, instead of a per-player query inside the loop (60 players
 	// was 60 serial DB round-trips with the game stalled on each panel refresh). This reports actual
-	// role-holding, independent of whether the gate is enforced — same as the old per-player call. null
+	// role-holding, independent of whether the gate is enforced - same as the old per-player call. null
 	// means the lookup failed; everyone then reads FALSE, matching the single-ckey path's fail-closed.
 	var/list/whitelisted_ckeys = symphony_ingame_role_ckeys("whitelist")
 	// GLOB.clients covers lobby + in-round + observers, one client per connected player.

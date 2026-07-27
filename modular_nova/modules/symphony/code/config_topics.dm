@@ -1,4 +1,4 @@
-/// Entries that carry a credential but are NOT marked CONFIG_ENTRY_HIDDEN upstream — webhook URLs are
+/// Entries that carry a credential but are NOT marked CONFIG_ENTRY_HIDDEN upstream - webhook URLs are
 /// bearer tokens in a URL, so exposing one lets the holder post as the server (or redirect adminhelps).
 /// Matched by name so a new entry of the same shape is covered without needing an upstream change.
 /proc/symphony_config_is_secret(entry_name)
@@ -69,7 +69,7 @@
 		.["success"] = FALSE
 		.["message"] = "unknown entry"
 		return
-	// A world_topic is NOT an admin proccall, so protection is NOT auto-guarded — enforce here.
+	// A world_topic is NOT an admin proccall, so protection is NOT auto-guarded - enforce here.
 	// HIDDEN must never be touched. LOCKED can't be changed live (the SSymphony file write persists it for next boot).
 	if(entry.protection & CONFIG_ENTRY_HIDDEN)
 		.["success"] = FALSE
@@ -81,12 +81,12 @@
 		return
 	if(entry.protection & CONFIG_ENTRY_LOCKED)
 		.["success"] = FALSE
-		.["message"] = "locked — change persisted to file, applies on restart"
+		.["message"] = "locked - change persisted to file, applies on restart"
 		return
 	var/old_value = entry.config_entry_value
 	var/ok = FALSE
 	if(istype(entry, /datum/config_entry/number_list))
-		// number_list REPLACES the whole value on each call — pass everything as one space-separated line.
+		// number_list REPLACES the whole value on each call - pass everything as one space-separated line.
 		ok = entry.ValidateAndSet(replacetext(trim(new_value), "\n", " "))
 	else if(istype(entry, /datum/config_entry/str_list) || istype(entry, /datum/config_entry/keyed_list))
 		// str_list appends / keyed_list assigns per key. Empty the list first (NOT set_default, which re-seeds
@@ -99,7 +99,7 @@
 			if(!element)
 				continue
 			// keyed_list needs "key value". A line without a separator used to be skipped silently, which
-			// reported success while quietly dropping it — refuse the whole write instead.
+			// reported success while quietly dropping it - refuse the whole write instead.
 			if(keyed && !findtext(element, " "))
 				ok = FALSE
 				break

@@ -9,7 +9,7 @@ SUBSYSTEM_DEF(symphony)
 	if(!CONFIG_GET(flag/symphony_enabled))
 		return
 	// One query for the whole server rather than a blocking round-trip per player. null means "couldn't
-	// check" (no DB, query failed) — do nothing, so a transient blip can't mass-revoke everyone. An
+	// check" (no DB, query failed) - do nothing, so a transient blip can't mass-revoke everyone. An
 	// empty list genuinely means nobody holds the role.
 	var/list/holders = symphony_ingame_role_ckeys("whitelist")
 	if(isnull(holders))
