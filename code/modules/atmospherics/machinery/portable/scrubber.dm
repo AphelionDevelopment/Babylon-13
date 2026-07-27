@@ -68,6 +68,7 @@
 	if(isopenturf(epicentre))
 		if(scrub(epicentre.return_air()))
 			epicentre.air_update_turf(FALSE, FALSE)
+<<<<<<< HEAD
 	for(var/turf/open/openturf as anything in epicentre.get_atmos_adjacent_turfs(alldir = TRUE))
 		if(scrub(openturf.return_air()))
 			openturf.air_update_turf(FALSE, FALSE)
@@ -76,6 +77,16 @@
 		if(open_turf.pollution)
 			open_turf.pollution.scrub_amount(POLLUTION_HEIGHT_DIVISOR)
 	//NOVA EDIT END
+=======
+	var/list/turfs_to_scrub = epicentre.get_atmos_adjacent_turfs(alldir = TRUE) // NOVA EDIT ADDITION
+	for(var/turf/open/openturf as anything in turfs_to_scrub) // NOVA EDIT CHANGE - ORIGINAL: for(var/turf/open/openturf as anything in epicentre.get_atmos_adjacent_turfs(alldir = TRUE))
+		if(scrub(openturf.return_air()))
+			openturf.air_update_turf(FALSE, FALSE)
+		//NOVA EDIT ADDITION START
+		if(openturf.pollution)
+			openturf.pollution.scrub_amount(POLLUTION_HEIGHT_DIVISOR)
+		//NOVA EDIT ADDITION END
+>>>>>>> 296ce380770 (Batch of TG PRs 7/25 (#7714))
 	return ..()
 
 /**

@@ -522,7 +522,11 @@
 		span_notice("You struggle inside [src], kicking the release with your foot... (this will take about [DisplayTimeText(CRYO_BREAKOUT_TIME)].)"), \
 		span_hear("You hear a thump from [src]."))
 	if(do_after(user, CRYO_BREAKOUT_TIME, target = src, cog_icon = null))
+<<<<<<< HEAD
 		if(!user || user.stat != CONSCIOUS || user.loc != src )
+=======
+		if(!user || IS_UNCONSCIOUS_OR_CRIT(user) || user.loc != src )
+>>>>>>> 296ce380770 (Batch of TG PRs 7/25 (#7714))
 			return
 		user.visible_message(span_warning("[user] successfully broke out of [src]!"), \
 			span_notice("You successfully break out of [src]!"))
@@ -555,10 +559,10 @@
 		occupant_data["name"] = mob_occupant.name
 		if(mob_occupant.stat == DEAD)
 			occupant_data["stat"] = "Dead"
-		else if (HAS_TRAIT(mob_occupant, TRAIT_KNOCKEDOUT))
+		else if (IS_UNCONSCIOUS(mob_occupant))
 			occupant_data["stat"] = "Unconscious"
 		else
-			occupant_data["stat"] = "Conscious"
+			occupant_data["stat"] = "Stable"
 
 		occupant_data["bodyTemperature"] = round(mob_occupant.bodytemperature, 1)
 
