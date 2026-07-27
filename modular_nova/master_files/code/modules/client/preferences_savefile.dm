@@ -255,14 +255,30 @@
 
 	if(current_version < VERSION_TG_LOADOUT)
 		var/list/save_loadout = SANITIZE_LIST(save_data["loadout_list"])
+		// BABYLON EDIT CHANGE BEGIN - was rewriting save_loadout in place while iterating it, and stored
+		// the result of _text2path unchecked. _text2path returns null for a path that no longer exists
+		// (a renamed or removed item), which wrote a null key and made sanitize_loadout_list stack_trace
+		// on "(Path: )". Build a new list instead: correct regardless of how DM orders a list that is
+		// mutated mid-iteration, and unresolvable paths are simply dropped.
+		// ORIGINAL:
+		// for(var/loadout in save_loadout)
+		// 	var/entry = save_loadout[loadout]
+		// 	save_loadout -= loadout
+		//
+		// 	if(istext(loadout))
+		// 		loadout = _text2path(loadout)
+		// 	save_loadout[loadout] = entry
+		// var/loadout_list = sanitize_loadout_list(save_loadout)
+		var/list/migrated_loadout = list()
 		for(var/loadout in save_loadout)
 			var/entry = save_loadout[loadout]
-			save_loadout -= loadout
-
 			if(istext(loadout))
 				loadout = _text2path(loadout)
-			save_loadout[loadout] = entry
-		var/loadout_list = sanitize_loadout_list(save_loadout)
+			if(!ispath(loadout))
+				continue
+			migrated_loadout[loadout] = entry
+		var/loadout_list = sanitize_loadout_list(migrated_loadout)
+		// BABYLON EDIT CHANGE END
 
 		if (length(loadout_list)) // We only want to write these changes down if we're certain that there was anything in that.
 			write_preference(GLOB.preference_entries[/datum/preference/loadout], loadout_list)
