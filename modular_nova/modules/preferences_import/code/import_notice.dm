@@ -33,7 +33,7 @@
 	var/list/lines = list(
 		span_boldnotice("Coming from another server? You can bring your characters with you."),
 		span_notice("1. On the server you are leaving, run <b>Export Preferences</b> from its OOC tab and keep the .json file it saves. Not every server offers this."),
-		span_notice("2. Here, <a href='?babylon_import_prefs=1'>click to import</a>, or run <b>Import Preferences</b> from your own OOC tab, and pick that file."),
+		span_notice("2. Here, <a href='byond://?babylon_import_prefs=1'>click to import</a>, or run <b>Import Preferences</b> from your own OOC tab, and pick that file."),
 		span_warning("Importing replaces every character you currently have. A backup of your existing preferences is kept, and you will be reconnected once it finishes."),
 		span_notice("<i>You will only see this message once.</i>"),
 	)
