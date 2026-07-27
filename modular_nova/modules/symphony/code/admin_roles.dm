@@ -77,4 +77,48 @@
 			continue
 		GLOB.symphony_ingame_roles["[SYMPHONY_ADMIN_ROLE_PREFIX][rank.name]"] = "Grants the in-game admin rank \"[rank.name]\"."
 
+/**
+ * The admin ranks this server has loaded, so the panel can offer them when granting a rank directly.
+ *
+ * Separate from symphony_ingame_roles on purpose. That list only carries `admin:` keys while Discord
+ * sync is enabled, but granting a rank from the panel is independent of that toggle and has to work
+ * with it off.
+ */
+/datum/world_topic/symphony_admin_ranks
+	keyword = "symphony_admin_ranks"
+	require_comms_key = TRUE
+
+/datum/world_topic/symphony_admin_ranks/Run(list/input)
+	. = list()
+	var/list/ranks = list()
+	for(var/datum/admin_rank/rank as anything in GLOB.admin_ranks)
+		if(!rank?.name)
+			continue
+		ranks += list(list(
+			"name" = rank.name,
+			// Ranks sourced from admins.txt cannot be reassigned by editing the admin table, so the panel
+			// greys them out rather than offering a grant that silently does nothing.
+			"protected" = (rank.name in GLOB.protected_ranks) ? TRUE : FALSE,
+		))
+	.["ranks"] = ranks
+	.["discord_sync"] = symphony_discord_admin_sync_enabled() ? TRUE : FALSE
+
+/**
+ * Reloads admins, so a rank granted from the panel takes effect without waiting for a round restart.
+ *
+ * The panel writes the row to the `admin` table itself and calls this afterwards, so this is advisory:
+ * if the game is offline the grant is already persisted and gets picked up by the next reload. That is
+ * why the panel treats a failure here as "delayed", not "failed".
+ */
+/datum/world_topic/symphony_reload_admins
+	keyword = "symphony_reload_admins"
+	require_comms_key = TRUE
+
+/datum/world_topic/symphony_reload_admins/Run(list/input)
+	. = list()
+	load_admins()
+	.["success"] = TRUE
+	.["admins"] = length(GLOB.admin_datums)
+	log_admin("Symphony: admins reloaded from the panel.")
+
 #undef SYMPHONY_ADMIN_ROLE_PREFIX
