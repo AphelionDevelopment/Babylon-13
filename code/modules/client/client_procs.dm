@@ -303,6 +303,10 @@ GLOBAL_LIST_INIT(unrecommended_builds, list(
 		GLOB.preferences_datums[ckey] = prefs
 	prefs.last_ip = address //these are gonna be used for banning
 	prefs.last_id = computer_id //these are gonna be used for banning
+	// BABYLON EDIT ADDITION - second pass of an imported savefile. Runs here because migration has now
+	// happened and a real preferences datum exists, so every value can be rebuilt through the validating
+	// write path. No-op unless the file is flagged as freshly imported.
+	prefs.prefs_import_finalise()
 
 	if(fexists(roundend_report_file()))
 		add_verb(src, /client/proc/show_previous_roundend_report)
@@ -974,6 +978,10 @@ GLOBAL_LIST_INIT(unrecommended_builds, list(
 		add_verb(src, /client/proc/self_playtime)
 	if(!CONFIG_GET(flag/forbid_preferences_export))
 		add_verb(src, /client/proc/export_preferences)
+	// BABYLON EDIT ADDITION - whitelisted-player preferences import. The verb re-checks the whitelist
+	// when run; this only decides whether it is offered at all.
+	if(!CONFIG_GET(flag/forbid_preferences_import))
+		add_verb(src, /client/proc/import_preferences)
 
 
 //checks if a client is afk

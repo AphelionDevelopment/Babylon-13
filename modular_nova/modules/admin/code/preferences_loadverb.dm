@@ -79,6 +79,19 @@ ADMIN_VERB(import_preferences, R_ADMIN, "Import Preferences", "Upload a characte
 		to_chat(user, span_warning("Failed to parse json savefile: Version ([savefile_version]) is below minimum"))
 		return
 
+	// BABYLON EDIT ADDITION - run the same sanitiser the player-facing import uses. Everything above
+	// validates the CONTAINER (extension, size, parses, has a version); nothing checked the CONTENTS,
+	// and preference values loaded from a savefile never pass through is_valid(). This also flags the
+	// file so the post-migration pass rebuilds every preference on the target's next login.
+	var/structural_problem = prefs_import_prevalidate(json_tree, user.prefs)
+	if(structural_problem)
+		to_chat(user, span_warning("Failed to import: [structural_problem]"), confidential = TRUE)
+		return
+	if(prefs_import_too_deep(new_save))
+		to_chat(user, span_warning("Failed to import: file is nested too deeply."), confidential = TRUE)
+		return
+	json_tree = prefs_import_pass1(json_tree)
+
 	// Backup and delete the existing savefile if it exists
 	if(save_exists)
 		var/backup_limit = CONFIG_GET(number/savefile_backup_limit)
