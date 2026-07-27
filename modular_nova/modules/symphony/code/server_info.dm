@@ -9,7 +9,7 @@
  * a change to what an existing topic returns, or a change to a shared database table. Then raise
  * REQUIRED_GAME_MODULE in SSymphony (src/core/gameModule.ts) to match, and tag that release vX.Y.Z-dm.
  */
-#define SYMPHONY_MODULE_VERSION 1
+#define SYMPHONY_MODULE_VERSION 2
 
 /// Live server status for the SSymphony panel. Returns a raw list; the caller passes format=json.
 /datum/world_topic/symphony_server_status
