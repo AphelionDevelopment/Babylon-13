@@ -72,11 +72,11 @@
  *
  * Separate from symphony_ingame_roles, which only carries `admin:` keys while Discord sync is on - this has to work with it off.
  */
-/datum/world_topic/symphony_admin_ranks
+/datum/world_topic/symphony/admin_ranks
 	keyword = "symphony_admin_ranks"
 	require_comms_key = TRUE
 
-/datum/world_topic/symphony_admin_ranks/Run(list/input)
+/datum/world_topic/symphony/admin_ranks/Run(list/input)
 	. = list()
 	var/list/ranks = list()
 	for(var/datum/admin_rank/rank as anything in GLOB.admin_ranks)
@@ -85,21 +85,24 @@
 		ranks += list(list(
 			"name" = rank.name,
 			// admins.txt ranks cannot be reassigned by editing the admin table, so the panel greys them out.
-			"protected" = (rank.name in GLOB.protected_ranks) ? TRUE : FALSE,
+			// protected_ranks holds the rank datums themselves, not their names - testing the name here was always FALSE.
+			"protected" = (rank in GLOB.protected_ranks) ? TRUE : FALSE,
 		))
 	.["ranks"] = ranks
 	.["discord_sync"] = symphony_discord_admin_sync_enabled() ? TRUE : FALSE
+	// With the legacy system on, load_admins() never reads the SQL admin tables, so a grant from the panel writes a row nothing loads.
+	.["legacy_admin_system"] = CONFIG_GET(flag/admin_legacy_system) ? TRUE : FALSE
 
 /**
  * Reloads admins, so a rank granted from the panel takes effect without waiting for a round restart.
  *
  * Advisory only - the panel has already written the row, so a failure here just means the next reload picks it up.
  */
-/datum/world_topic/symphony_reload_admins
+/datum/world_topic/symphony/reload_admins
 	keyword = "symphony_reload_admins"
 	require_comms_key = TRUE
 
-/datum/world_topic/symphony_reload_admins/Run(list/input)
+/datum/world_topic/symphony/reload_admins/Run(list/input)
 	. = list()
 	load_admins()
 	.["success"] = TRUE

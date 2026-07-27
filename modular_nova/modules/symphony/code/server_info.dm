@@ -6,12 +6,12 @@
 #define SYMPHONY_MODULE_VERSION 3
 
 /// Live server status for the SSymphony panel. Returns a raw list; the caller passes format=json.
-/datum/world_topic/symphony_server_status
+/datum/world_topic/symphony/server_status
 	keyword = "symphony_server_status"
 	require_comms_key = TRUE
 	log = FALSE
 
-/datum/world_topic/symphony_server_status/Run(list/input)
+/datum/world_topic/symphony/server_status/Run(list/input)
 	. = list()
 	// A missing module_version is itself the signal that the game side predates version reporting.
 	.["module_version"] = SYMPHONY_MODULE_VERSION
@@ -66,12 +66,12 @@
 	.["revision"] = GLOB.revdata?.commit
 
 /// Live player list with per-player detail for the panel. Sensitive (ckeys, antag roles) - comms-key gated.
-/datum/world_topic/symphony_player_list
+/datum/world_topic/symphony/player_list
 	keyword = "symphony_player_list"
 	require_comms_key = TRUE
 	log = FALSE
 
-/datum/world_topic/symphony_player_list/Run(list/input)
+/datum/world_topic/symphony/player_list/Run(list/input)
 	. = list()
 	var/list/players = list()
 	// Audit line - this hands out the whole live antag roster, and log = FALSE keeps the comms key out of the topic log.

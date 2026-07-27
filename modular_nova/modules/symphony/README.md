@@ -17,5 +17,7 @@ Discord-role whitelist gate for the server, paired with the **SSymphony** bridge
 | `SYMPHONY_ENABLED` | Master switch (flag). |
 | `SYMPHONY_URL` | SSymphony base URL, e.g. `https://symphony.example.com`. |
 | `SYMPHONY_GRACE_SECONDS` | Seconds between losing the role and lobby return (default 30). |
+| `SYMPHONY_TOPICS_LOCAL_ONLY` | Flag, off by default. On, Symphony world topics are only answered for local senders plus the addresses below; anything else gets `Bad Address`. |
+| `SYMPHONY_TOPICS_ALLOWED_ADDRESSES` | One address per line, only read when the flag above is on. For a panel that isn't on the game's machine. |
 
 Which Discord roles grant the whitelist (or any in-game role) is configured in **SSymphony's panel** → In-game roles, not in game config. Requires the SQL backend enabled and SSymphony running against the **same** database, with matching table prefix. See the SSymphony repo for the bridge setup.

@@ -5,6 +5,10 @@
 	var/list/all_handlers = subtypesof(/datum/world_topic)
 	for(var/I in all_handlers)
 		var/datum/world_topic/WT = I
+		// BABYLON EDIT ADDITION BEGIN - an abstract parent carries shared behaviour and no keyword, skip it before the warning below fires every boot.
+		if(initial(WT.abstract_type) == WT)
+			continue
+		// BABYLON EDIT ADDITION END
 		var/keyword = initial(WT.keyword)
 		if(!keyword)
 			warning("[WT] has no keyword! Ignoring...")
@@ -26,19 +30,31 @@
 	/// If the comms.txt config key is required. If you flip this to false, ensure the code is correct and the query you receive is legit.
 	var/require_comms_key = TRUE
 
-/datum/world_topic/proc/TryRun(list/input)
+/datum/world_topic/proc/TryRun(list/input, addr) // BABYLON EDIT - addr, so a topic can see where it came from
 	key_valid = (CONFIG_GET(string/comms_key) == input["key"]) && CONFIG_GET(string/comms_key) && input["key"]
 	input -= "key"
 	if(require_comms_key && !key_valid)
 		. = "Bad Key"
 		if (input["format"] == "json")
 			. = list("error" = .)
+	// BABYLON EDIT ADDITION BEGIN - refuse an address a topic does not accept, worded differently from a bad key so the caller can tell them apart.
+	else if(!AddressAllowed(addr))
+		. = "Bad Address"
+		if (input["format"] == "json")
+			. = list("error" = .)
+	// BABYLON EDIT ADDITION END
 	else
 		. = Run(input)
 	if (input["format"] == "json")
 		. = json_encode(.)
 	else if(islist(.))
 		. = list2params(.)
+
+// BABYLON EDIT ADDITION BEGIN - hook for the Symphony address gate, everything else keeps answering from anywhere.
+/// Whether this topic accepts the sender address. Allows everything unless a subtype says otherwise.
+/datum/world_topic/proc/AddressAllowed(addr)
+	return TRUE
+// BABYLON EDIT ADDITION END
 
 /datum/world_topic/proc/Run(list/input)
 	CRASH("Run() not implemented for [type]!")

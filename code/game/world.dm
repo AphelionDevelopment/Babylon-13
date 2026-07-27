@@ -297,7 +297,7 @@ GLOBAL_VAR_INIT(last_maptick_time, 0)
 		return
 
 	handler = new handler()
-	return handler.TryRun(input)
+	return handler.TryRun(input, addr) // BABYLON EDIT - addr passed through for the Symphony address gate
 
 /world/proc/AnnouncePR(announcement, list/payload)
 	var/static/list/PRcounts = list() //PR id -> number of times announced this round

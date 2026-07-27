@@ -1,11 +1,11 @@
 // The rest of the game config belongs to TGS and the config files. This is the one switch the panel gets.
 
 /// Turn the whitelist gate on or off at runtime. The panel also persists it to file for the next boot.
-/datum/world_topic/symphony_set_enforcement
+/datum/world_topic/symphony/set_enforcement
 	keyword = "symphony_set_enforcement"
 	require_comms_key = TRUE
 
-/datum/world_topic/symphony_set_enforcement/Run(list/input)
+/datum/world_topic/symphony/set_enforcement/Run(list/input)
 	. = list()
 	// Deliberately not behind symphony_enabled, unlike the rest of the module - this is what turns that flag on.
 	var/admin_name = input["admin_name"] || "Discord Admin"

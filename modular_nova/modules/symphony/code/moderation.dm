@@ -1,9 +1,9 @@
 /// Kick a connected player by ckey, attributed to an external (Discord) admin.
-/datum/world_topic/symphony_kick
+/datum/world_topic/symphony/kick
 	keyword = "symphony_kick"
 	require_comms_key = TRUE
 
-/datum/world_topic/symphony_kick/Run(list/input)
+/datum/world_topic/symphony/kick/Run(list/input)
 	. = list()
 	var/target_ckey = ckey(input["target_ckey"])
 	var/admin_name = input["admin_name"] || "Discord Admin"
@@ -23,7 +23,7 @@
 	.["success"] = TRUE
 
 /// The roles the panel/command can ban: 'Server' (full login-enforced ban) + abstract roles + every job title.
-/datum/world_topic/symphony_bannable_roles
+/datum/world_topic/symphony/bannable_roles
 	keyword = "symphony_bannable_roles"
 	require_comms_key = TRUE
 	log = FALSE
@@ -46,17 +46,17 @@
 			return role
 	return null
 
-/datum/world_topic/symphony_bannable_roles/Run(list/input)
+/datum/world_topic/symphony/bannable_roles/Run(list/input)
 	. = list()
 	.["roles"] = symphony_bannable_roles()
 
 /// Ban a ckey. role 'Server' is a full login-enforced ban, anything else is an in-round role ban. duration_mins null/0 = permanent.
 /// A world topic has no usr, so create_ban is unusable - we insert the ban row ourselves.
-/datum/world_topic/symphony_ban
+/datum/world_topic/symphony/ban
 	keyword = "symphony_ban"
 	require_comms_key = TRUE
 
-/datum/world_topic/symphony_ban/Run(list/input)
+/datum/world_topic/symphony/ban/Run(list/input)
 	. = list()
 	var/target_ckey = ckey(input["target_ckey"])
 	var/reason = input["reason"]
