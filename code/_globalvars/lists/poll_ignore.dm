@@ -23,6 +23,7 @@
 #define POLL_IGNORE_LAVALAND_ELITE "lavaland_elite"
 #define POLL_IGNORE_MAID_IN_MIRROR "maid_in_mirror"
 #define POLL_IGNORE_MONKEY_HELMET "mind_magnified_monkey"
+#define POLL_IGNORE_MUTANT "mutant" // BABYLON EDIT ADDITION - Mutated Abomination
 #define POLL_IGNORE_PAI "pai"
 #define POLL_IGNORE_POSIBRAIN "posibrain"
 #define POLL_IGNORE_POSSESSED_BLADE "possessed_blade"
@@ -67,6 +68,7 @@ GLOBAL_LIST_INIT(poll_ignore_desc, list(
 	POLL_IGNORE_LAVALAND_ELITE = "Lavaland elite",
 	POLL_IGNORE_MAID_IN_MIRROR = "Maid in the Mirror",
 	POLL_IGNORE_MONKEY_HELMET = "Mind magnified monkey",
+	POLL_IGNORE_MUTANT = "Mutated Abomination", // BABYLON EDIT ADDITION
 	POLL_IGNORE_PAI = JOB_PERSONAL_AI,
 	POLL_IGNORE_POSIBRAIN = "Positronic brain",
 	POLL_IGNORE_POSSESSED_BLADE = "Possessed blade",

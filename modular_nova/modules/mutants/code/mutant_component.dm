@@ -12,6 +12,8 @@
 #define IMMUNITY_LOWER (5 MINUTES)
 #define IMMUNITY_UPPER (10 MINUTES)
 #define RNA_REFRESH_TIME (2 MINUTES) // How soon can we extract more RNA?
+#define REPOLL_TIME (60 SECONDS) // How long we wait before asking ghosts again for an empty mutant body.
+#define MAX_REPOLLS 5 // How many times we ask before giving up, so we don't spam ghosts all round.
 
 /datum/component/mutant_infection
 	/// The reference to our host body.
@@ -30,6 +32,10 @@
 		)
 	/// Our timer ID used for seperate parts of the infection.
 	var/timer_id
+	/// Blocks process() from queueing a second transform while a ghost poll is in flight. Stays set if we run out of repolls.
+	var/awaiting_player = FALSE
+	/// How many times we have re-polled ghosts for an empty mutant body.
+	var/repoll_attempts = 0
 	/// Have we have our RNA extracted? If so, we can't have it extracted again.
 	var/rna_extracted = FALSE
 	/// How much toxin damage we take per tick. - Can probably be a define.
@@ -57,7 +63,9 @@
 		deltimer(timer_id)
 		timer_id = null
 	if(host)
-		remove_infection()
+		// Our parent qdels us on its own teardown. Don't try to cure a corpse that's already being deleted.
+		if(!QDELETED(host))
+			remove_infection()
 		host = null
 	return ..()
 
@@ -103,7 +111,7 @@
 					var/datum/wound/slash/flesh/moderate/rotting_wound = new
 					rotting_wound.apply_wound(wound_area)
 				host.emote(pick(list("cough", "sneeze", "scream")))
-	if(timer_id)
+	if(timer_id || awaiting_player)
 		return
 	if(host.stat != DEAD)
 		return
@@ -117,7 +125,7 @@
 
 /datum/component/mutant_infection/proc/cure_host()
 	SIGNAL_HANDLER
-	if(!host.stat == DEAD)
+	if(host.stat != DEAD)
 		to_chat(host, span_notice("You start to feel refreshed and invigorated!"))
 	STOP_PROCESSING(SSobj, src)
 	addtimer(CALLBACK(src, PROC_REF(Destroy)), CURE_TIME)
@@ -155,16 +163,30 @@
 	timer_id = addtimer(CALLBACK(src, PROC_REF(regenerate)), revive_time, TIMER_STOPPABLE)
 
 /datum/component/mutant_infection/proc/regenerate()
+	timer_id = null
+	if(QDELETED(host))
+		return
+
 	if(!host.mind)
-		var/list/candidates = SSpolling.poll_ghosts_for_target("Do you want to play as a mutant([host.name])?",
+		// The poll sleeps, so hold process() off until we know whether we found anyone.
+		awaiting_player = TRUE
+		var/mob/chosen_one = SSpolling.poll_ghosts_for_target("Do you want to play as a mutant([host.name])?",
+		role = ROLE_MUTANT,
 		checked_target = host,
+		ignore_category = POLL_IGNORE_MUTANT,
 		alert_pic = host,
 		role_name_text = "mutant [host.name]",
 		)
-		if(!candidates.len)
+		if(QDELETED(src) || QDELETED(host))
 			return
-		var/client/C = pick_n_take(candidates)
-		host.PossessByPlayer(C.key)
+		if(!chosen_one)
+			// Keep asking for a while so the mutant isn't left empty, but give up eventually.
+			if(++repoll_attempts < MAX_REPOLLS)
+				timer_id = addtimer(CALLBACK(src, PROC_REF(regenerate)), REPOLL_TIME, TIMER_STOPPABLE)
+			return
+		host.PossessByPlayer(chosen_one.key)
+		awaiting_player = FALSE
+		repoll_attempts = 0 // The cap is per empty-body episode, not per round.
 	else
 		host.grab_ghost()
 	to_chat(host, span_notice("You feel an itching, both inside and \
@@ -194,3 +216,5 @@
 #undef IMMUNITY_LOWER
 #undef IMMUNITY_UPPER
 #undef RNA_REFRESH_TIME
+#undef REPOLL_TIME
+#undef MAX_REPOLLS
